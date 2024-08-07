@@ -1,0 +1,20 @@
+/* styles.module.css */
+.container {
+  /* 容器样式 */
+	border: 1px;
+}
+
+.toggleButton {
+  /* 按钮样式 */
+	border: 1px;
+}
+
+.menuOpen {
+  display: block;
+  /* 菜单打开时的样式 */
+}
+
+.menuClosed {
+  display: none;
+  /* 菜单关闭时的样式 */
+}

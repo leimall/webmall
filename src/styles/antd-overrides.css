@@ -1,0 +1,28 @@
+/* 按钮样式覆盖 */
+.ant-btn {
+  @apply font-semibold rounded;
+}
+
+.ant-btn-primary {
+  @apply bg-primary-600 hover:bg-primary-600 border-primary-600;
+}
+
+.ant-btn-default {
+  @apply bg-white hover:bg-gray-50 border-gray-300;
+}
+
+/* 输入框样式覆盖 */
+.ant-input {
+  @apply rounded border-gray-300;
+}
+
+.ant-input:focus, .ant-input-focused {
+  @apply border-primary-600 ring-1 ring-primary-600;
+}
+
+/* 表单样式覆盖 */
+.ant-form-item-label > label {
+  @apply text-gray-700;
+}
+
+/* 更多组件样式覆盖... */
