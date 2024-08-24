@@ -5,9 +5,10 @@ import QuestCart from "@/components/UI/QuestCart";
 
 
 export default function ProductCardOne({ product }: { product: Product }) {
+  console.error("object", product);
 	return (
 		<>
-			<Link href={`/product/${product.id}`}>
+			<Link href={`/product/${product.productId}`}>
 				<div className="bg-white cursor-pointer hover:shadow-md transition-all relative">
 					{/* <div
 						className="bg-gray-100 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer absolute top-4 right-4">
@@ -20,8 +21,8 @@ export default function ProductCardOne({ product }: { product: Product }) {
 
 					<div className="relative w-full h-0 pb-[100%] overflow-hidden mx-auto">
 						<Image
-							src={product.imageUrl}
-							alt={product.name}
+							src={product.mainImg}
+							alt={product.title}
 							fill
 							sizes="100vw"
 						/>
@@ -30,7 +31,7 @@ export default function ProductCardOne({ product }: { product: Product }) {
 
 					<div className="p-5">
 						<h3 className="text-lg font-extrabold text-fta-primary-800">{product.title}</h3>
-						<p className="text-fta-primary-600 text-md mt-2">{product.description}</p>
+						<p className="text-fta-primary-600 text-md mt-2">{product.desction}</p>
 						<div className="flex items-center mt-2.5 mb-3">
 							<div className="flex items-center space-x-1 rtl:space-x-reverse">
 								<svg className="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
@@ -38,7 +39,7 @@ export default function ProductCardOne({ product }: { product: Product }) {
 								</svg>
 							</div>
 							<span className="bg-fta-accent1 text-fta-primary-300 text-xs font-semibold px-2.5 py-0.5 rounded ms-3">5.0</span>
-							<span className="text-sm text-fta-black-100 font-medium ms-3">({product.reviews} reviews)</span>
+							<span className="text-sm text-fta-black-100 font-medium ms-3">({product.price} reviews)</span>
 						</div>
 						<div className="flex items-center justify-between text-fta-black-100">
 							<h4 className="text-lg text-fta-primary-500 font-bold">${product.price}</h4>

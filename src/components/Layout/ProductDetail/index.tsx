@@ -80,7 +80,6 @@ export default function ProductDetail() {
 			setQuantity(product?.id, quantity + 1);
 		} else {
 			addItem({
-				id: Number(product.id),
 				title: product.title,
 				price: product.price,
 				description: product.description,

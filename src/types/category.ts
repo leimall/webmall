@@ -1,9 +1,10 @@
 export type CategoryItem = {
-    id: number,
-    name: string,
-		level: number,
-    description: string,
-    image: string,
+    ID: number
+    title: string,
+    title_en: string,
+    parent_id: number,
+    type: number,
+    value: string,
     createdAt: Date,
     updatedAt: Date
 }

@@ -13,20 +13,50 @@ const config: Config = {
 		},
 		extend: {
 			colors: {
+        main: "#603813",
+        secondary: "#f2ee75",
+        tertiary: "#ecdcde",
+        blake: "#070707",
+        blake1: "#313030",
+        blake2: "##a3a1a2",
+        blake3: "#e4e4e4",
+        blake4: "#fefdfd",
+        accent1: "#f9f6fc",
+        accent3: "#f8f4fc",
+        accent4: "#fefefe",
+        accent5: "#faf8fd",
+        accent6: "#f8f4fc",
+        accent7: "#f9f5fc",
+        stroke: "#EEEEEE",
+        strokedark: "#2D2F40",
+        hoverdark: "#252A42",
+        titlebg: "#ADFFF8",
+        titlebg2: "#FFEAC2",
+        titlebgdark: "#46495A",
+        btndark: "#292E45",
+        white: "#FFFFFF",
+        blackho: "#2C3149",
+        blacksection: "#1C2136",
+        primaryho: "#FFD1DC",
+        meta: "#20C5A8",
+        waterloo: "#757693",
+        manatee: "#999AA1",
+        alabaster: "#FBFBFB",
+        zumthor: "#EDF5FF",
+        socialicon: "#D1D8E0",
 				fta: {
 					primary: {
 						50: '#f2e5e7',
-    100: '#d9b3b7',
-    200: '#bf8086',
-    300: '#a64d56',
-    400: '#8d1a25',
-		500: '#603813', // 主色
-    600: '#49290e',
-    700: '#321b0a',
-    800: '#1b0c05',
-    900: '#050100',
-					},
-				
+            100: '#d9b3b7',
+            200: '#bf8086',
+            300: '#a64d56',
+            400: '#8d1a25',
+            500: '#603813', // 主色
+            600: '#49290e',
+            700: '#321b0a',
+            800: '#1b0c05',
+            900: '#050100',
+                  },
 						background: {
 							50: '#fdfaf9',
 							100: '#fbeeea',
@@ -53,24 +83,6 @@ const config: Config = {
 						accent6: '#f8f4fc',
 						accent7: '#f9f5fc',
 					},
-					stroke: "#EEEEEE",
-					strokedark: "#2D2F40",
-					hoverdark: "#252A42",
-					titlebg: "#ADFFF8",
-					titlebg2: "#FFEAC2",
-					titlebgdark: "#46495A",
-					btndark: "#292E45",
-					white: "#FFFFFF",
-					blackho: "#2C3149",
-					blacksection: "#1C2136",
-					primaryho: "#FFD1DC",
-					meta: "#20C5A8",
-					waterloo: "#757693",
-					manatee: "#999AA1",
-					alabaster: "#FBFBFB",
-					zumthor: "#EDF5FF",
-					socialicon: "#D1D8E0",
-
 					primary: {
 						50: "#fce4ec", // Soft pink
 						100: "#f8bbd0", // Pastel pink
@@ -84,7 +96,7 @@ const config: Config = {
 						900: "#880e4f", // Deep berry pink
 					},
 
-					secondary: {
+					secondary1: {
 						50: "#f3e5f5", // Soft peach
 						100: "#e1bee7", // Light orange-pink
 						200: "#ce93d8", // Vibrant coral
@@ -126,7 +138,6 @@ const config: Config = {
 					star: "#F9D423",
 					black: "#181C31",
 					primary1: '#441151',
-					secondary1: '#EE85B5',
 					violet: '#883677',
 					congo: '##FF958C',
 					success: '#5FC790',

@@ -39,12 +39,12 @@ export default function Header() {
     label: (
       <Link href="/myself/profile">Profile</Link>
     )
-  },{
+  }, {
     key: "orders",
     label: (
       <Link href="/myself/orders">Orders</Link>
     )
-  },{
+  }, {
     key: "addresses",
     label: (
       <Link href="/myself/address">Address</Link>
@@ -59,7 +59,7 @@ export default function Header() {
 
   return (
     <header className="flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
-      <div className="mx-auto max-w-c-1440 flex flex-wrap justify-between items-center gap-2 w-full">
+      <div className="mx-auto max-w-c-1440 flex flex-wrap justify-between align-middle items-center gap-2 w-full">
         <Link href="/">
           <div className='flex justify-center text-fta-primary-500 items-end'>
             <Image src="/images/logo/hlogo.png" alt="logo" width={48} height={48} />
@@ -69,16 +69,13 @@ export default function Header() {
           </div>
         </Link>
 
-        <div id="collapseMenu" className="hidden max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:w-full max-lg:h-full max-lg:bg-white max-lg:z-50 transition-transform duration-300 transform lg:flex lg:ml-14 lg:gap-x-5">
-          <ul className="lg:flex max-lg:space-y-8 max-lg:p-6">
-            {['Home', 'Team', 'Feature', 'Blog', 'About'].map((item) => (
-              <li key={item} className="max-lg:border-b max-lg:py-3 px-3">
-                <Link href={`/${item.toLowerCase()}`} className="lg:hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]">
-                  {item}
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <div className="hidden w-1/2 max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:w-full max-lg:h-full max-lg:bg-white max-lg:z-50 transition-transform duration-300 transform lg:flex lg:ml-14 lg:gap-x-5">
+          <div className="flex w-full max-xl:w-full bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-fta-primary-500 focus-within:bg-transparent">
+            <input type="text" placeholder="Search something..." className="w-full text-sm bg-transparent rounded outline-none pr-2" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" className="cursor-pointer fill-gray-400">
+              <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
+            </svg>
+          </div>
         </div>
 
         <div className='w-0 lg:w-68 md:w-48'></div>
@@ -87,9 +84,10 @@ export default function Header() {
           <div className="text-2xl font-bold text-fta-primary-400 pl-0 pr-4 md:px-4">
             <CartIcon />
           </div>
+          <div className='px-1 md:px-4'>|</div>
           {user ? (
-            <Dropdown className='cursor-pointer' menu={{items}} placement="bottom" trigger={['click']} arrow>
-              <div className='pl-4 pr-2 md:px-4'>
+            <Dropdown className='cursor-pointer' menu={{ items }} placement="bottom" trigger={['click']} arrow>
+              <div className='pr-1 md:px-4'>
                 {user.headerImg ? (
                   <Avatar src={user.headerImg} size={32} />) : (
                   <Avatar size={32} style={{ backgroundColor: '#8d1a25' }}>
@@ -100,7 +98,7 @@ export default function Header() {
             </Dropdown>
           ) : (
             <Link href="/auth/signin">
-              <div className="text-sm md:text-md font-bold text-fta-primary-400 pl-4 pr-2 md:px-4">
+              <div className="text-sm md:text-md font-bold text-fta-primary-400 pr-1 md:px-4">
                 Sign in
               </div>
             </Link>
@@ -110,7 +108,7 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="flex lg:w-96 w-full lg:pt-0 pt-2">
+        <div className="lg:hidden lg:w-96 w-full lg:pt-0 pt-2">
           <div className="flex w-full max-xl:w-full bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-fta-primary-500 focus-within:bg-transparent">
             <input type="text" placeholder="Search something..." className="w-full text-sm bg-transparent rounded outline-none pr-2" />
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" className="cursor-pointer fill-gray-400">

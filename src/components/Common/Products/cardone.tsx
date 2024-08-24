@@ -9,10 +9,10 @@ export default function ProductCardOne({ product }: { product: Product }) {
 		<>
 
 			<div className="w-full max-w-sm bg-white border border-gray-300 rounded-lg shadow-pink100 hover:shadow-pink400">
-				<Link href={`/product/${product.id}`}>
+				<Link href={`/product/${product.ID}`}>
 					<Image
-						src={product.imageUrl}
-						alt={product.name}
+						src={product.mainImg}
+						alt={product.title}
 						layout="responsive"
 						width={16}   // 这里的宽度和高度可以根据你的需求设置比例
 						height={9}   // 例如，这里设置的是 16:9 的比例
@@ -20,7 +20,7 @@ export default function ProductCardOne({ product }: { product: Product }) {
 					/>
 				</Link>
 				<div className="px-4 pb-3 pt-2">
-					<Link href={`/product/${product.id}`}>
+					<Link href={`/product/${product.ID}`}>
 						<h5 className="text-lg font-semibold tracking-tight text-fta-blake1">{product.name}</h5>
 					</Link>
 					<div className="flex items-center mt-2.5 mb-3">
@@ -30,11 +30,11 @@ export default function ProductCardOne({ product }: { product: Product }) {
 							</svg>
 						</div>
 						<span className="bg-fta-accent1 text-fta-primary-300 text-xs font-semibold px-2.5 py-0.5 rounded ms-3">5.0</span>
-						<span className="text-sm text-gray-500 ms-3">({product.reviews} reviews)</span>
+						<span className="text-sm text-gray-500 ms-3">({product.price} reviews)</span>
 					</div>
 					<div className="flex items-center justify-between text-[14px] md:text-md">
 						<span className="text-md md:text-xl font-bold text-fta-primary-500">${product.price}</span>
-						<Link href={`/product/${product.id}`}>
+						<Link href={`/product/${product.ID}`}>
 							<button className="text-white bg-fta-primary-500 hover:bg-fta-primary-500 focus:ring-4 focus:outline-none font-medium rounded-lg px-2 md:px-5 py-1 md:py-2.5 text-center">
 								Add to cart
 							</button>

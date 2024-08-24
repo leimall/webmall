@@ -8,7 +8,7 @@ import Router from 'next/router';
 
 // 创建新的axios实例
 const service = axios.create({
-  baseURL: '//localhost:9000/api/web',
+  baseURL: '//localhost:3009/api/web',
   timeout: 5000,
 });
 

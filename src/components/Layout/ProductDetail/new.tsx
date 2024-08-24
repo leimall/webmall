@@ -10,104 +10,41 @@ import Image from "next/image";
 import type { CarouselRef } from 'antd/es/carousel';
 import ReviewList from '@/components/Common/ReviewList';
 import type { Review } from '@/types/review';
-import Description from './description';
 import CatagoryListOfDetails from '@/components/Common/Category/CatagoryListOfDetails';
 import DetailsRecommendList from './DetailsRecommendList';
+import type { ProductDetail } from '@/types/products';
+import MarkdownPage from '@/components/Common/md';
 
-// 定义产品数据的类型
-interface Product {
-	id: number;
-	title: string;
-	price: number;
-	description: string;
-	gallery: { url: string }[];
-	image: string;
-	rating: number,
-	reviews: number,
-	reviewsList: Review[];
-	details: string;
-	specifications: { key: string; value: string }[];
-}
 
-// 假数据
-const ProductData: Product = {
-	id: 1,
-	title: "Kenmore 2-Burner Portable Tabletop Retro Gas Grill",
-	price: 173.06,
-	rating: 4,
-	reviews: 15,
-	description: "Fast and Easy Assembly: The new Kenmore 2-Burner Retro Portable Gas Grill arrives almost fully pre-assembled for quick setup and mainly requires installation of the side handles.",
-	gallery: [
-		{ url: "/products/001.jpg" },
-		{ url: "/products/002.jpg" },
-		{ url: "/products/003.jpg" },
-	],
-	image: "/products/000.jpg",
-	reviewsList: [
-		{
-			username: 'Darrell Steward',
-			rating: 4.5,
-			comment: 'This is an amazing product I have.',
-			createdAt: 'July 2, 2020 03:29 PM',
-			likes: 128,
-			dislikes: 3,
-			profileImage: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
-		},
-		{
-			username: 'Darlene Robertson',
-			rating: 3.5,
-			comment: 'This is an amazing product I have.',
-			createdAt: 'July 2, 2020 10:04 PM',
-			likes: 82,
-			dislikes: 1,
-			profileImage: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
-		},
-	],
-	details: "This is a detailed description of the product. It includes information about its features, benefits, and usage.",
-	specifications: [
-		{ key: "Brand", value: "Kenmore" },
-		{ key: "Product Dimensions", value: "17.75\"D x 21.5\"W x 15.25\"H" },
-		{ key: "Special Feature", value: "Portable, Non-Stick Surface, Removable Grease Tray, Compact, Warming Rack" },
-		{ key: "Color", value: "Turquoise" },
-		{ key: "Fuel Type", value: "Gas" },
-	]
-};
-
-export default function ProductDetail() {
-	const product: Product | null = ProductData;
+export default function ProductDetail({ product }: { product: ProductDetail }) {
 	const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
-	const { setQuantity, addItem, items } = useCartStore();
-	const existingItem = items.find(item => item.id === product?.id);
+  const { setQuantity, addItem, items } = useCartStore();
+	const existingItem = items.find(item => item.ID=== product?.ID);
 	const quantity = existingItem ? existingItem.quantity : 0;
+  const [skuTitle, setSkuTitle] = React.useState<string>('Color');
+  const [size, setSize] = React.useState<string>('M');
+  const [sizeList, setSizeList] = React.useState<string[]>(['L', 'M', 'S', 'XL']);
 
-	const handleAddToCart = () => {
+  const handleAddToCart = () => {
 		if (existingItem) {
-			setQuantity(product?.id, quantity + 1);
+			setQuantity(product.ID, quantity + 1);
 		} else {
 			addItem({
-				id: Number(product.id),
-				title: product.title,
-				price: product.price,
-				description: product.description,
+        ...product,
 				quantity: quantity + 1,
-				imageUrl: product.gallery[0].url,
-				name: product.title,
 				rating: 4.5,
 				reviews: 15,
 			});
 		}
 	};
 	const newProduct = {
-		id: Number(product.id),
-		title: product.title,
-		price: product.price,
-		description: product.description,
+    ...product,
 		quantity: quantity + 1,
-		imageUrl: product.gallery[0].url,
-		name: product.title,
 		rating: 4.5,
 		reviews: 15,
 	}
+  
+
 
 	const carouselRef = useRef<CarouselRef>(null);
 
@@ -115,6 +52,12 @@ export default function ProductDetail() {
 		if (carouselRef.current) {
 			carouselRef.current.goTo(selectedImageIndex, false);
 		}
+    if(product.Sku.title) {
+      setSkuTitle(product.Sku.title);
+    }
+    if(product.Sku.List.length > 0) {
+      setSizeList(product.Sku.List.map((sku) => sku.title));
+    }
 	}, [selectedImageIndex]);
 
 	return (
@@ -123,10 +66,10 @@ export default function ProductDetail() {
 				<div className="flex flex-col md:flex-row">
 					<div className="w-full md:w-1/2 pr-0 md:pr-10">
 						<Carousel ref={carouselRef} afterChange={setSelectedImageIndex}>
-							{product.gallery.map((image, index) => (
+							{product.ImageList.map((image, index) => (
 								<div key={index} className="relative w-full h-0 pb-[100%] overflow-hidden rounded-t-2xl mx-auto">
 									<Image
-										src={image.url}
+										src={image.img_url}
 										alt={product.title}
 										fill
 										sizes="100vw"
@@ -137,10 +80,10 @@ export default function ProductDetail() {
 						</Carousel>
 
 						<div className="flex flex-wrap gap-4 mt-5 mb-5">
-							{product.gallery.map((image, index) => (
+							{product.ImageList.map((image, index) => (
 								<img
 									key={index}
-									src={image.url}
+									src={image.img_url}
 									alt={product.title}
 									className={`w-16 h-16 border-2 cursor-pointer ${selectedImageIndex === index ? 'border-green-500' : 'border-gray3'} `}
 									onClick={() => setSelectedImageIndex(index)}
@@ -151,25 +94,34 @@ export default function ProductDetail() {
 					<div className="lg:w-1/2 pl-0 md:pl-20">
 						<h1 className="text-lg md:text-2xl font-bold">{product.title}</h1>
 						<div className="flex items-center">
-							<Rate allowHalf defaultValue={product.rating}></Rate>
-							<div className="text-gray-700 text-md pl-4">{product.rating}</div>
-							<p className="text-gray-600 text-sm pl-2">({product.reviews} Ratings)</p>
+							<Rate allowHalf defaultValue={product.price}></Rate>
+							<div className="text-gray-700 text-md pl-4">{product.price}</div>
+							<p className="text-gray-600 text-sm pl-2">({product.price} Ratings)</p>
 						</div>
 						<Divider />
 						<div className='pb-2'>
 							<p className="text-fta-primary-500 text-lg md:text-2xl font-bold">${product.price}</p>
-							<p className="text-gray-500 text-sm mt-2"><del>$$199.99</del> <span className="text-sm ml-1">Tax included</span></p>
+							<p className="text-gray-500 text-sm mt-2"><del>$199.99</del> <span className="text-sm ml-1">Tax included</span></p>
 						</div>
 						<Tag color="cyan">FREE Returns</Tag>
 						<Tag color="red">Get $10 off instantly</Tag>
 
 						<Divider />
 						<div>
-							<h2 className="text-md md:text-xl font-bold text-gray-800">Choose a Size</h2>
+							<h2 className="text-md md:text-xl font-bold text-gray-800">Choose a {skuTitle}</h2>
 							<div className="flex flex-wrap gap-4 mt-4">
-								<button type="button" className="w-10 h-10 border hover:border-gray-800 font-semibold text-sm rounded-md flex items-center justify-center shrink-0">S</button>
-								<button type="button" className="w-10 h-10 border hover:border-gray-800 border-gray-800 font-semibold text-sm rounded-md flex items-center justify-center shrink-0">M</button>
-								<button type="button" className="w-10 h-10 border hover:border-gray-800 font-semibold text-sm rounded-md flex items-center justify-center shrink-0">L</button>
+                {
+                  sizeList.map((e, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      className={`w-10 h-10 border hover:border-gray-800 font-semibold text-sm rounded-md flex items-center justify-center shrink-0 ${e === size ? 'border-gray-800' : 'border-gray-300'}`}
+                      onClick={() => setSize(e)}
+                    >
+                      {e}
+                    </button>
+                  ))
+                }
 							</div>
 						</div>
 						<Divider />
@@ -184,9 +136,7 @@ export default function ProductDetail() {
 						<div className="my-4">
 							<h2 className="text-lg font-bold">About this item</h2>
 							<ul className="list-disc ml-4 text-gray-700">
-								<li>Fast and Easy Assembly: The new Kenmore 2-Burner Retro Portable Gas Grill arrives almost fully pre-assembled for quick setup and mainly requires installation of the side handles.</li>
-								<li>Generous Cooking Surface: Two-burner propane grill with 343 sq inches of grilling area, ideal for 9 burgers.</li>
-								<li>Sleek Retro Design: Portable gas grill with nostalgic design, versatile for use on tabletop surfaces.</li>
+                {product.desction}
 							</ul>
 						</div>
 
@@ -217,10 +167,10 @@ export default function ProductDetail() {
 				</div>
 
 				<div className="flex flex-col md:flex-row">
-					<div className="w-full md:w-7/8">
-						<Description />
+					<div className="w-full md:w-7/8 my-8">
+            <MarkdownPage markdown={product.Detail[0].content} />
 						<div className="my-8">
-							<ReviewList reviews={product.reviewsList} />
+							<ReviewList reviews={product.reviews} />
 						</div>
 					</div>
 					<div className="hidden md:block lg:w-1/2 px-4 lg:visible xl:visible sm:invisible sx:invisible">
