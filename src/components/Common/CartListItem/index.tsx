@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useCartStore } from '@/stores/useCartStore';
 import QuantityControl from '@/components/UI/QuestCart/cart';
 import { CartItem } from '@/types/stores/cart';
-import { CloseCircleOutlined, CloseOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 
 export default function CartListItem({ item }: { item: CartItem }) {
@@ -17,8 +16,8 @@ export default function CartListItem({ item }: { item: CartItem }) {
 				<div className="col-span-2 flex items-center gap-4">
 					<div className="w-28 h-28 shrink-0 bg-white rounded-md">
 					<Image
-						src={item.imageUrl}
-						alt={item.name}
+						src={item.mainImg}
+						alt={item.title}
 						objectFit='fixed'
 						width={96}
 						height={96}
@@ -28,7 +27,7 @@ export default function CartListItem({ item }: { item: CartItem }) {
 
 					<div>
 						<h3 className="text-base font-bold text-gray-800">{item.title}</h3>
-						<h6 onClick={() => removeItem(item.id)} className="text-xs text-red-500 cursor-pointer mt-0.5">Remove</h6>
+						<h6 onClick={() => removeItem(item.ID)} className="text-xs text-red-500 cursor-pointer mt-0.5">Remove</h6>
 
 						<div className="flex gap-4 mt-4">
 							<div className="relative group">

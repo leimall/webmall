@@ -52,9 +52,9 @@ export default function DetailsRecommendList() {
 
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-		{products.map((product) => (
+		{/* {products.map((product) => (
           <ProductCardOne key={product.id} product={product} />
-        ))}
+        ))} */}
 		</div>
 	)
 }

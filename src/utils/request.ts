@@ -4,11 +4,13 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, type AxiosErro
 // import { Toast } from 'react-vant';
 import { message } from "antd";
 import { useAuthStore } from '@/stores/useUserinfoStroe';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation'
 
 // 创建新的axios实例
 const service = axios.create({
-  baseURL: '//localhost:3009/api/web',
+  // baseURL: '//localhost:3009/api/web',
+  baseURL: process.env.NEXT_PUBLIC_API_URL + '/api/web',
   timeout: 5000,
 });
 
@@ -56,6 +58,7 @@ service.interceptors.response.use(
     }
   },
   (error: AxiosError) => {
+    // const router = useRouter()
     const { response } = error;
     const { clearAuth } = useAuthStore.getState();
     message.destroy();
@@ -70,7 +73,7 @@ service.interceptors.response.use(
         duration: 5,
       });
       clearAuth();
-      Router.push('/auth/signin');
+      // router.push('/auth/signin');
     } else {
       message.error({
         content: `请求错误，状态码：${response?.status}`,

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { message } from 'antd'; // 使用 Ant Design 的 message 组件来显示反馈信息
 import { getCountry, createMyselfAddress, getMyselfAddress } from '@/apis/address';
+import type { CountryItem } from '@/types/category';
 
 export default function ProfilePage() {
   const [countries, setCountries] = useState([]);
@@ -45,13 +46,15 @@ export default function ProfilePage() {
     fetchMyselfAddress();
     fetchCountry();
   }, []);
-  const handleCountryChange = (e: any) => {
-    const selectedCountry = countries.find(country => country.code === e.target.value);
-    setFormData({
-      ...formData,
-      country: selectedCountry.name_en,
-      countryCode: selectedCountry.code,
-    });
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCountry: any = countries.find((country: CountryItem) => country.code === e.target.value);
+    if (selectedCountry) {
+      setFormData({
+        ...formData,
+        country: selectedCountry.name_en,
+        countryCode: selectedCountry.code,
+      });
+    }
   };
 
   const handleChange = (e: any) => {
@@ -98,7 +101,7 @@ export default function ProfilePage() {
                 <div className="w-full px-0 md:px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
                   <h3 className="text-lg font-semibold">Your Addresses</h3>
                   <ul className="mt-4 space-y-4">
-                    {address.map((item) => (
+                    {address.map((item: any) => (
                       <li key={item.id} className="p-4 border border-gray-300 rounded-md">
                         <p>{item.firstName} {item.lastName}</p>
                         <p>{item.street1}</p>
@@ -191,7 +194,7 @@ export default function ProfilePage() {
                     onChange={handleCountryChange}
                     className="mt-1 p-2 border border-gray-300 rounded-md"
                   >
-                    {countries.map((country) => (
+                    {countries.map((country: { id: string; code: string; name_en: string }) => (
                       <option key={country.id} value={country.code}>
                         {country.name_en} - {country.code}
                       </option>

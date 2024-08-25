@@ -12,24 +12,24 @@ export default function QuestCart({ product }: { product: Product }) {
 	const setCartQuantity = useCartStore((state) => state.setQuantity);
 
 	useEffect(() => {
-		const cartItem = useCartStore.getState().items.find(item => item.id === product.id);
+		const cartItem = useCartStore.getState().items.find(item => item.ID === product.ID);
 		if (cartItem) {
 			setQuantity(cartItem.quantity);
 		}
-	}, [product.id]);
+	}, [product.ID]);
 
 	const handleAdd = () => {
 		setQuantity((prev) => prev + 1);
-		addItem({ ...product, quantity: 1 });
+		addItem({ ...product, quantity: 1, rating: 0, reviews: 0 });
 	};
 
 	const handleRemove = () => {
 		if (quantity > 0) {
 			setQuantity((prev) => prev - 1);
 			if (quantity - 1 === 0) {
-				removeItem(product.id);
+				removeItem(product.ID);
 			} else {
-				setCartQuantity(product.id, quantity - 1);
+				setCartQuantity(product.ID, quantity - 1);
 			}
 		}
 	};

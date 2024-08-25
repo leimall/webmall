@@ -1,29 +1,29 @@
 // pages/product/[id].tsx
-"use client"
-import React, { useEffect, useRef } from 'react';
-import { Carousel, Divider, Rate, Tag, } from 'antd';
-import { useProductStore } from '@/stores/useProductStore';
-import QuestCart from "@/components/UI/QuestCart";
-import { useCartStore } from '@/stores/useCartStore';
-import Link from 'next/link';
+"use client";
+
+import React, { useEffect, useRef } from "react";
+import { Carousel, Divider, Rate, Tag } from "antd";
+import { useProductStore } from "@/stores/useProductStore";
+import { useCartStore } from "@/stores/useCartStore";
+import Link from "next/link";
 import Image from "next/image";
-import type { CarouselRef } from 'antd/es/carousel';
-import ReviewList from '@/components/Common/ReviewList';
-import type { Review } from '@/types/review';
-import CatagoryListOfDetails from '@/components/Common/Category/CatagoryListOfDetails';
-import DetailsRecommendList from './DetailsRecommendList';
-import type { ProductDetail } from '@/types/products';
-import MarkdownPage from '@/components/Common/md';
+import type { CarouselRef } from "antd/es/carousel";
+import type { ProductDetail } from "@/types/products";
+import CatagoryListOfDetails from "@/components/Common/Category/CatagoryListOfDetails";
+import MarkdownPage from "@/components/Common/md";
+import QuestCart from "@/components/UI/QuestCart";
+import DetailsRecommendList from "./DetailsRecommendList";
 
-
-export default function ProductDetail({ product }: { product: ProductDetail }) {
-	const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
+export default function ProductDetailPage({ product }: { product: ProductDetail }) {
+  const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
   const { setQuantity, addItem, items } = useCartStore();
-	const existingItem = items.find(item => item.ID=== product?.ID);
-	const quantity = existingItem ? existingItem.quantity : 0;
+  const existingItem = items.find((item) => item.ID === product?.ID);
+  const quantity = existingItem ? existingItem.quantity : 0;
+  const carouselRef = useRef<CarouselRef>(null);
   const [skuTitle, setSkuTitle] = React.useState<string>('Color');
   const [size, setSize] = React.useState<string>('M');
   const [sizeList, setSizeList] = React.useState<string[]>(['L', 'M', 'S', 'XL']);
+
 
   const handleAddToCart = () => {
 		if (existingItem) {
@@ -45,23 +45,19 @@ export default function ProductDetail({ product }: { product: ProductDetail }) {
 	}
 
 
-	const carouselRef = useRef<CarouselRef>(null);
 
-	useEffect(() => {
-		if (carouselRef.current) {
-			carouselRef.current.goTo(selectedImageIndex, false);
-		}
-    if(product.Sku.title) {
-      setSkuTitle(product.Sku.title);
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.goTo(selectedImageIndex, false);
     }
-    if(product.Sku.List.length > 0) {
-      setSizeList(product.Sku.List.map((sku) => sku.title));
-    }
-	}, [selectedImageIndex]);
+  }, [selectedImageIndex]);
 
-	return (
-		<>
-			<div className="container mx-auto mb-18">
+  // 添加其他客户端逻辑
+
+  return (
+    <div className="container mx-auto mb-18">
+      {/* 其余渲染逻辑 */}
+      <div className="container mx-auto mb-18">
 				<div className="flex flex-col md:flex-row">
 					<div className="w-full md:w-1/2 pr-0 md:pr-10">
 						<Carousel ref={carouselRef} afterChange={setSelectedImageIndex}>
@@ -182,6 +178,6 @@ export default function ProductDetail({ product }: { product: ProductDetail }) {
 				<DetailsRecommendList />
 
 			</div>
-		</>
-	);
+    </div>
+  );
 }

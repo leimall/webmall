@@ -1,41 +1,25 @@
-"use client"
+// /product/[id]/page.tsx
 import { getProductDetail } from "@/apis/product";
-import ProductDetailPage from "@/components/Layout/ProductDetail/new";
+import ProductDetailPage from "@/components/Layout/ProductDetail/test";
 import type { ProductDetail } from "@/types/products";
-import { message } from "antd";
-import { useParams, useRouter } from "next/navigation";
-import React from "react";
-import { useEffect } from "react";
 
+export async function generateStaticParams() {
+  return [{ id: "650157200295071744" }, { id: "648844539087294464" }];
+}
 
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const response = await getProductDetail(id);
+  const product: ProductDetail | undefined = response?.data ?? undefined;
 
-export default function Detail({ params }: { params: { id: string } }) {
-	const { id } = useParams();
-  const [product, setProduct] = React.useState<ProductDetail | null>(null);
+  if (!product) {
+    return <div>Product not found</div>;
+  }
 
-
-  const fetchData = async () => {
-    try {
-      const productId = Array.isArray(id) ? id[0] : id;
-      const response = await getProductDetail(productId);
-      if(response.code === 0) {
-        setProduct(response.data);
-        console.error("object", response.data);
-      } else {
-        message.error("Failed to fetch products");
-      }
-    } catch (error) {
-      message.error("Failed to fetch products");
-    }
-  };
-  
-  useEffect(() => {
-    fetchData()
-  }, []);
-
-	return (
-		<div className="relative mx-auto max-w-c-1440 py-5 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
-			{product && <ProductDetailPage product={product} />}
-		</div>
-	);
+  // 返回客户端组件，服务器端不处理客户端逻辑
+  return (
+    <div className="relative mx-auto max-w-c-1440 py-5 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
+      <ProductDetailPage product={product} />
+    </div>
+  );
 }

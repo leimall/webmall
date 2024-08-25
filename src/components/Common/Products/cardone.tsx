@@ -21,7 +21,7 @@ export default function ProductCardOne({ product }: { product: Product }) {
 				</Link>
 				<div className="px-4 pb-3 pt-2">
 					<Link href={`/product/${product.ID}`}>
-						<h5 className="text-lg font-semibold tracking-tight text-fta-blake1">{product.name}</h5>
+						<h5 className="text-lg font-semibold tracking-tight text-fta-blake1">{product.title}</h5>
 					</Link>
 					<div className="flex items-center mt-2.5 mb-3">
 						<div className="flex items-center space-x-1 rtl:space-x-reverse">

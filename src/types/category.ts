@@ -8,3 +8,8 @@ export type CategoryItem = {
     createdAt: Date,
     updatedAt: Date
 }
+
+export type CountryItem = {
+  name_en: string; 
+  code: string; 
+} 

@@ -72,31 +72,31 @@ export default function ProductDetail() {
 	const product: Product | null = ProductData;
 	const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
 	const { setQuantity, addItem, items } = useCartStore();
-	const existingItem = items.find(item => item.id === product?.id);
-	const quantity = existingItem ? existingItem.quantity : 0;
+	// const existingItem = items.find(item => item.id === product?.id);
+	// const quantity = existingItem ? existingItem.quantity : 0;
 
-	const handleAddToCart = () => {
-		if (existingItem) {
-			setQuantity(product?.id, quantity + 1);
-		} else {
-			addItem({
-				title: product.title,
-				price: product.price,
-				description: product.description,
-				quantity: quantity + 1,
-				imageUrl: product.gallery[0].url,
-				name: product.title,
-				rating: 4.5,
-				reviews: 15,
-			});
-		}
-	};
+	// const handleAddToCart = () => {
+	// 	if (existingItem) {
+	// 		setQuantity(product?.id, quantity + 1);
+	// 	} else {
+	// 		addItem({
+	// 			title: product.title,
+	// 			price: product.price,
+	// 			desction: product.description,
+	// 			quantity: quantity + 1,
+	// 			mainImg: product.gallery[0].url,
+	// 			title: product.title,
+	// 			rating: 4.5,
+	// 			reviews: 15,
+	// 		});
+	// 	}
+	// };
 	const newProduct = {
 		id: Number(product.id),
 		title: product.title,
 		price: product.price,
 		description: product.description,
-		quantity: quantity + 1,
+		// quantity: quantity + 1,
 		imageUrl: product.gallery[0].url,
 		name: product.title,
 		rating: 4.5,
@@ -171,7 +171,7 @@ export default function ProductDetail() {
 						</ul>
 					</div>
 
-					{quantity > 0 && (
+					{/* {quantity > 0 && (
 						<div className="my-4 flex flex-col align-middle justify-end md:flex-row md:items-start">
 							<div className='mr-2 align-bottom h-full sm:mb-5'>Quantify:    </div>
 							<div className='flex w-full mr-5 sm:mb-5'>
@@ -186,14 +186,14 @@ export default function ProductDetail() {
 							<div className="flex mt-4">
 							</div>
 						</div>
-					)}
+					)} */}
 
-					{quantity <= 0 && (
+					{/* {quantity <= 0 && (
 						<div className="flex my-4">
 							<button onClick={handleAddToCart} className="w-full md:w-1/2 mr-2 text-white bg-fta-primary-400 hover:bg-fta-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Buy Now</button>
 							<button onClick={handleAddToCart} className="w-full md:w-1/2 border-2 border-fta-primary-300 text-fta-primary-500 bg-fta-accent1 hover:bg-fta-primary-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Add to Cart</button>
 						</div>
-					)}
+					)} */}
 				</div>
 			</div>
 			<div className="flex flex-col md:flex-row">

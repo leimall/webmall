@@ -1,8 +1,7 @@
 // stores/authStore.ts
 import type { UserInfo } from "@/types/userinfo";
-import { setuid } from "process";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface AuthState {
   token: string | null;
@@ -10,6 +9,13 @@ interface AuthState {
   setUser: (user: UserInfo) => void;
   setAuth: (token: string, user: UserInfo) => void;
   clearAuth: () => void;
+}
+
+// 类型定义
+interface PersistedState {
+  token: string | null;
+  user: UserInfo | null;
+  expiresAt?: string; // `expiresAt` 是可选项
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -23,19 +29,13 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "auth-storage",
-      getStorage: () => localStorage,
-      serialize: (state) => {
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 7);
-        return JSON.stringify({ ...state, expiresAt: expiresAt.toISOString() });
-      },
-      deserialize: (str) => {
-        const state = JSON.parse(str);
-        if (new Date(state.state.expiresAt) < new Date()) {
-          localStorage.removeItem("auth-storage");
-          return { state: { token: null, user: null }, version: state.version };
+      storage: createJSONStorage(() => localStorage),
+      migrate: (state: unknown) => {
+        const persistedState = state as PersistedState; // 将 `state` 明确为 `PersistedState` 类型
+        if (!persistedState.expiresAt || new Date(persistedState.expiresAt) < new Date()) {
+          return { token: null, user: null };
         }
-        return state;
+        return persistedState;
       },
     }
   )

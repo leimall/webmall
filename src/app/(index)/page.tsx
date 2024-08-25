@@ -1,7 +1,6 @@
 import BannerInIndex from "@/components/Common/Banner";
 import Category from "@/components/Common/Category";
 import NewsLists from "@/components/Layout/NewsLists";
-import ProductsLists from "@/components/Layout/ProductsLists";
 
 export default function Home() {
 	const banners = [
