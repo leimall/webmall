@@ -6,7 +6,7 @@ export default function CategoryItem({ item }: { item: CategoryItem }) {
 		<div>
     <Link href={`/category/${item.title_en}`}>
       <div
-      className="bg-white pt-10 pb-5 w-40 max-w-sm rounded-md font-[sans-serif] overflow-hidden mx-auto">
+      className="bg-white pt-10 pb-5 w-40 max-w-sm hover:scale-[1.03] rounded shadow font-[sans-serif] overflow-hidden mx-auto">
       <div className="flex flex-col items-center">
         {
           item.ID % 2 === 0 ? (

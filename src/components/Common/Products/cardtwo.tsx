@@ -8,13 +8,14 @@ export default function ProductCardOne({ product }: { product: Product }) {
 	return (
 		<>
 			<Link href={`/product/${product.productId}`}>
-				<div className="bg-white cursor-pointer hover:shadow-md transition-all relative">
-					<div className="relative w-full h-0 pb-[100%] overflow-hidden mx-auto">
+				<div className="bg-white cursor-pointer shadow rounded hover:scale-[1.01] transition-all relative">
+					<div className="relative w-full h-0 pb-[100%] rounded-t overflow-hidden mx-auto">
 						<Image
 							src={product.mainImg}
 							alt={product.title}
 							fill
 							sizes="100vw"
+              className="h-full w-full object-cover object-top "
 						/>
 						<div className="absolute inset-0"></div>
 					</div>

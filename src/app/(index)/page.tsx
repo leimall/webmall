@@ -1,6 +1,10 @@
 import BannerInIndex from "@/components/Common/Banner";
 import Category from "@/components/Common/Category";
+import FaqPage from "@/components/Layout/faq";
+import MiniPage from "@/components/Layout/Minilist";
+import Newsletter from "@/components/Layout/Newsletter";
 import NewsLists from "@/components/Layout/NewsLists";
+import TeamPage from "@/components/Layout/Team";
 
 export default function Home() {
 	const banners = [
@@ -21,7 +25,15 @@ export default function Home() {
     <main className="relative mx-auto max-w-c-1440 pt-5 pb-10 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
 			<BannerInIndex banners={banners} />
 			<Category />
+
 			<NewsLists />
+
+      <MiniPage />
+
+      <TeamPage />
+      <FaqPage />
+
+      <Newsletter />
     </main>
   );
 }
