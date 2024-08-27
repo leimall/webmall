@@ -13,143 +13,6 @@ const config: Config = {
 		},
 		extend: {
 			colors: {
-        main: "#603813",
-        secondary: "#f2ee75",
-        tertiary: "#ecdcde",
-        blake: "#070707",
-        blake1: "#313030",
-        blake2: "##a3a1a2",
-        blake3: "#e4e4e4",
-        blake4: "#fefdfd",
-        accent1: "#f9f6fc",
-        accent3: "#f8f4fc",
-        accent4: "#fefefe",
-        accent5: "#faf8fd",
-        accent6: "#f8f4fc",
-        accent7: "#f9f5fc",
-        stroke: "#EEEEEE",
-        strokedark: "#2D2F40",
-        hoverdark: "#252A42",
-        titlebg: "#ADFFF8",
-        titlebg2: "#FFEAC2",
-        titlebgdark: "#46495A",
-        btndark: "#292E45",
-        white: "#FFFFFF",
-        blackho: "#2C3149",
-        blacksection: "#1C2136",
-        primaryho: "#FFD1DC",
-        meta: "#20C5A8",
-        waterloo: "#757693",
-        manatee: "#999AA1",
-        alabaster: "#FBFBFB",
-        zumthor: "#EDF5FF",
-        socialicon: "#D1D8E0",
-				fta: {
-					primary: {
-						50: '#f2e5e7',
-            100: '#d9b3b7',
-            200: '#bf8086',
-            300: '#a64d56',
-            400: '#8d1a25',
-            500: '#603813', // 主色
-            600: '#49290e',
-            700: '#321b0a',
-            800: '#1b0c05',
-            900: '#050100',
-                  },
-						background: {
-							50: '#fdfaf9',
-							100: '#fbeeea',
-							200: '#f8e2da',
-							300: '#f5d6cb',
-							400: '#f3cabc',
-							500: '#f0bfae', // 原始背景色
-							600: '#c19a8b',
-							700: '#927367',
-							800: '#634d44',
-							900: '#342620',
-						},
-						secondary: '#f2ee75',
-						tertiary: '#ecdcde',
-						blake: '#070707',
-						blake1: '#313030',
-						blake2: '##a3a1a2',
-						blake3: '#e4e4e4',
-						blake4: '#fefdfd',
-						accent1: '#f9f6fc',
-						accent3: '#f8f4fc',
-						accent4: '#fefefe',
-						accent5: '#faf8fd',
-						accent6: '#f8f4fc',
-						accent7: '#f9f5fc',
-					},
-					primary: {
-						50: "#fce4ec", // Soft pink
-						100: "#f8bbd0", // Pastel pink
-						200: "#f48fb1", // Vibrant pink
-						300: "#f06292", // Bright pink
-						400: "#ec407a", // Deep pink
-						500: "#e91e63", // Rich pink
-						600: "#d81b60", // Dark pink
-						700: "#c2185b", // Warm pink
-						800: "#ad1457", // Cool pink
-						900: "#880e4f", // Deep berry pink
-					},
-
-					secondary1: {
-						50: "#f3e5f5", // Soft peach
-						100: "#e1bee7", // Light orange-pink
-						200: "#ce93d8", // Vibrant coral
-						300: "#ba68c8", // Bright salmon
-						400: "#ab47bc", // Deep coral
-						500: "#9c27b0", // Rich peach
-						600: "#8e24aa", // Dark orange-pink
-						700: "#7b1fa2", // Warm coral
-						800: "#6a1b9a", // Cool coral
-						900: "#4a148c", // Deep salmon
-					},
-
-					accent: {
-						50: "#e0f7fa", // Bright magenta
-						100: "#b2ebf2", // Vibrant fuchsia
-						200: "#80deea", // Rich pink
-						300: "#4dd0e1", // Cool coral
-						400: "#26c6da", // Deep salmon
-						500: "#00bcd4", // Bright pink
-						600: "#ff99cc", // Rich peach
-						700: "#ff7a83", // Cool coral
-						800: "#ff6d73", // Deep salmon
-						900: "#ff3d78", // Bright pink
-					},
-
-					neutral: {
-						50: "#ffe5cc", // Soft cream
-						100: "#fffbf0", // Light beige
-						200: "#ffd7be", // Bright salmon
-						300: "#ffc4b9", // Deep coral
-						400: "#ff99cc", // Rich peach
-						500: "#ff93cc", // Dark orange-pink
-						600: "#ff8e94", // Warm coral
-						700: "#ff7a83", // Cool coral
-						800: "#ff6d73", // Deep salmon
-						900: "#ff5f63", // Dark peach
-					},
-
-					star: "#F9D423",
-					black: "#181C31",
-					primary1: '#441151',
-					violet: '#883677',
-					congo: '##FF958C',
-					success: '#5FC790',
-					warning: '#FFA600',
-					danger: '#FF5630',
-					dark: '#2E3A44',
-					info: '#1CA7EC',
-					black1: '#2E3A44',
-					grey1: '#A0AABF',
-					grey2: '#C0C6D4',
-					grey3: '#E3E8F1',
-					light: '#F9FBFC',
 					primarygpt: {
 						light: '#f4c2d7', // 较浅的粉色，接近 logo 中的浅色部分
 						DEFAULT: '#e75480', // 主色调，logo 中的粉色
@@ -170,7 +33,6 @@ const config: Config = {
 						DEFAULT: '#f5f5f5', // 主色调，浅灰色
 						dark: '#eeeeee', // 深灰色，分隔线
 					},
-
 				},
 				fontSize: {
 					metatitle: ["12px", "20px"],
@@ -233,17 +95,17 @@ const config: Config = {
 					90: "22.5rem",
 				},
 				screens: {
-					'xl': '90rem',        // 1440px / 16
-					'lg': '64rem',        // 1024px / 16
-					'md': '48rem',        // 768px / 16
-					'sm': '40rem',        // 640px / 16
-					'xs': '23.4375rem',   // 手机尺寸 (375px / 16)
+					xl: '90rem',        // 1440px / 16
+					lg: '64rem',        // 1024px / 16
+					md: '48rem',        // 768px / 16
+					sm: '40rem',        // 640px / 16
+					xs: '23.4375rem',   // 手机尺寸 (375px / 16)
 				},
 				maxWidth: {
 					"c-1440": "90rem",
 					"c-1280": "80rem",
 
-					"c-1024": "64",
+					"c-1024": "64rem",
 					"c-992": "62rem",
 
 					"c-768": "48rem",
@@ -277,14 +139,14 @@ const config: Config = {
 					"solid-12": "0px 2px 10px rgba(0, 0, 0, 0.05)",
 					"solid-13": "0px 2px 19px rgba(0, 0, 0, 0.05)",
 					pink100: '0 1px 3px 0 rgba(247, 207, 227, 0.5), 0 1px 2px 0 rgba(247, 207, 227, 0.06)',
-        pink200: '0 1px 3px 0 rgba(241, 181, 211, 0.5), 0 1px 2px 0 rgba(241, 181, 211, 0.06)',
-        pink300: '0 1px 3px 0 rgba(238, 141, 191, 0.5), 0 1px 2px 0 rgba(238, 141, 191, 0.06)',
-        pink400: '0 1px 3px 0 rgba(233, 98, 171, 0.5), 0 1px 2px 0 rgba(233, 98, 171, 0.06)',
-        pink500: '0 1px 3px 0 rgba(229, 54, 151, 0.5), 0 1px 2px 0 rgba(229, 54, 151, 0.06)',
-        pink600: '0 1px 3px 0 rgba(193, 45, 128, 0.5), 0 1px 2px 0 rgba(193, 45, 128, 0.06)',
-        pink700: '0 1px 3px 0 rgba(156, 36, 104, 0.5), 0 1px 2px 0 rgba(156, 36, 104, 0.06)',
-        pink800: '0 1px 3px 0 rgba(119, 28, 80, 0.5), 0 1px 2px 0 rgba(119, 28, 80, 0.06)',
-        pink900: '0 1px 3px 0 rgba(82, 10, 56, 0.5), 0 1px 2px 0 rgba(82, 10, 56, 0.06)',
+          pink200: '0 1px 3px 0 rgba(241, 181, 211, 0.5), 0 1px 2px 0 rgba(241, 181, 211, 0.06)',
+          pink300: '0 1px 3px 0 rgba(238, 141, 191, 0.5), 0 1px 2px 0 rgba(238, 141, 191, 0.06)',
+          pink400: '0 1px 3px 0 rgba(233, 98, 171, 0.5), 0 1px 2px 0 rgba(233, 98, 171, 0.06)',
+          pink500: '0 1px 3px 0 rgba(229, 54, 151, 0.5), 0 1px 2px 0 rgba(229, 54, 151, 0.06)',
+          pink600: '0 1px 3px 0 rgba(193, 45, 128, 0.5), 0 1px 2px 0 rgba(193, 45, 128, 0.06)',
+          pink700: '0 1px 3px 0 rgba(156, 36, 104, 0.5), 0 1px 2px 0 rgba(156, 36, 104, 0.06)',
+          pink800: '0 1px 3px 0 rgba(119, 28, 80, 0.5), 0 1px 2px 0 rgba(119, 28, 80, 0.06)',
+          pink900: '0 1px 3px 0 rgba(82, 10, 56, 0.5), 0 1px 2px 0 rgba(82, 10, 56, 0.06)',
 				},
 				keyframes: {
 					line: {
@@ -301,6 +163,5 @@ const config: Config = {
 			},
 		},
 		plugins: [],
-		// plugins: [require("daisyui")],
 	};
 	export default config;

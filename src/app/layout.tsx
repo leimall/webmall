@@ -5,7 +5,6 @@ import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 
 import "@/styles/globals.css";
-import "@/styles/antd-overrides.css";
 
 export const metadata: Metadata = {
   title: "FTAnails",

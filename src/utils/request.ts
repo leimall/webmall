@@ -4,7 +4,6 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, type AxiosErro
 // import { Toast } from 'react-vant';
 import { message } from "antd";
 import { useAuthStore } from '@/stores/useUserinfoStroe';
-import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/navigation'
 
 // 创建新的axios实例
@@ -19,12 +18,15 @@ service.interceptors.request.use(
   (config) => {
     const { token, user} =  useAuthStore.getState();
     if (token) {
+      config.headers = config.headers || {};
       config.headers['x-token'] = token;
     }
     if(user?.userId) {
+      config.headers = config.headers || {};
       config.headers['x-user-id'] = user.userId;
     }
     
+    config.headers = config.headers || {};
     config.headers['Content-Type'] = 'application/json';
 
 
@@ -33,8 +35,7 @@ service.interceptors.request.use(
     //   duration: 0, // 一直存在
     // });
     return config;
-  },
-  (error: AxiosError) => {
+  },  (error: AxiosError) => {
     message.destroy;
     message.error({
       content: '请求错误，请稍后再试',
