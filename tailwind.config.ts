@@ -1,3 +1,4 @@
+import defaultTheme from 'tailwindcss/defaultTheme';
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -8,11 +9,33 @@ const config: Config = {
 	],
 	theme: {
 		fontFamily: {
-			sans: ['Roboto', 'Arial', 'sans-serif'],
+      sans: ['Roboto', 'Arial', 'sans-serif', 'var(--font-inter)', ...defaultTheme.fontFamily.sans],
 			inter: ["sans-serif"],
+      poppins: ['var(--font-poppins)'],
 		},
 		extend: {
 			colors: {
+          text: {
+            primary: '#FFFFFF',
+            secondary: '#0C0F19',
+          },
+          background: {
+            primary: '#0C0F19',
+            secondary: '#0C0F19',
+            back1: '#FFFBF8',
+            back2: '#FDD1AE',
+            back3: '#FEC495',
+            back4: '#FFBB7B',
+            back5: '#603813',
+            back6: '#4f2d0f',
+            back7: '#3f2310',
+            back8: '#2f1912',
+            back9: '#1f100d',
+          },
+          forecolor: {
+            primary: "#603813",
+            secondary: '#0C0F19',
+          },
 					primarygpt: {
 						light: '#f4c2d7', // 较浅的粉色，接近 logo 中的浅色部分
 						DEFAULT: '#e75480', // 主色调，logo 中的粉色
