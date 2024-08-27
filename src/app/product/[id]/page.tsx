@@ -1,10 +1,19 @@
 // /product/[id]/page.tsx
-import { getProductDetail } from "@/apis/product";
+import type { Product, ProductDetail } from "@/types/products";
+import { getProductDetail, getProductList } from "@/apis/product";
 import ProductDetailPage from "@/components/Layout/ProductDetail/test";
-import type { ProductDetail } from "@/types/products";
 
 export async function generateStaticParams() {
-  return [{ id: "650157200295071744" }, { id: "648844539087294464" }];
+  let list: { id: string }[] = [];
+  const res = await getProductList();
+  const products = res.data;
+
+  products.forEach((product: Product) => {
+    list.push({
+      id: product.productId,
+    });
+  });
+  return list
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
