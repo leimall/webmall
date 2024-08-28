@@ -1,26 +1,24 @@
 'use client'
-import { Suspense, useState } from 'react';
+
+import { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, Drawer, Dropdown, Menu, type MenuProps } from 'antd';
 import { MenuUnfoldOutlined } from '@ant-design/icons';
 import CartIcon from "@/components/Common/CartIcon";
+import { usePathStore } from '@/stores/usePathStore';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
-import { useRouter } from 'next/navigation';
-import { useRequireLogin } from '@/hooks/useRequireLogin';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 export default function Header() {
+  const router = useRouter();
+  // const pathname = usePathname();
+  // const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const { user, clearAuth } = useAuthStore();
-  const router = useRouter();
-  const isAuthenticated = useRequireLogin();
-
-  if (!isAuthenticated) {
-    return null;
-  }
-
-
+  const { token, user, clearAuth } = useAuthStore();
+  const { setRedirectPath } = usePathStore();
+  
   const showDrawer = () => {
     setOpen(true);
     toggleMenu();
@@ -39,8 +37,14 @@ export default function Header() {
     clearAuth()
     router.push("/");
   }
+
   const handleCartClick = () => {
-    if (isAuthenticated) {
+    if (!token) {
+      if (window.location.pathname !== '/auth/signin') {
+        setRedirectPath(window.location.pathname);
+      }
+      router.push('/auth/signin');
+    } else  {
       router.push('/cart')
     }
   }
