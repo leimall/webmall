@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, Drawer, Dropdown, Menu, type MenuProps } from 'antd';
@@ -7,12 +7,19 @@ import { MenuUnfoldOutlined } from '@ant-design/icons';
 import CartIcon from "@/components/Common/CartIcon";
 import { useAuthStore } from '@/stores/useUserinfoStroe';
 import { useRouter } from 'next/navigation';
+import { useRequireLogin } from '@/hooks/useRequireLogin';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, clearAuth } = useAuthStore();
   const router = useRouter();
+  const isAuthenticated = useRequireLogin();
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
 
   const showDrawer = () => {
     setOpen(true);
@@ -32,8 +39,11 @@ export default function Header() {
     clearAuth()
     router.push("/");
   }
-
-
+  const handleCartClick = () => {
+    if (isAuthenticated) {
+      router.push('/cart')
+    }
+  }
   const items: MenuProps['items'] = [{
     key: "profile",
     label: (
@@ -81,9 +91,11 @@ export default function Header() {
         <div className='w-0 lg:w-68 md:w-48'></div>
 
         <div className="flex items-center lg:ml-auto max-lg:w-full">
-          <div className="text-2xl font-bold text-fta-primary-400 pl-0 pr-4 md:px-4">
-            <CartIcon />
-          </div>
+          <Suspense fallback={<div>Loading...</div>}>
+            <div onClick={handleCartClick} className="text-2xl font-bold text-fta-primary-400 pl-0 pr-4 md:px-4">
+              <CartIcon />
+            </div>
+          </Suspense>
           <div className='px-1 md:px-4'>|</div>
           {user ? (
             <Dropdown className='cursor-pointer' menu={{ items }} placement="bottom" trigger={['click']} arrow>
