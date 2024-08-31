@@ -136,7 +136,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           <Divider />
           <div>
             <h3 className="text-xl font-bold text-gray-800">Desp</h3>
-            <p className="text-gray-800 text-4xl font-bold mt-4">${product.price}</p>
+            <p className="text-gray-800 text-md font-bold mt-4">{product.desction}</p>
           </div>
           <Divider />
 

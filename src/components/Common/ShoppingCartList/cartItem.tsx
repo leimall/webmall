@@ -16,27 +16,27 @@ export default function CartListItem({ item }: { item: CartItem }) {
       <div className="md:col-span-2 rounded-md">
         <div className="grid grid-cols-3 items-center gap-4">
           <div className="col-span-2 flex items-center gap-4">
-            <div className="w-24 h-24 shrink-0 rounded-md">
+            <div className="w-28 h-28 shrink-0 rounded">
               <Image
                 src={item.mainImg}
                 alt={item.title}
                 objectFit='fixed'
                 width={96}
                 height={96}
-                className="rounded-md h-full w-full "
+                className="rounded h-full w-full "
               />
             </div>
 
             <div>
-            <div className="ml-4 flex-1">
-              <h3 className="text-base font-bold text-gray-800 truncate">{item.title}</h3>
-              <h6 onClick={() => removeItem(item.ID)} className="text-xs text-red-500 cursor-pointer mt-0.5">Remove</h6>
+              <div className="ml-4 flex-1">
+                <h3 className="text-base font-bold text-gray-800 truncate">{item.title}fdfdsfdfsdfdfdfdf</h3>
+                <h6 onClick={() => removeItem(item.ID)} className="text-md text-red-500 cursor-pointer mt-0.5">Remove</h6>
               </div>
 
-              <div className="flex gap-4 mt-4">
-                <div className="relative group">
+              <div className="flex gap-4 ml-4 mt-4">
+                <div className="relative group bg-white">
                   <button type="button"
-                    className="flex items-center px-2.5 py-1.5 border border-gray-300 text-gray-800 text-xs outline-none bg-transparent rounded-md">
+                    className="flex items-center px-2.5 py-1.5 border border-gray-300 text-gray-800 text-md outline-none bg-transparent rounded-md">
                     XL
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 fill-gray-500 inline ml-2.5" viewBox="0 0 24 24">
                       <path fill-rule="evenodd"
@@ -46,16 +46,15 @@ export default function CartListItem({ item }: { item: CartItem }) {
                   </button>
 
                   <ul className='group-hover:block hidden absolute rounded-md min-w-[80px] shadow-lg bg-white z-[1000]'>
-                    <li className='py-2 px-4 hover:bg-gray-100 text-gray-800 text-xs cursor-pointer'>SM</li>
-                    <li className='py-2 px-4 hover:bg-gray-100 text-gray-800 text-xs cursor-pointer'>MD</li>
-                    <li className='py-2 px-4 hover:bg-gray-100 text-gray-800 text-xs cursor-pointer'>XL</li>
-                    <li className='py-2 px-4 hover:bg-gray-100 text-gray-800 text-xs cursor-pointer'>XXL</li>
+                    <li className='py-2 px-4 hover:bg-gray-100 text-gray-800 text-md cursor-pointer'>SM</li>
+                    <li className='py-2 px-4 hover:bg-gray-100 text-gray-800 text-md cursor-pointer'>MD</li>
+                    <li className='py-2 px-4 hover:bg-gray-100 text-gray-800 text-md cursor-pointer'>XL</li>
+                    <li className='py-2 px-4 hover:bg-gray-100 text-gray-800 text-md cursor-pointer'>XXL</li>
                   </ul>
                 </div>
                 <QuantityControl item={item} />
-
-
               </div>
+
             </div>
           </div>
           <div className="ml-auto pr-0 md:pr-4">
