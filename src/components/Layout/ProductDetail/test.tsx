@@ -196,7 +196,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
       <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-8">
       <div className="lg:col-span-4 mt-8">
         <Divider />
-        {/* <ReviewList productID={product.productId} /> */}
+        <ReviewList productID={product.productId} />
         </div>
       </div>
     </div>

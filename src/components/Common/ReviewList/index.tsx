@@ -5,13 +5,56 @@ import ReviewSummary from "./ReviewSummary";
 import DetailTitle from "../Title";
 
 
-export default function ReviewList({ reviews }: { reviews: Review[] }) {
+export default function ReviewList({ productID }: { productID: string }) {
+
+  const reviews = [{
+    username: "Richard",
+    rating: 4.5,
+    comment: "This is a very nice product. I love it.",
+    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+    likes: 10,
+    dislikes: 2,
+    createdAt: "2021-10-10"
+  }, {
+    username: "Richard",
+    rating: 4.5,
+    comment: "This is a very nice product. I love it.",
+    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+    likes: 10,
+    dislikes: 2,
+    createdAt: "2021-10-10"
+  }, {
+    username: "Richard",
+    rating: 4.5,
+    comment: "This is a very nice product. I love it.",
+    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+    likes: 10,
+    dislikes: 2,
+    createdAt: "2021-10-10"
+  }, {
+    username: "Richard",
+    rating: 4.5,
+    comment: "This is a very nice product. I love it.",
+    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+    likes: 10,
+    dislikes: 2,
+    createdAt: "2021-10-10"
+  }, {
+    username: "Richard",
+    rating: 4.5,
+    comment: "This is a very nice product. I love it.",
+    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+    likes: 10,
+    dislikes: 2,
+    createdAt: "2021-10-10"
+  }]
+
 	return (
 		<div>
 			<DetailTitle title="Reviews" />
 			<ReviewSummary />
 			<Divider />
-			<div className="">
+			<div>
 				<List
 					itemLayout="vertical"
 					dataSource={reviews}
@@ -26,12 +69,9 @@ export default function ReviewList({ reviews }: { reviews: Review[] }) {
 									</div>
 								</div>
 								<div className="flex items-cente">
-									<Button className="flex items-center" type="text" icon={<LikeOutlined className="text-fta-primary-500" />}>
-										{review.likes}
-									</Button>
-									<Button className="flex items-center" type="text" icon={<DislikeOutlined />}>
-										{review.dislikes}
-									</Button>
+                <div className="flex items-center ml-1">
+									<p className="text-gray-300">{review.createdAt}</p>
+								</div>
 								</div>
 							</div>
 
@@ -40,9 +80,6 @@ export default function ReviewList({ reviews }: { reviews: Review[] }) {
 									<div className="w-12"></div>
 									<Rate disabled style={{ fontSize: 16 }} allowHalf defaultValue={review.rating} />
 									<div className="text-gray-700 text-md ml-4">{review.rating}</div>
-								</div>
-								<div className="flex items-center ml-1">
-									<p className="text-gray-300">{review.createdAt}</p>
 								</div>
 							</div>
 

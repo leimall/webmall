@@ -1,8 +1,6 @@
 import React from 'react';
 import { Rate, Progress, Button, Flex } from 'antd';
-import 'tailwindcss/tailwind.css';
 import { MinusOutlined, PlusOutlined, StarOutlined } from '@ant-design/icons';
-import { availableMemory } from 'process';
 
 const reviewSummary = {
 	averageRating: 4.8,

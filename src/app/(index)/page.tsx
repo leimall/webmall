@@ -2,7 +2,6 @@ import BannerInIndex from "@/components/Common/Banner";
 import Category from "@/components/Common/Category";
 import FaqPage from "@/components/Layout/faq";
 import MiniPage from "@/components/Layout/Minilist";
-import Newsletter from "@/components/Layout/Newsletter";
 import NewsLists from "@/components/Layout/NewsLists";
 import TeamPage from "@/components/Layout/Team";
 
@@ -31,9 +30,8 @@ export default function Home() {
       <MiniPage />
 
       <TeamPage />
-      <FaqPage />
 
-      <Newsletter />
+      <FaqPage />
     </main>
   );
 }

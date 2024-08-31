@@ -21,7 +21,7 @@ export default function RootLayout({
 			<GoogleAnalytics gaId="G-WNPBNMJSN8" />
       <body>
         <Header />
-				<div className="bg-fta-background-50">
+				<div className="bg-white">
           {children}
 				</div>
         <Footer />
