@@ -162,7 +162,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
 
           <div>
           <h3 className="text-xl font-bold text-gray-800">Quantity</h3>
-            {/* <CartItemComponent item={cartItem} /> */}
+            <CartItemComponent item={cartItem} />
           </div>
 
         </div>
