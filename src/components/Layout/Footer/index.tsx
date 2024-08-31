@@ -3,7 +3,7 @@
 const Footer = () => {
   return (
     <footer className="font-sans tracking-wide bg-background-back1 text-back1 after:first:last:px-8 py-12">
-      <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c1440 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-6 gap-y-10">
+      <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c-1440 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-6 gap-y-10">
 
         <div>
           <div className="flex md:justify-between md:flex-row flex-col md:place-items-end">
@@ -125,7 +125,7 @@ const Footer = () => {
 
       <hr className="my-10 border-fta-background-300" />
 
-      <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c1440 flex flex-wrap max-md:flex-col gap-4">
+      <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c-1440 flex flex-wrap max-md:flex-col gap-4">
         <ul className="md:flex md:space-x-6 max-md:space-y-2">
           <li>
             <a href='/terms' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Terms of Service</a>
