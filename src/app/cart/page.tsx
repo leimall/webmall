@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '@/components/Common/pay/CheckoutForm';
-import CartListItem from '@/components/Common/CartListItem';
 import '@/styles/pay.css';
 import ShoppingCartList from '@/components/Common/ShoppingCartList/one';
 

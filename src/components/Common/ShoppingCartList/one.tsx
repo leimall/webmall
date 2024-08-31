@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CartItem } from '@/types/stores/cart';
-import CartListItem from '../CartListItem';
+import CartListItem from './cartItem';
 import { Divider } from 'antd';
 import Link from 'next/link';
 import { useCartStore } from '@/stores/useCartStore';
@@ -11,8 +11,10 @@ export default function ShoppingCartList() {
 
 	return (
 		<>
-			<div className="flex flex-col md:flex-row ">
-				<div className="flex-1 bg-white rounded-md p-4">
+			<div className="flex flex-col  md:flex-row ">
+				<div className="flex-1 bg-background-back1 rounded-md p-4">
+        <h2 className="text-2xl font-bold text-gray-800">Cart</h2>
+        <hr className="border-gray-300 mt-4 mb-8" />
 					{items.map((item) => (
 						<CartListItem item={item} key={item.ID} />
 					))}

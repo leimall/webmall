@@ -1,56 +1,42 @@
 import { useState } from 'react';
 import { CartItem } from '@/types/stores/cart';
-import CartListItem from '../CartListItem';
+import CartListItem from './cartItem';
 import { Divider } from 'antd';
 
 type ShoppingCartListProps = {
-	items: CartItem[];
+  items: CartItem[];
 };
 
-export default function ShoppingCartList({ items }: ShoppingCartListProps) {
-	const [cartItems] = useState<CartItem[]>(items);
+export default function ShoppingCartList() {
 
-	const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-	return (
-		<div className="flex flex-col md:flex-row">
-			<div className="flex-1">
-				{cartItems.map((item) => (
-					<CartListItem item={item} />
-				))}
-			</div>
+  return (
+    <div className="font-sans md:max-w-4xl max-md:max-w-xl mx-auto bg-white py-4">
+      <div className="grid md:grid-cols-3 gap-4">
 
-			<div className="w-full md:w-1/4 md:ml-8 sx:ml-0 rounded-md md:mt-0 mt-4 sm:ml-0 p-8 bg-fta-primary-50">
-				<div className="px-4">
-					<h2 className="text-2xl font-bold">Product Summary</h2>
-					<p className="text-gray-500">No products selected</p>
-				</div>
-				<div className="px-4">
-					<Divider />
-					<p className="flex justify-between text-gray-600 py-1">
-						<span >Total Price</span>
-						<span>${totalPrice}</span>
-					</p>
-					<p className="flex justify-between text-gray-600 py-1">
-						<span>Total Price (Discount)</span>
-						<span>$0</span>
-					</p>
-					<p className="flex justify-between text-gray-600 py-1">
-						<span>Tax & Fee</span>
-						<span>$0</span>
-					</p>
-					<Divider />
-				</div>
-				<div className="px-4 pb-4">
-					<div className="flex justify-between font-bold text-lg mt-4">
-						<span>Total Price</span>
-						<span>${totalPrice}</span>
-					</div>
-				</div>
-				<button className="mt-4 bg-fta-primary-500">
-					Checkout
-				</button>
-			</div>
-		</div>
-	);
+
+        <div className="bg-gray-100 rounded-md p-4 md:sticky top-0">
+          <div className="flex border border-blue-600 overflow-hidden rounded-md">
+            <input type="email" placeholder="Promo code"
+              className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-2.5" />
+            <button type='button' className="flex items-center justify-center font-semibold tracking-wide bg-blue-600 hover:bg-blue-700 px-4 text-sm text-white">
+              Apply
+            </button>
+          </div>
+
+          <ul className="text-gray-800 mt-8 space-y-4">
+            <li className="flex flex-wrap gap-4 text-base">Discount <span className="ml-auto font-bold">$0.00</span></li>
+            <li className="flex flex-wrap gap-4 text-base">Shipping <span className="ml-auto font-bold">$2.00</span></li>
+            <li className="flex flex-wrap gap-4 text-base">Tax <span className="ml-auto font-bold">$4.00</span></li>
+            <li className="flex flex-wrap gap-4 text-base font-bold">Total <span className="ml-auto">$52.00</span></li>
+          </ul>
+
+          <div className="mt-8 space-y-2">
+            <button type="button" className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-blue-600 hover:bg-blue-700 text-white rounded-md">Checkout</button>
+            <button type="button" className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent text-gray-800 border border-gray-300 rounded-md">Continue Shopping  </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
