@@ -13,7 +13,7 @@ export default function CartListItem({ item }: { item: CartItem }) {
 
   return (
     <>
-      <div className="md:col-span-2 pb-4 rounded-md">
+      <div className="md:col-span-2 rounded-md">
         <div className="grid grid-cols-3 items-center gap-4">
           <div className="col-span-2 flex items-center gap-4">
             <div className="w-24 h-24 shrink-0 rounded-md">
@@ -29,7 +29,7 @@ export default function CartListItem({ item }: { item: CartItem }) {
 
             <div>
             <div className="ml-4 flex-1">
-              <h3 className="text-base font-bold text-gray-800 truncate">{item.title}fdsfsadfasfasdsfadsfasdfasfasdf</h3>
+              <h3 className="text-base font-bold text-gray-800 truncate">{item.title}</h3>
               <h6 onClick={() => removeItem(item.ID)} className="text-xs text-red-500 cursor-pointer mt-0.5">Remove</h6>
               </div>
 
@@ -63,8 +63,7 @@ export default function CartListItem({ item }: { item: CartItem }) {
           </div>
         </div>
       </div>
-
-
+      <hr className="border-gray-100 mt-4 mb-8" />
     </>
   );
 };
