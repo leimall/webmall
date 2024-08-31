@@ -1,8 +1,9 @@
 // components/CartItem.tsx
+'use client'
 import React from 'react';
 import Image from 'next/image';
 import { useCartStore } from '@/stores/useCartStore';
-import QuantityControl from '@/components/UI/QuestCart/cart';
+import QuantityControl from '@/components/UI/QuestCart/inputNumber';
 import { CartItem } from '@/types/stores/cart';
 import { Divider } from 'antd';
 
