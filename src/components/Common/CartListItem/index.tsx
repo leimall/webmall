@@ -50,7 +50,7 @@ export default function CartListItem({ item }: { item: CartItem }) {
 							</div>
 
 							<div>
-							<QuantityControl product={item} />
+							<QuantityControl item={item} />
 							</div>
 						</div>
 					</div>

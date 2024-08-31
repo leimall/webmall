@@ -200,7 +200,7 @@ export default function ProductDetail() {
 				<div className="w-full md:w-7/8">
 					<Description />
 					<div className="my-8">
-						<ReviewList reviews={product.reviews} />
+						{/* <ReviewList reviews={product.reviews} /> */}
 					</div>
 				</div>
 				<div className="lg:w-1/2 px-4 lg:visible xl:visible sm:invisible sx:invisible">
