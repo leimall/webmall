@@ -2,23 +2,22 @@
 
 import { useCartStore } from '@/stores/useCartStore'; // 引入 Zustand store
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type { CartItem } from '@/types/stores/cart';
 
-export default function CartItemComponent({ item }:{item:CartItem}) {
-  const { setQuantity } = useCartStore();
-  const [quantity, setItemQuantity] = useState(item.quantity);
+export default function CartItemInputNumber({ item }: { item: CartItem }) {
+  const setQuantity = useCartStore((state) => state.setQuantity);
+  const quantity = useCartStore((state) =>
+    state.items.find((i) => i.ID === item.ID)?.quantity ?? 0
+  );
 
   const handleDecrease = () => {
-    const newQuantity = quantity - 1;
-    setQuantity(item.ID, newQuantity);
-    setItemQuantity(newQuantity);
+    if (quantity > 1) {
+      setQuantity(item.ID, quantity - 1);
+    }
   };
 
   const handleIncrease = () => {
-    const newQuantity = quantity + 1;
-    setQuantity(item.ID, newQuantity);
-    setItemQuantity(newQuantity);
+    setQuantity(item.ID, quantity + 1);
   };
 
   return (
@@ -51,4 +50,4 @@ export default function CartItemComponent({ item }:{item:CartItem}) {
       </div>
     </div>
   );
-};
+}

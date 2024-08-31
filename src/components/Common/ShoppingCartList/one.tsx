@@ -3,25 +3,20 @@ import { CartItem } from '@/types/stores/cart';
 import CartListItem from '../CartListItem';
 import { Divider } from 'antd';
 import Link from 'next/link';
+import { useCartStore } from '@/stores/useCartStore';
 
-type ShoppingCartListProps = {
-	items: CartItem[];
-};
-
-export default function ShoppingCartList({ items }: ShoppingCartListProps) {
-	const [cartItems] = useState<CartItem[]>(items);
-
-	const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+export default function ShoppingCartList() {
+  const {items} = useCartStore();
+	const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
 	return (
 		<>
 			<div className="flex flex-col md:flex-row ">
 				<div className="flex-1 bg-white rounded-md p-4">
-					{cartItems.map((item) => (
-						<CartListItem item={item} />
+					{items.map((item) => (
+						<CartListItem item={item} key={item.ID} />
 					))}
 				</div>
-
 				<div className="w-full md:w-1/4 md:ml-8 sx:ml-0 rounded-md md:mt-0 mt-4 sm:ml-0 p-4 bg-fta-background-100">
 					<div className="px-4">
 						<h2 className="text-2xl font-bold">Cart total</h2>

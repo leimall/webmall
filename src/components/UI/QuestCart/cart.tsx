@@ -7,7 +7,7 @@ import type { CartItem } from '@/types/stores/cart';
 
 export default function CartItemComponent({ item }:{item:CartItem}) {
   const router = useRouter();
-  const { addItem, setQuantity, removeItem } = useCartStore();
+  const { addItem, setQuantity } = useCartStore();
   const [quantity, setItemQuantity] = useState(item.quantity);
 
   const handleDecrease = () => {

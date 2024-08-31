@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import { Typography, Row, Col } from 'antd';
 import { useCartStore } from '@/stores/useCartStore';
 import { useState } from 'react';
@@ -51,7 +51,7 @@ export default function Cart() {
 					</div>
 				</div>
 			) : (
-				<ShoppingCartList items={items} />
+				<ShoppingCartList />
 			)}
 
 			<div className='mb-8'>
