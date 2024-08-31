@@ -15,6 +15,96 @@ const config: Config = {
 		},
 		extend: {
 			colors: {
+				fta: {
+					primary: {
+						50: '#f2e5e7',
+            100: '#d9b3b7',
+            200: '#bf8086',
+            300: '#a64d56',
+            400: '#8d1a25',
+            500: '#603813', // 主色
+            600: '#49290e',
+            700: '#321b0a',
+            800: '#1b0c05',
+            900: '#050100',
+                  },
+						background: {
+							50: '#fdfaf9',
+							100: '#fbeeea',
+							200: '#f8e2da',
+							300: '#f5d6cb',
+							400: '#f3cabc',
+							500: '#f0bfae', // 原始背景色
+							600: '#c19a8b',
+							700: '#927367',
+							800: '#634d44',
+							900: '#342620',
+						},
+						secondary: '#f2ee75',
+						tertiary: '#ecdcde',
+						blake: '#070707',
+						blake1: '#313030',
+						blake2: '##a3a1a2',
+						blake3: '#e4e4e4',
+						blake4: '#fefdfd',
+						accent1: '#f9f6fc',
+						accent3: '#f8f4fc',
+						accent4: '#fefefe',
+						accent5: '#faf8fd',
+						accent6: '#f8f4fc',
+						accent7: '#f9f5fc',
+					},
+					primary: {
+						50: "#fce4ec", // Soft pink
+						100: "#f8bbd0", // Pastel pink
+						200: "#f48fb1", // Vibrant pink
+						300: "#f06292", // Bright pink
+						400: "#ec407a", // Deep pink
+						500: "#e91e63", // Rich pink
+						600: "#d81b60", // Dark pink
+						700: "#c2185b", // Warm pink
+						800: "#ad1457", // Cool pink
+						900: "#880e4f", // Deep berry pink
+					},
+
+					secondary1: {
+						50: "#f3e5f5", // Soft peach
+						100: "#e1bee7", // Light orange-pink
+						200: "#ce93d8", // Vibrant coral
+						300: "#ba68c8", // Bright salmon
+						400: "#ab47bc", // Deep coral
+						500: "#9c27b0", // Rich peach
+						600: "#8e24aa", // Dark orange-pink
+						700: "#7b1fa2", // Warm coral
+						800: "#6a1b9a", // Cool coral
+						900: "#4a148c", // Deep salmon
+					},
+
+					accent: {
+						50: "#e0f7fa", // Bright magenta
+						100: "#b2ebf2", // Vibrant fuchsia
+						200: "#80deea", // Rich pink
+						300: "#4dd0e1", // Cool coral
+						400: "#26c6da", // Deep salmon
+						500: "#00bcd4", // Bright pink
+						600: "#ff99cc", // Rich peach
+						700: "#ff7a83", // Cool coral
+						800: "#ff6d73", // Deep salmon
+						900: "#ff3d78", // Bright pink
+					},
+
+					neutral: {
+						50: "#ffe5cc", // Soft cream
+						100: "#fffbf0", // Light beige
+						200: "#ffd7be", // Bright salmon
+						300: "#ffc4b9", // Deep coral
+						400: "#ff99cc", // Rich peach
+						500: "#ff93cc", // Dark orange-pink
+						600: "#ff8e94", // Warm coral
+						700: "#ff7a83", // Cool coral
+						800: "#ff6d73", // Deep salmon
+						900: "#ff5f63", // Dark peach
+					},
           text: {
             primary: '#FFFFFF',
             secondary: '#0C0F19',
