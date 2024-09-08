@@ -15,7 +15,7 @@ export default function ShoppingCartList() {
         <div className="flex-1 bg-background-back1 rounded-md p-4">
           <h2 className="text-2xl font-bold text-gray-800">Cart</h2>
           <hr className="border-gray-300 mt-4 mb-8" />
-          <div className='p-4'>
+          <div className='p-0 md:p-4'>
 
           {items.map((item) => (
             <CartListItem item={item} key={item.ID} />

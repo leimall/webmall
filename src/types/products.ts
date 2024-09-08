@@ -1,6 +1,6 @@
 export type Product = {
 	ID: number;
-	title: string,
+	title: string;
 	desction: string;
   price: number;
   priceOff: number;
@@ -18,6 +18,13 @@ export type ProductDetail = Product & {
 	Sku: Sku & {
 		List: Sku[];
 	};
+}
+
+export type CartItem = Product & {
+  quantity: number;
+  sku: string;
+  skuTitle: string;
+  skuValue: string;
 }
 
 

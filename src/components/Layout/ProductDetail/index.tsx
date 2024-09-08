@@ -9,7 +9,7 @@ import Link from 'next/link';
 import type { CarouselRef } from 'antd/es/carousel';
 import ReviewList from '@/components/Common/ReviewList';
 import type { Review } from '@/types/review';
-import Description from './description';
+import Description from './desction';
 import CatagoryListOfDetails from '@/components/Common/Category/CatagoryListOfDetails';
 import DetailsRecommendList from './DetailsRecommendList';
 
@@ -198,7 +198,6 @@ export default function ProductDetail() {
 			</div>
 			<div className="flex flex-col md:flex-row">
 				<div className="w-full md:w-7/8">
-					<Description />
 					<div className="my-8">
 						{/* <ReviewList reviews={product.reviews} /> */}
 					</div>

@@ -1,27 +1,25 @@
 'use client'
 
 import { useCartStore } from '@/stores/useCartStore'; // 引入 Zustand store
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import QuantityControl from './inputNumber';
 import type { CartItem } from '@/types/stores/cart';
 
 export default function CartItemComponent({ item }: { item: CartItem }) {
   const router = useRouter();
-  const { addItem, setQuantity } = useCartStore();
-  const [quantity, setItemQuantity] = useState(item.quantity);
+  const { addItem, setQuantity, items } = useCartStore();
+  const [quantity, setQuantityState] = useState(0);
+  const pitem = {...item, quantity: quantity };
 
-  const handleDecrease = () => {
-    const newQuantity = quantity - 1;
-    setQuantity(item.ID, newQuantity);
-    setItemQuantity(newQuantity);
-  };
+  const inits = () => {
+    items.map((e) => {
+      console.error("111111", e.title);
+    });
+  }
 
-  const handleIncrease = () => {
-    const newQuantity = quantity + 1;
-    setQuantity(item.ID, newQuantity);
-    setItemQuantity(newQuantity);
-  };
+  inits()
+
 
   const handleBuyNow = () => {
     // 执行立即购买逻辑, 这里你可以加入支付流程
@@ -29,14 +27,21 @@ export default function CartItemComponent({ item }: { item: CartItem }) {
   };
 
   const handleAddToCart = () => {
-    addItem({ ...item, quantity });
+    addItem(item);
   };
 
   return (
     <div className="flex flex-col md:justify-between md:flex-row md:items-center md:mt-2">
-      <div className="md:w-1/3 pt-4">
-        <QuantityControl item={item} />
-      </div>
+      {
+        quantity > 1 && (
+          <div className="md:w-1/3 pt-4">
+            <div className='w-28'>
+              <QuantityControl item={pitem} />
+            </div>
+          </div>
+        )
+      }
+
 
       <div className="md:w-2/3 pt-4">
         <div className="flex gap-4">

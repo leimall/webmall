@@ -5,52 +5,60 @@ import React, { useEffect, useRef } from "react";
 import { Carousel, Divider, Rate, Tag } from "antd";
 import { useProductStore } from "@/stores/useProductStore";
 import { useCartStore } from "@/stores/useCartStore";
-import Link from "next/link";
 import Image from "next/image";
 import type { CarouselRef } from "antd/es/carousel";
 import type { ProductDetail } from "@/types/products";
-import CatagoryListOfDetails from "@/components/Common/Category/CatagoryListOfDetails";
-import MarkdownPage from "@/components/Common/md";
-import QuestCart from "@/components/UI/QuestCart";
-import DetailsRecommendList from "./DetailsRecommendList";
-import ReviewList from "@/components/Common/ReviewList";
+
 import CartItemComponent from "@/components/UI/QuestCart/cart";
+import { CartItem } from "@/types/stores/cart";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
-  const { setQuantity, addItem, items } = useCartStore();
-  const existingItem = items.find((e) => e.ID === product?.ID);
+  const { setQuantity, addItem, items, totalQuantity } = useCartStore();
+  const existingItem = items.find((e) => e.productId === product?.productId);
   const quantity = existingItem ? existingItem.quantity : 0;
   const carouselRef = useRef<CarouselRef>(null);
   const [skuTitle, setSkuTitle] = React.useState<string>('Size');
   const [size, setSize] = React.useState<string>('M');
   const [sizeList, setSizeList] = React.useState<string[]>(['L', 'M', 'S', 'XL']);
 
-  const cartItem = {
-    ...product,
-    quantity: quantity + 1,
-    sku: product.ID + size +quantity,
-    skuTitle: skuTitle,
-    skuValue: size,
+  const [cartItem, setCartitem] = React.useState<CartItem>()
+
+  const initCartItem = async () => {
+    console.error("object-=existingItem", existingItem);
+    console.error("object-=existingItem", items);
+    console.error("object-=existingItem", totalQuantity);
+
+    const res = await addItem()
+
+    
+    if (quantity === 0) {
+      setCartitem({
+        ...product,
+        quantity: 1,
+        sku: product.productId + '-' + size,
+        skuTitle: skuTitle,
+        skuValue: size,
+      })
+    } else {
+      setCartitem(existingItem)
+    }
   }
 
   useEffect(() => {
     if (carouselRef.current) {
       carouselRef.current.goTo(selectedImageIndex, false);
     }
-    if(product.Sku.title){
+    if (product.Sku.title) {
       setSkuTitle(product.Sku.title)
     }
-    if(product.Sku.List && product.Sku.List.length > 0){
+    if (product.Sku.List && product.Sku.List.length > 0) {
       setSizeList(product.Sku.List.map(item => item.title))
     }
+    initCartItem()
+
   }, [selectedImageIndex]);
 
-  // 添加其他客户端逻辑
-
-  const  reviews = [{
-
-  }]
 
   return (
     <div className="font-sans tracking-wide p-4 lg:max-w-6xl max-w-2xl max-lg:mx-auto">
@@ -157,49 +165,13 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
               }
             </div>
           </div>
-
           <Divider />
-
           <div>
-          <h3 className="text-xl font-bold text-gray-800">Quantity</h3>
+            <h3 className="text-xl font-bold text-gray-800">Quantity</h3>
             <CartItemComponent item={cartItem} />
           </div>
-
-        </div>
-
-      </div>
-
-
-      <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-8">
-        <div className="lg:col-span-3 mt-8">
-          <ul className="flex border-b">
-            <li
-              className="text-gray-800 font-bold text-sm bg-gray-100 py-3 px-8 border-b-2 border-gray-800 transition-all">
-              Description</li>
-          </ul>
-
-          <div className="mt-4">
-            <MarkdownPage markdown={product.Detail[0].content} />
-          </div>
-        </div>
-        <div className="lg:col-span-2 border md:p-4 md:mt-8 md:m-4 rounded">
-          <div>aaabbb</div>
-          <div>aaabbb</div>
-          <div>aaabbb</div>
-          <div>aaabbb</div>
-          <div>aaabbb</div>
-          <div>aaabbb</div>
-          <div>aaabbb</div>
-          <div>aaabbb</div>
-        </div>
-      </div>
-      <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-8">
-      <div className="lg:col-span-4 mt-8">
-        <Divider />
-        <ReviewList productID={product.productId} />
         </div>
       </div>
     </div>
-
   );
 }

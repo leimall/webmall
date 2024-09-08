@@ -21,7 +21,6 @@ export default function QuestCart({ product }: { product: Product }) {
 
 	const handleAdd = () => {
 		setQuantity((prev) => prev + 1);
-		addItem({ ...product, quantity: 1, rating: 0, reviews: 0 });
 	};
 
 	const handleRemove = () => {

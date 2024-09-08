@@ -28,14 +28,7 @@ export default function ProductDetail({ product }: { product: ProductDetail }) {
   const handleAddToCart = () => {
 		if (existingItem) {
 			setQuantity(product.ID, quantity + 1);
-		} else {
-			addItem({
-        ...product,
-				quantity: quantity + 1,
-				rating: 4.5,
-				reviews: 15,
-			});
-		}
+		} 
 	};
 	const newProduct = {
     ...product,

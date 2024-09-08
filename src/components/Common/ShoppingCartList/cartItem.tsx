@@ -6,6 +6,7 @@ import { useCartStore } from '@/stores/useCartStore';
 import QuantityControl from './inputNumber';
 import { CartItem } from '@/types/stores/cart';
 import { Divider } from 'antd';
+import Link from 'next/link';
 
 export default function CartListItem({ item }: { item: CartItem }) {
   const removeItem = useCartStore((state) => state.removeItem);
@@ -27,13 +28,17 @@ export default function CartListItem({ item }: { item: CartItem }) {
               />
             </div>
 
-            <div>
-              <div className="ml-4 flex-1">
-                <h3 className="text-base font-bold text-gray-800 truncate">{item.title}fdfdsfdfsdfdfdfdf</h3>
+            <div className='ml-0 md:ml-4'>
+              <div className="flex-1">
+                <h3 className="text-base font-bold text-gray-800 truncate">
+                  <Link href={`/product/${item.productId}`}>
+                    {item.title}
+                  </Link>
+                </h3>
                 <h6 onClick={() => removeItem(item.ID)} className="text-md text-red-500 cursor-pointer mt-0.5">Remove</h6>
               </div>
 
-              <div className="flex gap-4 ml-4 mt-4">
+              <div className="flex gap-4 mt-6 md:mt-4">
                 <div className="relative group bg-white">
                   <button type="button"
                     className="flex items-center px-2.5 py-1.5 border border-gray-300 text-gray-800 text-md outline-none bg-transparent rounded-md">
