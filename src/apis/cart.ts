@@ -10,3 +10,11 @@ export const getProductCart = (id: string): Promise<ProductDetailResponse> => {
     method: 'get'
   })
 }
+
+
+export const getUserCartList = () => {
+  return request({
+    url: '/cart/list',
+    method: 'post'
+  })
+}

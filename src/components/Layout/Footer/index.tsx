@@ -104,13 +104,10 @@ const Footer = () => {
 
           <ul className="space-y-5 mt-6 max-sm:hidden">
             <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>About us</a>
+              <a href='/aboutus' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>About us</a>
             </li>
             <li>
               <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Careers</a>
-            </li>
-            <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Blog</a>
             </li>
             <li>
               <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Portfolio</a>
@@ -122,7 +119,6 @@ const Footer = () => {
         </div>
 
       </div>
-
       <hr className="my-10 border-fta-background-300" />
 
       <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c-1440 flex flex-wrap max-md:flex-col gap-4">

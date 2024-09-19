@@ -1,21 +1,39 @@
 'use client'
 
 import { useCartStore } from '@/stores/useCartStore'; // 引入 Zustand store
+import { useAuthStore } from '@/stores/useUserinfoStroe';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import QuantityControl from './inputNumber';
 import type { CartItem } from '@/types/stores/cart';
+import type { ProductDetail } from "@/types/products";
+import item from '@/components/Common/Category/item';
 
-export default function CartItemComponent({ item }: { item: CartItem }) {
+export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
   const { addItem, setQuantity, items } = useCartStore();
+  const { user } = useAuthStore();
+  const [userId, setUserId] = useState('');
+  const [item, setItem] = useState<CartItem>();
   const [quantity, setQuantityState] = useState(0);
-  const pitem = {...item, quantity: quantity };
+  const [skuTitle, setSkuTitle] = useState<string>('Size');
+  const [size, setSize] = useState<string>('M');
+  const [sizeList, setSizeList] = useState<string[]>(['L', 'M', 'S', 'XL']);
+
+  useEffect(() => {
+    if (product.Sku.title) {
+      setSkuTitle(product.Sku.title)
+    }
+    if (product.Sku.List && product.Sku.List.length > 0) {
+      setSizeList(product.Sku.List.map(item => item.title))
+    }
+    if (user?.userId) {
+      setUserId(user.userId)
+    }
+  }, [product.Sku.title, product.Sku.List, user?.userId]);
+
 
   const inits = () => {
-    items.map((e) => {
-      console.error("111111", e.title);
-    });
   }
 
   inits()
@@ -27,7 +45,21 @@ export default function CartItemComponent({ item }: { item: CartItem }) {
   };
 
   const handleAddToCart = () => {
-    addItem(item);
+    const e: CartItem = {
+      sku: product.productId,
+      skuTitle: skuTitle,
+      skuValue: size,
+      user_id: userId,
+      product_id: product.productId,
+      quantity: 1,
+      stock: product.stock,
+      price: product.price,
+      main_img: product.mainImg,
+      title: product.title,
+     };
+     setItem(e)
+
+    // addItem(item);
   };
 
   return (
@@ -36,7 +68,7 @@ export default function CartItemComponent({ item }: { item: CartItem }) {
         quantity > 1 && (
           <div className="md:w-1/3 pt-4">
             <div className='w-28'>
-              <QuantityControl item={pitem} />
+              {/* <QuantityControl product={product}  /> */}
             </div>
           </div>
         )

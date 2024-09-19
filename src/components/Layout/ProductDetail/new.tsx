@@ -19,20 +19,13 @@ import MarkdownPage from '@/components/Common/md';
 export default function ProductDetail({ product }: { product: ProductDetail }) {
 	const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
   const { setQuantity, addItem, items } = useCartStore();
-	const existingItem = items.find(item => item.ID=== product?.ID);
-	const quantity = existingItem ? existingItem.quantity : 0;
   const [skuTitle, setSkuTitle] = React.useState<string>('Color');
   const [size, setSize] = React.useState<string>('M');
   const [sizeList, setSizeList] = React.useState<string[]>(['L', 'M', 'S', 'XL']);
 
-  const handleAddToCart = () => {
-		if (existingItem) {
-			setQuantity(product.ID, quantity + 1);
-		} 
-	};
 	const newProduct = {
     ...product,
-		quantity: quantity + 1,
+		quantity: 1,
 		rating: 4.5,
 		reviews: 15,
 	}
@@ -132,7 +125,7 @@ export default function ProductDetail({ product }: { product: ProductDetail }) {
 							</ul>
 						</div>
 
-						{quantity > 0 && (
+						{/* {quantity > 0 && (
 							<div className="my-4 flex flex-col align-middle justify-end md:flex-row md:items-start">
 								<div className='mr-2 align-bottom h-full sm:mb-5'>Quantify:    </div>
 								<div className='flex w-full mr-5 sm:mb-5'>
@@ -147,14 +140,14 @@ export default function ProductDetail({ product }: { product: ProductDetail }) {
 								<div className="flex mt-4">
 								</div>
 							</div>
-						)}
+						)} */}
 
-						{quantity <= 0 && (
+						{/* {quantity <= 0 && (
 							<div className="flex flex-wrap gap-4">
 							<button onClick={handleAddToCart} type="button" className="min-w-[200px] px-4 py-3 bg-fta-primary-500 hover:bg-fta-primary-600 text-white text-sm font-semibold rounded-md">Buy now</button>
 							<button onClick={handleAddToCart} type="button" className="min-w-[200px] px-4 py-2.5 border border-fta-primary-500 bg-transparent hover:bg-fta-background-100 text-fta-primary-500 text-sm font-semibold rounded-md">Add to cart</button>
 						</div>
-						)}
+						)} */}
 					</div>
 				</div>
 

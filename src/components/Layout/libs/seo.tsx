@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
 type SeoProps = {
   title: string;
@@ -39,7 +40,7 @@ export const SEO: React.FC<SeoProps> = ({
     <meta name="twitter:description" content={description} />
     <meta name="twitter:site" content="@propernounco" />
     <meta name="twitter:creator" content="@propernounco" />
-    {css && <link rel="stylesheet" href={`${css}`} />}
+    {css && <Link rel="stylesheet" href={`${css}`} />}
     {image ? (
       <meta property="og:image" content={`${image}`} />
     ) : (

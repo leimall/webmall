@@ -19,7 +19,7 @@ export default function CartListItem({ item }: { item: CartItem }) {
           <div className="col-span-2 flex items-center gap-4">
             <div className="w-28 h-28 shrink-0 rounded">
               <Image
-                src={item.mainImg}
+                src={item.main_img}
                 alt={item.title}
                 objectFit='fixed'
                 width={96}
@@ -30,12 +30,12 @@ export default function CartListItem({ item }: { item: CartItem }) {
 
             <div className='ml-0 md:ml-4'>
               <div className="flex-1">
-                <h3 className="text-base font-bold text-gray-800 truncate">
-                  <Link href={`/product/${item.productId}`}>
+                <h3 className="text-md font-bold text-gray-800 truncate">
+                  <Link href={`/product/${item.product_id}`}>
                     {item.title}
                   </Link>
                 </h3>
-                <h6 onClick={() => removeItem(item.ID)} className="text-md text-red-500 cursor-pointer mt-0.5">Remove</h6>
+                <h6 onClick={() => removeItem(item.product_id)} className="text-sm text-red-500 cursor-pointer mt-0.5">Remove</h6>
               </div>
 
               <div className="flex gap-4 mt-6 md:mt-4">
@@ -67,7 +67,7 @@ export default function CartListItem({ item }: { item: CartItem }) {
           </div>
         </div>
       </div>
-      <hr className="border-gray-100 mt-4 mb-8" />
+      <hr className="border-gray-black my-6" />
     </>
   );
 };

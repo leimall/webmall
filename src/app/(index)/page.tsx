@@ -1,5 +1,6 @@
 import BannerInIndex from "@/components/Common/Banner";
 import Category from "@/components/Common/Category";
+import Adpage from "@/components/Layout/Adpage";
 import FaqPage from "@/components/Layout/faq";
 import MiniPage from "@/components/Layout/Minilist";
 import NewsLists from "@/components/Layout/NewsLists";
@@ -23,9 +24,12 @@ export default function Home() {
   return (
     <main className="relative mx-auto max-w-c-1440 pt-5 pb-10 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
 			<BannerInIndex banners={banners} />
+
 			<Category />
 
 			<NewsLists />
+
+      <Adpage />
 
       <MiniPage />
 

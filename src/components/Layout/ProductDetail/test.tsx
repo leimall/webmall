@@ -8,42 +8,20 @@ import { useCartStore } from "@/stores/useCartStore";
 import Image from "next/image";
 import type { CarouselRef } from "antd/es/carousel";
 import type { ProductDetail } from "@/types/products";
+import Price from "./price"
 
 import CartItemComponent from "@/components/UI/QuestCart/cart";
-import { CartItem } from "@/types/stores/cart";
+import cartItem from "@/components/Common/ShoppingCartList/cartItem";
+import CustomRate from "@/components/Common/Rate";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
   const { setQuantity, addItem, items, totalQuantity } = useCartStore();
-  const existingItem = items.find((e) => e.productId === product?.productId);
-  const quantity = existingItem ? existingItem.quantity : 0;
   const carouselRef = useRef<CarouselRef>(null);
   const [skuTitle, setSkuTitle] = React.useState<string>('Size');
   const [size, setSize] = React.useState<string>('M');
   const [sizeList, setSizeList] = React.useState<string[]>(['L', 'M', 'S', 'XL']);
-
-  const [cartItem, setCartitem] = React.useState<CartItem>()
-
-  const initCartItem = async () => {
-    console.error("object-=existingItem", existingItem);
-    console.error("object-=existingItem", items);
-    console.error("object-=existingItem", totalQuantity);
-
-    const res = await addItem()
-
-    
-    if (quantity === 0) {
-      setCartitem({
-        ...product,
-        quantity: 1,
-        sku: product.productId + '-' + size,
-        skuTitle: skuTitle,
-        skuValue: size,
-      })
-    } else {
-      setCartitem(existingItem)
-    }
-  }
+  const [rate, setRate] = React.useState<number>(5);
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -55,16 +33,17 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
     if (product.Sku.List && product.Sku.List.length > 0) {
       setSizeList(product.Sku.List.map(item => item.title))
     }
-    initCartItem()
-
+    if (product.Review.average) {
+      setRate(product.Review.average)
+    }
   }, [selectedImageIndex]);
 
 
   return (
-    <div className="font-sans tracking-wide p-4 lg:max-w-6xl max-w-2xl max-lg:mx-auto">
-      <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-8">
+    <div className="font-sans tracking-wide mx-auto ">
+      <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <div className="lg:col-span-3 text-center">
+        <div className="lg:col-span-7 text-center">
           <div className="md:p-4 relative before:absolute before:inset-0 befo before:rounded">
             <Carousel ref={carouselRef} afterChange={setSelectedImageIndex}>
               {product.ImageList.map((image, index) => (
@@ -73,6 +52,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
                     src={image.img_url}
                     alt={product.title}
                     fill
+                    priority
                     sizes="100vw"
                     className="w-full h-auto rounded"
                   />
@@ -95,41 +75,20 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           </div>
         </div>
 
-        <div className="lg:col-span-2 md:p-4">
+        <div className="lg:col-span-5 md:p-4">
           <div className="flex flex-wrap items-start gap-4">
             <div className="w-full">
-              <div className="text-2xl font-extrabold line-clamp-2 overflow-hidden">
+              <div className="text-sm font-extrabold line-clamp-2 overflow-hidden">
                 <h1 style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, lineHeight: '1.5em', maxHeight: '4.5em' }}>
                   {product.title}
                 </h1>
               </div>
+              <div className="text-xs text-gray-500 pt-2">
+                SKU: {product.productId}
+              </div>
 
               <div className="flex space-x-1 mt-4">
-                <svg className="w-5 fill-orange-500" viewBox="0 0 14 13" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                </svg>
-                <svg className="w-5 fill-orange-500" viewBox="0 0 14 13" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                </svg>
-                <svg className="w-5 fill-orange-500" viewBox="0 0 14 13" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                </svg>
-                <svg className="w-5 fill-orange-500" viewBox="0 0 14 13" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                </svg>
-                <svg className="w-5 fill-[#CED5D8]" viewBox="0 0 14 13" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                </svg>
+                <CustomRate rating={rate} />
               </div>
             </div>
           </div>
@@ -137,14 +96,13 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           <Divider />
 
           <div>
-            <h3 className="text-xl font-bold text-gray-800">Price</h3>
-            <p className="text-gray-800 text-4xl font-bold mt-4">${product.price}</p>
+            <Price product={product} />
           </div>
 
           <Divider />
           <div>
-            <h3 className="text-xl font-bold text-gray-800">Desp</h3>
-            <p className="text-gray-800 text-md font-bold mt-4">{product.desction}</p>
+            <h3 className="text-md font-bold text-gray-800">Description</h3>
+            <p className="text-gray-700 text-sm mt-2">{product.desction}</p>
           </div>
           <Divider />
 
@@ -168,10 +126,11 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           <Divider />
           <div>
             <h3 className="text-xl font-bold text-gray-800">Quantity</h3>
-            <CartItemComponent item={cartItem} />
+            <CartItemComponent product={product} />
           </div>
         </div>
       </div>
+
     </div>
   );
 }

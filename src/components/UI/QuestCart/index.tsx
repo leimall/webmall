@@ -13,10 +13,10 @@ export default function QuestCart({ product }: { product: Product }) {
 	const setCartQuantity = useCartStore((state) => state.setQuantity);
 
 	useEffect(() => {
-		const cartItem = useCartStore.getState().items.find(item => item.ID === product.ID);
-		if (cartItem) {
-			setQuantity(cartItem.quantity);
-		}
+		// const cartItem = useCartStore.getState().items.find(item => item.ID === product.ID);
+		// if (cartItem) {
+		// 	setQuantity(cartItem.quantity);
+		// }
 	}, [product.ID]);
 
 	const handleAdd = () => {
@@ -27,9 +27,9 @@ export default function QuestCart({ product }: { product: Product }) {
 		if (quantity > 0) {
 			setQuantity((prev) => prev - 1);
 			if (quantity - 1 === 0) {
-				removeItem(product.ID);
+				// removeItem(product.ID);
 			} else {
-				setCartQuantity(product.ID, quantity - 1);
+				// setCartQuantity(product.ID, quantity - 1);
 			}
 		}
 	};

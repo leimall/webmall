@@ -3,8 +3,6 @@ import type { CategoryItem } from '@/types/category';
 
 export default function CategoryItem({ item }: { item: CategoryItem }) {
   return (
-		<div>
-    <Link href={`/category/${item.title_en}`}>
       <div
       className="bg-white pt-10 pb-5 w-40 max-w-sm hover:scale-[1.03] rounded shadow font-[sans-serif] overflow-hidden mx-auto">
       <div className="flex flex-col items-center">
@@ -16,11 +14,9 @@ export default function CategoryItem({ item }: { item: CategoryItem }) {
           )
         }
         <div className="mt-5 text-center">
-          <h3 className="text-main font-bold text-md leading-relaxed">{item.title_en}</h3>
+          <h3 className="text-main font-bold text-xs leading-relaxed">{item.title_en}</h3>
         </div>
       </div>
     </div>
-    </Link>
-		</div>
   );
 }

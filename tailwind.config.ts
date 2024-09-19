@@ -9,9 +9,9 @@ const config: Config = {
 	],
 	theme: {
 		fontFamily: {
+			inter: ["Inter", "Inter Italic","sans-serif"],
+      notasans: ["NotoSans", "NotoSans Italic","sans-serif"],
       sans: ['Roboto', 'Arial', 'sans-serif', 'var(--font-inter)', ...defaultTheme.fontFamily.sans],
-			inter: ["sans-serif"],
-      poppins: ['var(--font-poppins)'],
 		},
 		extend: {
 			colors: {
@@ -108,10 +108,14 @@ const config: Config = {
           text: {
             primary: '#FFFFFF',
             secondary: '#0C0F19',
+            three: '#603813',
+
           },
           background: {
             primary: '#0C0F19',
             secondary: '#0C0F19',
+            back: '#eee',
+            back0:'#FdFdFd',
             back1: '#FFFBF8',
             back2: '#FDD1AE',
             back3: '#FEC495',

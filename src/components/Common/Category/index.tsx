@@ -7,6 +7,7 @@ import { Avatar, List, message, Skeleton } from 'antd';
 import Title from '../Title';
 import item from './item';
 import CategoryItemSkeleton from './loading';
+import Link from 'next/link';
 
 
 
@@ -35,15 +36,19 @@ export default function Category() {
     <div className='gap-4 py-8'>
       <Title title='Featured Category' />
       <div className='flex justify-between flex-wrap gap-4 py-8'>
-      {loading ? (
+        {loading ? (
           // 显示 8 个骨架屏
           Array.from({ length: 8 }).map((_, index) => (
-            <CategoryItemSkeleton key={index} />
+            <div key={index} >
+              <CategoryItemSkeleton />
+            </div>
           ))
         ) : (
           // 数据加载完成后显示真实内容
           categoryList.map((category: any) => (
-            <CategoryItem key={category.id} item={{ ...category }} />
+            <Link key={category.ID} href={`/category/${category.title_en}`}>
+              <CategoryItem item={{ ...category }} />
+            </Link>
           ))
         )}
       </div>

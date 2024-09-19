@@ -1,3 +1,4 @@
+@import "./fonts.css"
 @layer tailwind-base, antd;
 @layer tailwind-base {
   @tailwind base;

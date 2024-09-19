@@ -3,22 +3,41 @@
 import { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Avatar, Drawer, Dropdown, Menu, type MenuProps } from 'antd';
+import { Avatar, Drawer, Dropdown, message, type MenuProps } from 'antd';
 import { MenuUnfoldOutlined } from '@ant-design/icons';
 import CartIcon from "@/components/Common/CartIcon";
 import { usePathStore } from '@/stores/usePathStore';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { getCategoryList } from '@/apis/category';
+import React from 'react';
+import { Category } from '@/types/products';
 
 export default function Header() {
   const router = useRouter();
   // const pathname = usePathname();
   // const searchParams = useSearchParams();
+  const [categoryList, setCategoryList] = React.useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { token, user, clearAuth } = useAuthStore();
   const { setRedirectPath } = usePathStore();
-  
+
+
+  const fetchData = async () => {
+    try {
+      const response = await getCategoryList();
+      setCategoryList(response.data);
+    } catch (error) {
+      message.error("Failed to fetch captcha");
+    }
+  };
+
+  useEffect(() => {
+    fetchData()
+  }, []);
+
+
   const showDrawer = () => {
     setOpen(true);
     toggleMenu();
@@ -44,7 +63,7 @@ export default function Header() {
         setRedirectPath(window.location.pathname);
       }
       router.push('/auth/signin');
-    } else  {
+    } else {
       router.push('/cart')
     }
   }
@@ -72,14 +91,17 @@ export default function Header() {
 
 
   return (
-    <header className="flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
+    <header className="border-b py-4 px-4 sm:px-10 bg-background-back1 font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
       <div className="mx-auto max-w-c-1440 flex flex-wrap justify-between align-middle items-center gap-2 w-full">
+        <div onClick={showDrawer} className="lg:hidden text-3xl font-bold">
+          <MenuUnfoldOutlined />
+        </div>
         <Link href="/">
           <div className='flex justify-center text-fta-primary-500 items-end'>
             <Image src="/images/logo/hlogo.png" alt="logo" width={48} height={48} />
-            <span className='text-lg'>F</span>inger
-            <span className='text-lg'>T</span>ip
-            <span className='text-lg'>A</span>rtistry
+            <span className='text-md md:text-xl'>F</span>inger
+            <span className='text-md md:text-xl'>T</span>ip
+            <span className='text-md md:text-xl'>A</span>rtistry
           </div>
         </Link>
 
@@ -119,9 +141,6 @@ export default function Header() {
               </div>
             </Link>
           )}
-          <div onClick={showDrawer} className="lg:hidden text-3xl font-bold ml-auto">
-            <MenuUnfoldOutlined />
-          </div>
         </div>
 
         <div className="lg:hidden lg:w-96 w-full lg:pt-0 pt-2">
@@ -134,12 +153,19 @@ export default function Header() {
         </div>
 
         <Drawer title="FingerTipArtistry" placement={"left"} closable={false} onClose={onClose} open={open} width={280} key={"left"} footer="https://ftanails.com">
-          <button id="toggleClose" onClick={onClose} className="fixed top-4 right-4 z-[1001] rounded-full bg-white p-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 fill-black" viewBox="0 0 320.591 320.591">
+          <div id="toggleClose" onClick={onClose} className="fixed w-8 h-8 top-4 right-8 cursor-pointer bg-white z-[2222] rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" className="m-2 w-4 items-center  bg-white text-black" viewBox="0 0 320.591 320.591">
               <path d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z" />
               <path d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z" />
             </svg>
-          </button>
+          </div>
+          {categoryList.map((category: Category, index) => (
+            <Link key={index} href={`/category/${category.title_en}`}>
+              <div className='border-b text- text-md border-gray-200 pb-4 mb-4'>
+                {category.title_en}
+              </div>
+            </Link>
+          ))}
           {user ? (
             <>
               <div className='fixed top-0 left-52 z-[1001] p-3'>
@@ -152,7 +178,7 @@ export default function Header() {
                 )}
               </div>
               <Link href="/myself/profile">
-                <div className='border-b text-lg border-gray-200 pb-4 mb-4'>
+                <div className='border-b text-md border-gray-200 pb-4 mb-4'>
                   Profile
                 </div>
               </Link>
@@ -160,18 +186,30 @@ export default function Header() {
           ) : (
             <>
               <Link href="/auth/signin">
-                <div className='border-b text-lg border-gray-200 pb-4 mb-4'>
+                <div className='border-b text-md border-gray-200 pb-4 mb-4'>
                   Sign in
                 </div>
               </Link>
               <Link href="/auth/signup">
-                <div className='border-b text-lg border-gray-200 pb-4 mb-4'>
+                <div className='border-b text-md border-gray-200 pb-4 mb-4'>
                   Sign up
                 </div>
               </Link>
             </>
           )}
+
         </Drawer>
+      </div>
+      <div className="hidden md:block">
+        <div className='mx-auto max-w-c-1280 flex flex-wrap gap-4 items-center justify-center mt-4'>
+          {categoryList.map((category: Category, index) => (
+            <Link href={`/category/${category.title_en}`} key={index}>
+              <div className='text-xs text-fta-primary-500'>
+                {category.title_en}
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </header>
   );
