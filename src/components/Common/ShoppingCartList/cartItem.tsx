@@ -30,8 +30,6 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
     if (index === length - 1) {
       setIsShow(false);
     }
-
-    console.error("object", isShow, length, index);
   }
 
 
@@ -58,7 +56,7 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
       <div className="md:col-span-2 rounded-md">
         <div className="items-center gap-4">
           <div className="md:col-span-2 flex items-center gap-2">
-            <div className="w-32 h-32 shrink-0 border rounded">
+            <div className="w-32 h-32 shrink-0 border rounded bg-white">
               <Image
                 src={item.main_img}
                 alt={item.title}

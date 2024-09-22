@@ -18,7 +18,6 @@ export default function ProductInfoPage({ product }: { product: Product }) {
       setOldprice(old.toFixed(2))
       setOff(off)
     }
-    console.error(product);
   }, [product]);
   return (
     <div className="flex justify-center items-end font-sans">

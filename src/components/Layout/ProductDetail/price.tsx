@@ -18,7 +18,6 @@ export default function ProductInfoPage({ product }: { product: ProductDetail })
       setOldprice(old.toFixed(2))
       setOff(off)
     }
-    console.error(product);
   }, [product]);
   return (
     <div className="font-sans tracking-wide mx-auto ">

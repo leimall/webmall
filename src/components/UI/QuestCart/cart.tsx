@@ -19,7 +19,8 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [skuTitle, setSkuTitle] = useState<string>('Size');
   const [size, setSize] = useState<string>('M');
   const [sizeList, setSizeList] = useState<string[]>(['L', 'M', 'S', 'XS']);
-  const [show, setShow] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -113,10 +114,65 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   }, [selfItem?.size]);
 
-  const handleBuyNow = () => {
-    // 执行立即购买逻辑, 这里你可以加入支付流程
-    router.push('/checkout');
+
+  const handleBuyNow = async () => {
+    setLoading(true);
+    if (selfItem) {
+      // Step 1: 本地状态的同步 (Zustand store)
+      selfItem.user_id = userId;
+      selfItem.size = size;
+      selfItem.price = selfPrice;
+      selfItem.quantity = selfQuantity;
+  
+      addItem(selfItem); // 添加商品到购物车或本地存储
+  
+      // Step 2: 订单信息准备
+      const orderData = {
+        user_id: userId,
+        order_id: `ORD-${new Date().getTime()}`, // 假设你生成订单号的方式
+        total_price: selfItem.price * selfItem.quantity,
+        payment_method: 'pending', // 可以根据实际情况动态调整
+        order_status: 'pending',
+        shipping_method: 'standard', // 示例配送方式
+        shipping_price: 10.00, // 假设有固定运费
+        shipping_address_id: 123, // 假设用户的默认地址ID
+        order_items: [
+          {
+            product_id: selfItem.product_id,
+            quantity: selfItem.quantity,
+            price: selfItem.price,
+            title: selfItem.title,
+            size: selfItem.size,
+            color: selfItem.color,
+            main_img: selfItem.main_img
+          }
+        ]
+      };
+  
+      try {
+        // Step 3: 发送订单数据到后端 API 同步到数据库
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData),
+        });
+  
+        if (!response.ok) {
+          throw new Error('订单创建失败');
+        }
+  
+        const result = await response.json();
+  
+        // Step 4: 订单创建成功后，跳转到结算页面
+        router.push('/checkout');
+      } catch (error) {
+        console.error('订单创建失败:', error);
+      }
+    }
   };
+  
 
   const handleAddToCart = () => {
     if (selfItem) {
@@ -216,13 +272,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             <button
               type="button"
               onClick={handleAddToCart}
-              className="min-w-[120px] px-4 py-2.5 border border-orange-500 bg-transparent hover:bg-orange-500 hover:text-zinc-50 text-gray-800 text-sm font-semibold rounded"
-            >
-              Add to cart
-            </button>
-            <button
-              type="button"
-              onClick={fetchCartItems}
               className="min-w-[120px] px-4 py-2.5 border border-orange-500 bg-transparent hover:bg-orange-500 hover:text-zinc-50 text-gray-800 text-sm font-semibold rounded"
             >
               Add to cart

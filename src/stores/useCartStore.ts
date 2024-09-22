@@ -13,6 +13,7 @@ interface CartStore {
   addItem: (item: CartItem) => void;
   removeItem: (product_id: string) => void;
   clearCart: () => void;
+  clearCartItem: (item: CartItem) => void;
   setQuantity: (product_id: string, quantity: number) => void;
   setSkuValue: (product_id: string, size: string) => void;
   applyCoupon: (couponCode: string, discount: number) => void; // 新增：应用优惠券
@@ -91,6 +92,11 @@ export const useCartStore = create<CartStore>()(
       // 清空购物车
       clearCart: () => {
         set({ items: [], totalQuantity: 0, totalPrice: 0, discount: 0, couponCode: null });
+      },
+
+      clearCartItem: (item: CartItem) => {
+        get().deleteCart(item)
+        get().clearCart()
       },
 
       // 设置商品数量

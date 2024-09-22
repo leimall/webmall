@@ -3,3 +3,9 @@ export interface ResponseData<T> {
   message?: string;
   data: T;
 }
+
+export interface Response {
+  code: number;
+  msg?: string;
+  data?: any;
+}
