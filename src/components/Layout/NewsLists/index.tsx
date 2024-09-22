@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useInView } from 'react-intersection-observer'
-import useSWR from 'swr'
 import ProductCardOne from '@/components/Common/Products/cardtwo'
 import { Product } from '@/types/products'
 import Title from '@/components/Common/Title'

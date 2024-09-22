@@ -8,6 +8,7 @@ import { MenuUnfoldOutlined } from '@ant-design/icons';
 import CartIcon from "@/components/Common/CartIcon";
 import { usePathStore } from '@/stores/usePathStore';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
+import { useCartStore } from '@/stores/useCartStore';
 import { useRouter } from 'next/navigation';
 import { getCategoryList } from '@/apis/category';
 import React from 'react';
@@ -21,6 +22,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { token, user, clearAuth } = useAuthStore();
+  const { clearCart } = useCartStore();
   const { setRedirectPath } = usePathStore();
 
 
@@ -54,6 +56,7 @@ export default function Header() {
 
   const signout = () => {
     clearAuth()
+    clearCart()
     router.push("/");
   }
 

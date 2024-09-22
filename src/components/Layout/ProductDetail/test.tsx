@@ -16,27 +16,17 @@ import CustomRate from "@/components/Common/Rate";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
-  const { setQuantity, addItem, items, totalQuantity } = useCartStore();
   const carouselRef = useRef<CarouselRef>(null);
-  const [skuTitle, setSkuTitle] = React.useState<string>('Size');
-  const [size, setSize] = React.useState<string>('M');
-  const [sizeList, setSizeList] = React.useState<string[]>(['L', 'M', 'S', 'XL']);
   const [rate, setRate] = React.useState<number>(5);
 
   useEffect(() => {
     if (carouselRef.current) {
       carouselRef.current.goTo(selectedImageIndex, false);
     }
-    if (product.Sku.title) {
-      setSkuTitle(product.Sku.title)
-    }
-    if (product.Sku.List && product.Sku.List.length > 0) {
-      setSizeList(product.Sku.List.map(item => item.title))
-    }
     if (product.Review.average) {
       setRate(product.Review.average)
     }
-  }, [selectedImageIndex]);
+  }, [selectedImageIndex, product.Review.average]);
 
 
   return (
@@ -68,7 +58,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
                 key={index}
                 src={image.img_url}
                 alt={product.title}
-                className={`w-16 h-16 border-2 cursor-pointer ${selectedImageIndex === index ? 'border-green-500' : 'border-gray3'} `}
+                className={`w-16 h-16 border-2 rounded cursor-pointer ${selectedImageIndex === index ? 'border-gray-800 bg-slate-100' : 'border-fta-primary-50'} `}
                 onClick={() => setSelectedImageIndex(index)}
               />
             ))}
@@ -107,25 +97,6 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           <Divider />
 
           <div>
-            <h2 className="text-md md:text-xl font-bold text-gray-800">Choose a {skuTitle}</h2>
-            <div className="flex flex-wrap gap-4 mt-4">
-              {
-                sizeList.map((e, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className={`w-10 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-sm rounded-md flex items-center justify-center shrink-0 ${e === size ? 'border-gray-800 bg-slate-100' : 'border-gray-300'}`}
-                    onClick={() => setSize(e)}
-                  >
-                    {e}
-                  </button>
-                ))
-              }
-            </div>
-          </div>
-          <Divider />
-          <div>
-            <h3 className="text-xl font-bold text-gray-800">Quantity</h3>
             <CartItemComponent product={product} />
           </div>
         </div>

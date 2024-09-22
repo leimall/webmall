@@ -12,10 +12,10 @@ import Link from 'next/link';
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function Cart() {
-  const { items, addItem,  removeItem } = useCartStore();
+  const { items, addItem,  removeItem, totalPrice } = useCartStore();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
-  const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
+  // const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
   const totalAmount = totalPrice * 100;
 
 
@@ -43,7 +43,7 @@ export default function Cart() {
   };
 
   return (
-    <div className="relative mx-auto max-w-c-1280 py-5 justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
+    <div className="relative mx-auto max-w-c-1280 py-5 justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
       <div>
         <ul className="flex items-center font-[sans-serif] space-x-4 mb-4">
           <Link href={'/'} passHref>
@@ -63,7 +63,7 @@ export default function Cart() {
           </li>
         </ul>
       </div>
-      <h1 className="text-xl md:text-3xl py-1 md:py-4 mb-4">Shopping Cart</h1>
+      <h1 className="text-xl md:text-3xl py-1 md:py-4 mb-2">Shopping Cart</h1>
       {items.length === 0 ? (
         <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white sm:rounded-lg p-6 text-center">

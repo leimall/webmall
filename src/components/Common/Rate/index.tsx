@@ -3,15 +3,14 @@ import { Rate } from 'antd';
 
 
 export default function CustomRate({rating}: {rating: number}) {
-  const [value,setValue] = React.useState(4.5);
+  const [value, setValue] = React.useState(4.5);
   useEffect(() => {
-    console.log(rating);
     setValue(rating);
   }, [rating]);
 
   return (
     <div>
-      <Rate disabled defaultValue={value} />
+      <Rate disabled defaultValue={value} style={{ fontSize: 14, color: '#FFA407FF' }} />
     </div>
   );
 }

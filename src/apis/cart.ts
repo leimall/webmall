@@ -18,3 +18,36 @@ export const getUserCartList = () => {
     method: 'post'
   })
 }
+
+export const createCartItem = (data: any) => {
+  return request({
+    url: '/cart/add',
+    method: 'post',
+    data
+  })
+}
+
+export const updateCartItem = (data: any) => {
+  return request({
+    url: '/cart/update',
+    method: 'post',
+    data
+  })
+}
+
+export const deleteCartItem = (data: any) => {
+  return request({
+    url: '/cart/delete',
+    method: 'post',
+    data
+  })
+}
+
+export const deleteCartItemOne = (data: any) => {
+  return request({
+    url: '/cart/deleteone',
+    method: 'post',
+    data
+  })
+}
+

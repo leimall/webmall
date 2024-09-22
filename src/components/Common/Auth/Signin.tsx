@@ -6,8 +6,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useUserinfoStroe"
+import { useCartStore } from "@/stores/useCartStore";
 
 export default function Signin() {
+  const { fetchCartItems } = useCartStore()
   const [data, setData] = useState<{ picPath?: string } | null>(null);
   const [captchaId, setCaptchaId] = useState("");
   const [email, setEmail] = useState("");
@@ -44,7 +46,7 @@ export default function Signin() {
       message.error("Captcha is required");
       return false;
     }
-    if(!rememberMe) {
+    if (!rememberMe) {
       message.error("I agree to the terms and conditions is required");
       return false;
     }
@@ -53,12 +55,13 @@ export default function Signin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateFields() && rememberMe ) {
+    if (validateFields() && rememberMe) {
       try {
         const response = await signIn({ email, password, captcha, captchaId });
         const { token, user } = response.data;
-      setAuth(token, user); // 保存token和用户信息到Zustand
-      message.success("Signed in successfully");
+        setAuth(token, user); // 保存token和用户信息到Zustand
+        fetchCartItems();
+        message.success("Signed in successfully");
         router.push("/"); // Redirect to home page or any other page
       } catch (error) {
         message.error(" to sign in");
@@ -83,15 +86,15 @@ export default function Signin() {
               <div className="mt-8">
                 <label className="text-gray-800 text-xs block mb-2">Email</label>
                 <div className="relative flex items-center">
-                <input
-										name="email"
-										type="text"
-										required
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-										className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
-										placeholder="Enter email"
-									/>
+                  <input
+                    name="email"
+                    type="text"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+                    placeholder="Enter email"
+                  />
                   <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 682.667 682.667">
                     <defs>
                       <clipPath id="a" clipPathUnits="userSpaceOnUse">
@@ -109,15 +112,15 @@ export default function Signin() {
               <div className="mt-8">
                 <label className="text-gray-800 text-xs block mb-2">Password</label>
                 <div className="relative flex items-center">
-                <input
-										name="password"
-										type="password"
-										required
-										value={password}
-										onChange={(e) => setPassword(e.target.value)}
-										className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
-										placeholder="Enter password"
-									/>
+                  <input
+                    name="password"
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+                    placeholder="Enter password"
+                  />
                   <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2 cursor-pointer" viewBox="0 0 128 128">
                     <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" data-original="#000000"></path>
                   </svg>
@@ -128,15 +131,15 @@ export default function Signin() {
                 <label className="text-gray-800 text-xs block mb-2">Captcha</label>
                 <div className="flex justify-between items-center">
                   <div className="w-2/3 relative flex items-center">
-                  <input
-											name="captcha"
-											type="text"
-											required
-											value={captcha}
-											onChange={(e) => setCaptcha(e.target.value)}
-											className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
-											placeholder="Enter captcha"
-										/>
+                    <input
+                      name="captcha"
+                      type="text"
+                      required
+                      value={captcha}
+                      onChange={(e) => setCaptcha(e.target.value)}
+                      className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+                      placeholder="Enter captcha"
+                    />
                   </div>
                   <div className="pl-4 cursor-pointer" onClick={fetchCaptcha}>
                     {data?.picPath && <Image src={data.picPath} alt="Captcha" width={140} height={60} />}
@@ -145,14 +148,14 @@ export default function Signin() {
               </div>
 
               <div className="flex items-center mt-8">
-              <input
-									id="remember-me"
-									name="remember-me"
-									type="checkbox"
-									checked={rememberMe}
-									onChange={(e) => setRememberMe(e.target.checked)}
-									className="h-4 w-4 shrink-0 rounded bg-fta-primary-500"
-								/>
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-4 w-4 shrink-0 rounded bg-fta-primary-500"
+                />
                 <label className="ml-3 block text-sm">
                   I accept the <a href="/" className="text-fta-primary-400 font-semibold hover:underline ml-1">Terms and Conditions</a>
                 </label>
