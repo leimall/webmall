@@ -148,28 +148,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
           }
         ]
       };
-  
-      try {
-        // Step 3: 发送订单数据到后端 API 同步到数据库
-        const response = await fetch('/api/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderData),
-        });
-  
-        if (!response.ok) {
-          throw new Error('订单创建失败');
-        }
-  
-        const result = await response.json();
-  
-        // Step 4: 订单创建成功后，跳转到结算页面
-        router.push('/checkout');
-      } catch (error) {
-        console.error('订单创建失败:', error);
-      }
     }
   };
   

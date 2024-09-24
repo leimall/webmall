@@ -1,13 +1,7 @@
 // /product/[id]/page.tsx
-import type { Detail, Product, ProductDetail } from "@/types/products";
+import type { Product, ProductDetail } from "@/types/products";
 import { getProductDetail, getProductList } from "@/apis/product";
 import ProductDetailPage from "@/components/Layout/ProductDetail/test";
-import ProudctDesction from "@/components/Layout/ProductDetail/desction";
-import ProductReview from "@/components/Common/ReviewList";
-import ProductImage from "@/components/Layout/ProductDetail/imagelist";
-import ProductInfo from "@/components/Layout/ProductDetail/info";
-import Image from 'next/image'
-import ReviewSummary from "@/components/Common/ReviewList/ReviewSummary";
 
 export async function generateStaticParams() {
   let list: { id: string }[] = [];
@@ -26,8 +20,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
   const response = await getProductDetail(id);
   const product: ProductDetail | undefined = response?.data ?? undefined;
-  const detail: Detail = product?.Detail[0] ?? '';
-  const productID: string = product?.productId ?? '';
 
   if (!product) {
     return <div>Product not found</div>;

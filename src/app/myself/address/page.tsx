@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { message } from 'antd'; // 使用 Ant Design 的 message 组件来显示反馈信息
 import { getCountry, createMyselfAddress, getMyselfAddress } from '@/apis/address';
 import type { CountryItem } from '@/types/category';
+import type { AddressItem } from '@/types/address';
 
 export default function ProfilePage() {
-  const [countries, setCountries] = useState([]);
-  const [address, setAddress] = useState([]);
+  const [countries, setCountries] = useState<CountryItem[]>([]);
+  const [address, setAddress] = useState<AddressItem[]>([]);
   const [total, setTotal] = useState(0);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -26,10 +27,10 @@ export default function ProfilePage() {
   const fetchMyselfAddress = async () => {
     try {
       const response = await getMyselfAddress();
-      setAddress(response.data.list);
-      setTotal(response.data.total);
+      setAddress(response.data?.list ?? []);
+      setTotal(response.data?.total ?? 0);
     } catch (error) {
-      message.error("Failed to fetch captcha");
+      message.error("Failed to fetch address");
     }
   };
 
@@ -46,8 +47,9 @@ export default function ProfilePage() {
     fetchMyselfAddress();
     fetchCountry();
   }, []);
+
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCountry: any = countries.find((country: CountryItem) => country.code === e.target.value);
+    const selectedCountry = countries.find((country: CountryItem) => country.code === e.target.value);
     if (selectedCountry) {
       setFormData({
         ...formData,
@@ -57,7 +59,7 @@ export default function ProfilePage() {
     }
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -69,9 +71,9 @@ export default function ProfilePage() {
     e.preventDefault();
     try {
       const response = await createMyselfAddress(formData);
-      message.success("Signed up successfully");
+      message.success("Address added successfully");
     } catch (error) {
-      message.error(" to sign in");
+      message.error("Failed to add address");
     }
   };
 
@@ -101,8 +103,8 @@ export default function ProfilePage() {
                 <div className="w-full px-0 md:px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
                   <h3 className="text-lg font-semibold">Your Addresses</h3>
                   <ul className="mt-4 space-y-4">
-                    {address.map((item: any) => (
-                      <li key={item.id} className="p-4 border border-gray-300 rounded-md">
+                    {address.map((item: AddressItem) => (
+                      <li key={item.ID} className="p-4 border border-gray-300 rounded-md">
                         <p>{item.firstName} {item.lastName}</p>
                         <p>{item.street1}</p>
                         <p>{item.street2}</p>
@@ -194,8 +196,8 @@ export default function ProfilePage() {
                     onChange={handleCountryChange}
                     className="mt-1 p-2 border border-gray-300 rounded-md"
                   >
-                    {countries.map((country: { id: string; code: string; name_en: string }) => (
-                      <option key={country.id} value={country.code}>
+                    {countries.map((country: CountryItem) => (
+                      <option key={country.code} value={country.code}>
                         {country.name_en} - {country.code}
                       </option>
                     ))}

@@ -4,14 +4,12 @@
 import React, { useEffect, useRef } from "react";
 import { Carousel, Divider, Rate, Tag } from "antd";
 import { useProductStore } from "@/stores/useProductStore";
-import { useCartStore } from "@/stores/useCartStore";
 import Image from "next/image";
 import type { CarouselRef } from "antd/es/carousel";
 import type { ProductDetail } from "@/types/products";
 import Price from "./price"
 
 import CartItemComponent from "@/components/UI/QuestCart/cart";
-import cartItem from "@/components/Common/ShoppingCartList/cartItem";
 import CustomRate from "@/components/Common/Rate";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {

@@ -1,4 +1,7 @@
+import type { AddressItem } from '@/types/address';
+import type { ResponseLists  } from '@/types/respones'
 import request from '@/utils/request'
+type addressResponse = ResponseLists<{ list: AddressItem[], total: number }>;
 
 
 export const getCountry = () => {
@@ -8,7 +11,7 @@ export const getCountry = () => {
   })
 }
 
-export const getMyselfAddress = () => {
+export const getMyselfAddress = (): Promise<addressResponse>=> {
   return request({
     url: '/myself/address',
     method: 'get'
