@@ -25,7 +25,7 @@ export default function Home() {
     <main className="relative mx-auto max-w-c-1440 pt-5 pb-10 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
 			<BannerInIndex banners={banners} />
 
-			<Category />
+			{/* <Category /> */}
 
 			<NewsLists />
 
