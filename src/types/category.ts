@@ -12,4 +12,16 @@ export type CategoryItem = {
 export type CountryItem = {
   name_en: string; 
   code: string; 
-} 
+}
+
+export interface Category {
+  ID: number;
+  title: string;
+  title_en: string;
+  parent_id: number;
+  type: number;
+  value: string;
+  createdAt: Date;
+  updatedAt: Date;
+  children?: Category[];
+}

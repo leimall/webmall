@@ -1,44 +1,31 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Avatar, Drawer, Dropdown, message, type MenuProps } from 'antd';
+import { Avatar, Drawer, Dropdown, type MenuProps } from 'antd';
 import { MenuUnfoldOutlined } from '@ant-design/icons';
 import CartIcon from "@/components/Common/CartIcon";
 import { usePathStore } from '@/stores/usePathStore';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
 import { useCartStore } from '@/stores/useCartStore';
 import { useRouter } from 'next/navigation';
-import { getCategoryList } from '@/apis/category';
 import React from 'react';
-import { Category } from '@/types/products';
+import { Category } from '@/types/category';
 
-export default function Header() {
+interface HeaderProps {
+  categories?: Category[];
+}
+
+export default function Header({ categories = [] }: HeaderProps) {
   const router = useRouter();
   // const pathname = usePathname();
   // const searchParams = useSearchParams();
-  const [categoryList, setCategoryList] = React.useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { token, user, clearAuth } = useAuthStore();
   const { clearCart } = useCartStore();
   const { setRedirectPath } = usePathStore();
-
-
-  const fetchData = async () => {
-    try {
-      const response = await getCategoryList();
-      setCategoryList(response.data);
-    } catch (error) {
-      message.error("Failed to fetch captcha");
-    }
-  };
-
-  useEffect(() => {
-    fetchData()
-  }, []);
-
 
   const showDrawer = () => {
     setOpen(true);
@@ -158,17 +145,29 @@ export default function Header() {
         <Drawer title="FingerTipArtistry" placement={"left"} closable={false} onClose={onClose} open={open} width={280} key={"left"} footer="https://ftanails.com">
           <div id="toggleClose" onClick={onClose} className="fixed w-8 h-8 top-4 right-8 cursor-pointer bg-white z-[2222] rounded-full">
             <svg xmlns="http://www.w3.org/2000/svg" className="m-2 w-4 items-center  bg-white text-black" viewBox="0 0 320.591 320.591">
-              <path d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z" />
-              <path d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z" />
+              <path d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-14.072-18.752-32.142-18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
             </svg>
           </div>
-          {categoryList.map((category: Category, index) => (
-            <Link key={index} href={`/category/${category.title_en}`}>
-              <div className='border-b text- text-md border-gray-200 pb-4 mb-4'>
-                {category.title_en}
+          {categories && categories.length > 0 ? (
+            categories.map((mainCategory) => (
+              <div key={mainCategory.ID}>
+                <Link href={`/category/${mainCategory.title_en}`}>
+                  <div className='border-b text-md border-gray-200 pb-4 mb-4'>
+                    {mainCategory.title_en}
+                  </div>
+                </Link>
+                {mainCategory.children && mainCategory.children.map((subCategory) => (
+                  <Link key={subCategory.ID} href={`/category/${mainCategory.title_en}/${subCategory.title_en}`}>
+                    <div className='border-b text-sm border-gray-200 pb-2 mb-2 ml-4'>
+                      {subCategory.title_en}
+                    </div>
+                  </Link>
+                ))}
               </div>
-            </Link>
-          ))}
+            ))
+          ) : (
+            <div>No categories available</div>
+          )}
           {user ? (
             <>
               <div className='fixed top-0 left-52 z-[1001] p-3'>
@@ -205,13 +204,30 @@ export default function Header() {
       </div>
       <div className="hidden md:block">
         <div className='mx-auto max-w-c-1280 flex flex-wrap gap-4 items-center justify-center mt-4'>
-          {categoryList.map((category: Category, index) => (
-            <Link href={`/category/${category.title_en}`} key={index}>
-              <div className='text-xs text-fta-primary-500'>
-                {category.title_en}
+          {categories && categories.length > 0 ? (
+            categories.map((mainCategory) => (
+              <div key={mainCategory.ID} className="relative group">
+                <Link href={`/category/${mainCategory.title_en}`}>
+                  <div className='text-xs text-fta-primary-500'>
+                    {mainCategory.title_en}
+                  </div>
+                </Link>
+                {mainCategory.children && mainCategory.children.length > 0 && (
+                  <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10">
+                    {mainCategory.children.map((subCategory) => (
+                      <Link key={subCategory.ID} href={`/category/${mainCategory.title_en}/${subCategory.title_en}`}>
+                        <div className='text-xs text-fta-primary-500 p-2 hover:bg-gray-100'>
+                          {subCategory.title_en}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-            </Link>
-          ))}
+            ))
+          ) : (
+            <div>No categories available</div>
+          )}
         </div>
       </div>
     </header>

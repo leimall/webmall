@@ -1,19 +1,16 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-
 import CategoryItem from './item';
 import { getCategoryList } from '@/apis/category';
-import { Avatar, List, message, Skeleton } from 'antd';
+import { message } from 'antd';
 import Title from '../Title';
-import item from './item';
 import CategoryItemSkeleton from './loading';
 import Link from 'next/link';
-
-
+import type { Category } from '@/types/category';
 
 export default function Category() {
   const [loading, setLoading] = useState(true);
-  const [categoryList, setCategoryList] = React.useState([]);
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   const fetchData = async () => {
     try {
@@ -24,7 +21,7 @@ export default function Category() {
       }, 2000)
     } catch (error) {
       setLoading(false);
-      message.error("Failed to fetch captcha");
+      message.error("Failed to fetch categories");
     }
   };
 
@@ -45,9 +42,9 @@ export default function Category() {
           ))
         ) : (
           // 数据加载完成后显示真实内容
-          categoryList.map((category: any) => (
+          categoryList.map((category: Category) => (
             <Link key={category.ID} href={`/category/${category.title_en}`}>
-              <CategoryItem item={{ ...category }} />
+              <CategoryItem item={category} />
             </Link>
           ))
         )}
