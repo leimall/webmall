@@ -6,15 +6,19 @@ import { persist, createJSONStorage } from "zustand/middleware";
 interface AuthState {
   token: string | null;
   user: UserInfo | null;
+  returnUrl: string | null;
   setUser: (user: UserInfo) => void;
   setAuth: (token: string, user: UserInfo) => void;
   clearAuth: () => void;
+  setReturnUrl: (url: string) => void;
+  clearReturnUrl: () => void;
 }
 
 // 类型定义
 interface PersistedState {
   token: string | null;
   user: UserInfo | null;
+  returnUrl: string | null;
   expiresAt?: string; // `expiresAt` 是可选项
 }
 
@@ -23,9 +27,12 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       token: null,
       user: null,
+      returnUrl: null,
       setUser: (user: UserInfo) => set({ user }),
       setAuth: (token: string, user: UserInfo) => set({ token, user }),
       clearAuth: () => set({ token: null, user: null }),
+      setReturnUrl: (url: string) => set({ returnUrl: url }),
+      clearReturnUrl: () => set({ returnUrl: null }),
     }),
     {
       name: "auth-storage",

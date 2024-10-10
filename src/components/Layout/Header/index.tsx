@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, Drawer, Dropdown, type MenuProps } from 'antd';
@@ -12,12 +12,22 @@ import { useCartStore } from '@/stores/useCartStore';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { Category } from '@/types/category';
+import useMenuStore from '@/stores/useMenuStore';
 
-interface HeaderProps {
-  categories?: Category[];
-}
+export default function Header() {
+  const [list, setList] = useState<Category[]>([]);
+  const { fetchCategories, categories  } = useMenuStore();
 
-export default function Header({ categories = [] }: HeaderProps) {
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      setList(categories);
+    }
+  }, [categories]);
+
   const router = useRouter();
   // const pathname = usePathname();
   // const searchParams = useSearchParams();
@@ -148,16 +158,16 @@ export default function Header({ categories = [] }: HeaderProps) {
               <path d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-14.072-18.752-32.142-18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
             </svg>
           </div>
-          {categories && categories.length > 0 ? (
-            categories.map((mainCategory) => (
+          {list && list.length > 0 ? (
+            list.map((mainCategory) => (
               <div key={mainCategory.ID}>
-                <Link href={`/category/${mainCategory.title_en}`}>
+                <Link href={`/category/${mainCategory.url}`}>
                   <div className='border-b text-md border-gray-200 pb-4 mb-4'>
                     {mainCategory.title_en}
                   </div>
                 </Link>
                 {mainCategory.children && mainCategory.children.map((subCategory) => (
-                  <Link key={subCategory.ID} href={`/category/${mainCategory.title_en}/${subCategory.title_en}`}>
+                  <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
                     <div className='border-b text-sm border-gray-200 pb-2 mb-2 ml-4'>
                       {subCategory.title_en}
                     </div>
@@ -204,10 +214,10 @@ export default function Header({ categories = [] }: HeaderProps) {
       </div>
       <div className="hidden md:block">
         <div className='mx-auto max-w-c-1280 flex flex-wrap gap-4 items-center justify-center mt-4'>
-          {categories && categories.length > 0 ? (
-            categories.map((mainCategory) => (
+          {list && list.length > 0 ? (
+            list.map((mainCategory) => (
               <div key={mainCategory.ID} className="relative group">
-                <Link href={`/category/${mainCategory.title_en}`}>
+                <Link href={`/category/${mainCategory.url}`}>
                   <div className='text-xs text-fta-primary-500'>
                     {mainCategory.title_en}
                   </div>
@@ -215,7 +225,7 @@ export default function Header({ categories = [] }: HeaderProps) {
                 {mainCategory.children && mainCategory.children.length > 0 && (
                   <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10">
                     {mainCategory.children.map((subCategory) => (
-                      <Link key={subCategory.ID} href={`/category/${mainCategory.title_en}/${subCategory.title_en}`}>
+                      <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
                         <div className='text-xs text-fta-primary-500 p-2 hover:bg-gray-100'>
                           {subCategory.title_en}
                         </div>

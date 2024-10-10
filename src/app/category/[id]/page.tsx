@@ -1,7 +1,55 @@
-export function generateStaticParams() {
-  return [{ id: "test" }];
+import { getCategoryList } from "@/apis/category";
+import { getProductByCategory } from "@/apis/product";
+import ProductCardOne from "@/components/Common/Products/cardtwo";
+import type { Category} from "@/types/category";
+import type { Product } from "@/types/products";
+import { message } from "antd";
+
+export async function generateStaticParams() {
+  try {
+    let list: { id: string }[] = [];
+    const res = await getCategoryList();
+    const products = res.data;
+
+    if (res.code === 0 && res.data.length > 0) {
+      products.forEach((product: Category) => {
+        list.push({
+          id: product.title_en.toLowerCase().replace(/\s+/g, '_'),
+        });
+      });
+    }
+    return list
+  } catch (error) {
+    message.error("Failed to fetch categories")
+    return []
+  }
 }
 
-export default async function Page(props: any) {
-  return <div>{JSON.stringify(props.params)}</div>;
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = params;
+
+  try {
+    const res = await getProductByCategory(id);
+    const data: Product[] | null = res.data;
+
+    console.error("object", res);
+
+    if (!data) {
+      return <div>Document not found</div>;
+    }
+
+    return (
+      <div className="relative mx-auto max-w-c-1280 py-5 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
+        {
+          data.map((product) => (
+            <ProductCardOne key={product.ID} product={product} />
+          ))
+        }
+      </div>
+    );
+  } catch (error) {
+    console.error('Error fetching document:', error);
+    return <div>Error loading document</div>;
+  }
 }

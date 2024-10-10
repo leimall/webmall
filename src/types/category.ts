@@ -21,6 +21,7 @@ export interface Category {
   parent_id: number;
   type: number;
   value: string;
+  url: string;
   createdAt: Date;
   updatedAt: Date;
   children?: Category[];

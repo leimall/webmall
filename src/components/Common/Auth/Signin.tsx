@@ -15,9 +15,9 @@ export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [captcha, setCaptcha] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  // const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const {setAuth, returnUrl, clearReturnUrl} = useAuthStore();
 
   const fetchCaptcha = async () => {
     try {
@@ -46,28 +46,32 @@ export default function Signin() {
       message.error("Captcha is required");
       return false;
     }
-    if (!rememberMe) {
-      message.error("I agree to the terms and conditions is required");
-      return false;
-    }
+    // if (!rememberMe) {
+    //   message.error("I agree to the terms of srvice and privacy policy.");
+    //   return false;
+    // }
     return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateFields() && rememberMe) {
+    // if (validateFields() && rememberMe) {
+    if (validateFields()) {
       try {
         const response = await signIn({ email, password, captcha, captchaId });
         const { token, user } = response.data;
         setAuth(token, user); // 保存token和用户信息到Zustand
         fetchCartItems();
         message.success("Signed in successfully");
-        router.push("/"); // Redirect to home page or any other page
+        if (returnUrl) {
+          router.push(returnUrl);
+          clearReturnUrl();
+        }
+        router.push("/")
       } catch (error) {
         message.error(" to sign in");
         setCaptcha(""); // Reset captcha on failed login
         fetchCaptcha(); // Refresh captcha on failed login
-
       }
     };
   };
@@ -147,7 +151,7 @@ export default function Signin() {
                 </div>
               </div>
 
-              <div className="flex items-center mt-8">
+              {/* <div className="flex items-center mt-8">
                 <input
                   id="remember-me"
                   name="remember-me"
@@ -157,9 +161,9 @@ export default function Signin() {
                   className="h-4 w-4 shrink-0 rounded bg-fta-primary-500"
                 />
                 <label className="ml-3 block text-sm">
-                  I accept the <a href="/" className="text-fta-primary-400 font-semibold hover:underline ml-1">Terms and Conditions</a>
+                  I accept the  <Link className="text-fta-primary-400 hover:text-fta-primary-500" href={"/document/terms"}>Terms of Service</Link> and <Link className="text-fta-primary-400 hover:text-fta-primary-500" href={"/document/privacy"}>Privacy Policy</Link>. 
                 </label>
-              </div>
+              </div> */}
 
               <div className="mt-8">
                 <button type="button" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white bg-fta-primary-500 hover:bg-fta-primary-400 focus:outline-none transition-all" onClick={handleSubmit}>
@@ -176,7 +180,6 @@ export default function Signin() {
           </div>
         </div>
       </section>
-      {/* <!-- ===== SignIn Form End ===== --> */}
     </>
   );
 }

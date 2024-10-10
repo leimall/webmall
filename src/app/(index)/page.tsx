@@ -1,5 +1,3 @@
-'use client'
-
 import BannerInIndex from "@/components/Common/Banner";
 import Category from "@/components/Common/Category";
 import Adpage from "@/components/Layout/Adpage";
@@ -7,15 +5,9 @@ import FaqPage from "@/components/Layout/faq";
 import MiniPage from "@/components/Layout/Minilist";
 import NewsLists from "@/components/Layout/NewsLists";
 import TeamPage from "@/components/Layout/Team";
-import useMenuStore from "@/stores/useMenuStore";
-import { useEffect } from "react";
 
 export default function Home() {
-  const {fetchCategories,} = useMenuStore();
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
   
 	const banners = [
     {

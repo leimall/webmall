@@ -18,6 +18,7 @@ export type Order = {
   totalPrice: number;
   orderStatus: string;
   paymentMethod: string;
+  paymentStatus: string;
   shippingMethod: string;
   shippingPrice: number;
   shippingAddressId: number;

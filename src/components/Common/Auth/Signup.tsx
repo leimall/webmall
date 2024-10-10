@@ -76,10 +76,6 @@ export default function Signup() {
 			{/* <!-- ===== SignUp Form Start ===== --> */}
 			<section className="py-4 md:py-20">
 				<div className="font-[sans-serif] relative">
-					{/* <div className="h-[240px] font-[sans-serif]">
-						<img src="https://readymadeui.com/cardImg.webp" alt="Banner Image" className="w-full h-full object-cover" />
-					</div> */}
-
 					<div className="relative m-4">
 						<form className="bg-white max-w-xl w-full mx-auto shadow-md p-4 md:p-16 rounded-2xl">
 							<div className="mb-12">
@@ -179,8 +175,8 @@ export default function Signup() {
 									className="h-4 w-4 shrink-0 rounded bg-fta-primary-500"
 								/>
 								<label className="ml-3 block text-sm">
-									I accept the <a href="/;" className="text-fta-primary-400 font-semibold hover:underline ml-1">Terms and Conditions</a>
-								</label>
+                  I accept the  <Link className="text-fta-primary-400 hover:text-fta-primary-500" href={"/document/terms"}>Terms of Service</Link> and <Link className="text-fta-primary-400 hover:text-fta-primary-500" href={"/document/privacy"}>Privacy Policy</Link>. 
+                </label>
 							</div>
 
 							<div className="mt-8">

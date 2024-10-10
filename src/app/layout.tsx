@@ -7,7 +7,7 @@ import Footer from "@/components/Layout/Footer";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "FTAnails",
+  title: "FTAnails | ",
   description: "",
 };
 

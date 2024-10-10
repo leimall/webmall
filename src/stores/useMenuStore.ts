@@ -3,6 +3,9 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { getCategoryList } from '@/apis/category';
 import { message } from 'antd';
 import type { Category } from '@/types/category';
+import { ChildProcess } from 'child_process';
+import { get } from 'http';
+import { url } from 'inspector';
 
 interface MenuState {
   categories: Category[];
@@ -21,10 +24,15 @@ const useMenuStore = create<MenuState>()(
       organizeCategories: (flatCategories: Category[]) => {
         const organizedCategories = flatCategories.filter(cat => cat.parent_id === 0).map(mainCat => ({
           ...mainCat,
-          children: flatCategories.filter(subCat => subCat.parent_id === mainCat.ID)
+          url: mainCat.title_en.toLowerCase().replace(/\s+/g, '_'), // 生成 url 字段
+          children: flatCategories.filter(subCat => subCat.parent_id === mainCat.ID).map(child => ({
+            ...child,
+            url: child.title_en.toLowerCase().replace(/\s+/g, '_'), // 生成 url 字段
+          }))
         }));
         set({ categories: organizedCategories });
       },
+
       fetchCategories: async () => {
         try {
           const response = await getCategoryList();
@@ -43,8 +51,8 @@ const useMenuStore = create<MenuState>()(
         }
         return {
           getItem: () => null,
-          setItem: () => {},
-          removeItem: () => {},
+          setItem: () => { },
+          removeItem: () => { },
         };
       }),
     }

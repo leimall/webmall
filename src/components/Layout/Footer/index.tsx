@@ -68,53 +68,36 @@ const Footer = () => {
 
 
         <div className="md:pl-20">
-          <h4 className="text-fta-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">Platforms <svg
-            xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-            className="sm:hidden absolute right-0 top-1 fill-back1" viewBox="0 0 24 24">
-            <path
-              d="M12 16a1 1 0 0 1-.71-.29l-6-6a1 1 0 0 1 1.42-1.42l5.29 5.3 5.29-5.29a1 1 0 0 1 1.41 1.41l-6 6a1 1 0 0 1-.7.29z"
-              data-name="16" data-original="#000000"></path>
-          </svg>
+          <h4 className="text-fta-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">FTAnails SUPORT
           </h4>
           <ul className="space-y-5 mt-6 max-sm:hidden">
             <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Hubspot</a>
+              <a href='/document/faq' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>FAQ</a>
             </li>
             <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Integration Services</a>
+              <a href='/document/shipping' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>SHIPPING POLICY</a>
             </li>
             <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Marketing Glossar</a>
+              <a href='/document/return' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>RETURN & REFUND</a>
             </li>
             <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>UIPath</a>
+              <a href='/document/payment' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>PAYMENT METHOD</a>
             </li>
           </ul>
         </div>
 
         <div className="md:pl-20">
-          <h4 className="text-fta-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">Company <svg
-            xmlns="http://www.w3.org/2000/svg" width="16px" height="16px"
-            className="sm:hidden absolute right-0 top-1 fill-back1" viewBox="0 0 24 24">
-            <path
-              d="M12 16a1 1 0 0 1-.71-.29l-6-6a1 1 0 0 1 1.42-1.42l5.29 5.3 5.29-5.29a1 1 0 0 1 1.41 1.41l-6 6a1 1 0 0 1-.7.29z"
-              data-name="16" data-original="#000000"></path>
-          </svg>
+          <h4 className="text-fta-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">FTANAILS SERVICE
           </h4>
 
           <ul className="space-y-5 mt-6 max-sm:hidden">
             <li>
-              <a href='/aboutus' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>About us</a>
+              <a href='/document/about' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>ABOUT US</a>
             </li>
             <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Careers</a>
+              <a href='/document/contact' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>CONTACT US</a>
             </li>
-            <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Portfolio</a>
-            </li>
-            <li>
-              <a href='/' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Events</a>
-            </li>
+
           </ul>
         </div>
 
@@ -124,13 +107,13 @@ const Footer = () => {
       <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c-1440 flex flex-wrap max-md:flex-col gap-4">
         <ul className="md:flex md:space-x-6 max-md:space-y-2">
           <li>
-            <a href='/terms' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Terms of Service</a>
+            <a href='/document/terms' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Terms of Service</a>
           </li>
           <li>
-            <a href='/privacy' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Privacy Policy</a>
+            <a href='/document/privacy' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Privacy Policy</a>
           </li>
           <li>
-            <a href='/cookie' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Cookie Policy</a>
+            <a href='/document/cookie' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Cookie Policy</a>
           </li>
         </ul>
 
