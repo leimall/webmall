@@ -1,10 +1,13 @@
 import BannerInIndex from "@/components/Common/Banner";
 import Category from "@/components/Common/Category";
 import Adpage from "@/components/Layout/Adpage";
+import DiscountLists from "@/components/Layout/DiscountLists";
 import FaqPage from "@/components/Layout/faq";
+import HotLists from "@/components/Layout/HotLists";
 import MiniPage from "@/components/Layout/Minilist";
 import NewsLists from "@/components/Layout/NewsLists";
 import TeamPage from "@/components/Layout/Team";
+import TopLists from "@/components/Layout/TopLists";
 import { SafetyOutlined, ShoppingCartOutlined, DollarOutlined, CustomerServiceOutlined } from "@ant-design/icons";
 
 export default function Home() {
@@ -35,35 +38,41 @@ export default function Home() {
       <Adpage />
 			<NewsLists />
       <Adpage />
+      <HotLists />
+      <Adpage />
+      <TopLists />
+      <Adpage />
+      <DiscountLists />
+
       {/* <MiniPage /> */}
 
       {/* <TeamPage /> */}
 
       <FaqPage />
 
-      <div className="flex items-center justify-between py-8">
-      <div className="text-center  w-1/4 p-4">
+      <div className="flex flex-col md:flex-row justify-between py-8">
+      <div className="text-center md:w-1/4 p-2 xl:p-4">
         <SafetyOutlined style={{ fontSize: '4rem', color: '#603813' }} />
         <div className="text-lg font-bold pt-2">
           Secure payments
         </div>
         <p>Your payment are 100% safe and protected</p>
       </div>
-      <div className="text-center  w-1/4 p-4">
+      <div className="text-center md:w-1/4  p-2 xl:p-4">
         <ShoppingCartOutlined style={{ fontSize: '4rem', color: '#603813' }} />
         <div className="text-lg font-bold pt-2">
           Fast Shipping
         </div>
         <p>On your doorstep in just 7-15 days.</p>
       </div>
-      <div className="text-center w-1/4 p-4">
+      <div className="text-center md:w-1/4 p-2 xl:p-4">
         <DollarOutlined style={{ fontSize: '4rem', color: '#603813' }} />
         <div className="text-lg font-bold pt-2">
           Duty Free
         </div>
         <p>No extra taxes or tips.</p>
       </div>
-      <div className="text-center w-1/4 p-4">
+      <div className="text-center md:w-1/4 p-2 xl:p-4">
         <CustomerServiceOutlined style={{ fontSize: '4rem', color: '#603813' }} />
         <div className="text-lg font-bold pt-2">
           Customer Servic

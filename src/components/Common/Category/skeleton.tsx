@@ -1,7 +1,7 @@
 import React from 'react';
 import { Skeleton } from 'antd';
 
-export default function CategoryItemSkeleton() {
+export default function CategorySkeleton() {
   return (
     <div
       className="bg-white pt-10 pb-5 w-40 max-w-sm rounded-md font-[sans-serif] overflow-hidden mx-auto">

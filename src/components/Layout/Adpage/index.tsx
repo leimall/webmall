@@ -3,7 +3,7 @@
 
 export default function Adpage() {
   return (
-    <div className="bg-background-back1">
+    <div className="bg-background-back1 my-8">
       <div className="relative mx-auto max-w-c-1440 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
 
         <div className="flex flex-col md:flex-row items-center md:max-h-[375px] overflow-hidden">
