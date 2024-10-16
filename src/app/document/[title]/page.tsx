@@ -5,7 +5,7 @@ import MarkdownPage from '@/components/Common/md';
 
 export function generateStaticParams() {
   // let list: {title: string}[] = []
-  const titles = ['terms', 'privacy', 'cookie', 'about', 'contact', 'faq',  'shipping', 'return', 'payment'];
+  const titles = ['terms', 'privacy', 'about', 'contact', 'faq',  'shipping', 'return', 'payment'];
   return titles.map(title => ({ title }));
 }
 

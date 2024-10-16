@@ -76,7 +76,16 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
                     </div>
                   </Link>
                 </h3>
-                <h6 onClick={() => removeItem(item.product_id)} className="text-sm text-blue-500 cursor-pointer mt-0.5">Remove</h6>
+                <div className="text-sm py-1">
+                  <span className='fill-gray-400 flex items-center justify-end'>
+                    <svg onClick={() => removeItem(item.product_id)} xmlns="http://www.w3.org/2000/svg" className="w-4 cursor-pointer inline-block" viewBox="0 0 24 24">
+                      <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" data-original="#000000"></path>
+                      <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" data-original="#000000"></path>
+                    </svg>
+                    <span onClick={() => removeItem(item.product_id)} className='px-2 cursor-pointer text-gray-400'>REMOVE</span>
+                  </span>
+
+                </div>
               </div>
 
               <div className="flex items-center justify-end">
@@ -96,7 +105,7 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
                   <div>
                     <Select
                       defaultValue={item.size}
-                      style={{ width: 80 }}
+                      style={{ width: 80, height: 36, textAlign: 'center' }}
                       options={options}
                       onChange={setSelfSize}
                     />
@@ -104,7 +113,7 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
                 </div>
                 <div>
                   <div className='bg-white'>
-                    <div className="flex items-center border border-gray-300 text-gray-800 text-md outline-none bg-transparent rounded">
+                    <div className="flex items-center border border-gray-300 text-gray-800 text-md outline-none bg-transparent rounded" style={{ width: 110, height: 36 }}>
                       <div onClick={handleDecrease} className="px-3 py-3 cursor-pointer bg-orange-50  rounded-l ">
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 fill-current" viewBox="0 0 124 124">
                           <path d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z" data-original="#000000"></path>

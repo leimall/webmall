@@ -13,7 +13,7 @@ const Footer = () => {
 
             <ul className="flex justify-center py-8  md:pt-4 space-x-5">
               <li>
-                <a href='/'>
+                <a href='https://www.facebook.com/profile.php?id=61559012786365'>
                   <svg xmlns="http://www.w3.org/2000/svg" className="inline w-12 h-12 md:w-8 md:h-8" viewBox="0 0 512 512">
                     <path fill="#1877f2" d="M512 256c0 127.78-93.62 233.69-216 252.89V330h59.65L367 256h-71v-48.02c0-20.25 9.92-39.98 41.72-39.98H370v-63s-29.3-5-57.31-5c-58.47 0-96.69 35.44-96.69 99.6V256h-65v74h65v178.89C93.62 489.69 0 383.78 0 256 0 114.62 114.62 0 256 0s256 114.62 256 256z" data-original="#1877f2" />
                     <path fill="#fff" d="M355.65 330 367 256h-71v-48.021c0-20.245 9.918-39.979 41.719-39.979H370v-63s-29.296-5-57.305-5C254.219 100 216 135.44 216 199.6V256h-65v74h65v178.889c13.034 2.045 26.392 3.111 40 3.111s26.966-1.066 40-3.111V330z" data-original="#ffffff" />
@@ -21,7 +21,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href='/'>
+                <a href='https://www.instagram.com/ftanails'>
                   <svg xmlns="http://www.w3.org/2000/svg" className="inline w-12 h-12 md:w-8 md:h-8" viewBox="0 0 176 176">
                     <g data-name="Layer 2">
                       <rect width="176" height="176" fill="#0077b5" data-original="#0077b5" rx="24" />
@@ -31,7 +31,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href='/'>
+                <a href='https://www.instagram.com/ftanails'>
                   <svg xmlns="http://www.w3.org/2000/svg" className="inline w-12 h-12 md:w-8 md:h-8" viewBox="0 0 24 24">
                     <linearGradient id="a" x1="-37.106" x2="-26.555" y1="-72.705" y2="-84.047" gradientTransform="matrix(0 -1.982 -1.844 0 -132.522 -51.077)" gradientUnits="userSpaceOnUse">
                       <stop offset="0" stopColor="#fd5" />
@@ -44,7 +44,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href='/'>
+                <a href='https://x.com/FTAnails'>
                   <svg xmlns="http://www.w3.org/2000/svg" className="inline w-12 h-12 md:w-8 md:h-8" viewBox="0 0 1227 1227">
                     <path d="M613.5 0C274.685 0 0 274.685 0 613.5S274.685 1227 613.5 1227 1227 952.315 1227 613.5 952.315 0 613.5 0z" data-original="#000000" />
                     <path fill="#fff" d="m680.617 557.98 262.632-305.288h-62.235L652.97 517.77 470.833 252.692H260.759l275.427 400.844-275.427 320.142h62.239l240.82-279.931 192.35 279.931h210.074L680.601 557.98zM345.423 299.545h95.595l440.024 629.411h-95.595z" data-original="#ffffff" />
@@ -113,7 +113,7 @@ const Footer = () => {
             <a href='/document/privacy' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Privacy Policy</a>
           </li>
           <li>
-            <a href='/document/cookie' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Cookie Policy</a>
+            <a href='/document/privacy' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Cookie Policy</a>
           </li>
         </ul>
 
