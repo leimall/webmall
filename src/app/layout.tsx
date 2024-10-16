@@ -10,6 +10,24 @@ export const metadata: Metadata = {
   title: "FTAnails | ",
   description: "",
 };
+const HotjarScript = () => {
+  return (
+    <script
+    dangerouslySetInnerHTML={{
+      __html: `
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:5173699,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+      `,
+    }}
+  />
+  )
+}
 
 export default function RootLayout({
   children,
@@ -18,14 +36,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-			<GoogleAnalytics gaId="G-WNPBNMJSN8" />
+      <head>
+        <HotjarScript />
+        <GoogleAnalytics gaId="G-WNPBNMJSN8" />
+      </head>
+
       <body className="min-h-screen flex flex-col">
         <Header />
-				<div className="flex-grow bg-white">
+        <div className="flex-grow bg-white">
           {children}
-				</div>
+        </div>
         <Footer />
-				<SpeedInsights />
+        <SpeedInsights />
       </body>
     </html>
   );
