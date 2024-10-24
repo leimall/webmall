@@ -70,17 +70,17 @@ export default function Header() {
   const items: MenuProps['items'] = [{
     key: "profile",
     label: (
-      <Link href="/myself/profile">Profile</Link>
+      <Link href="/profile/myself">Profile</Link>
     )
   }, {
     key: "orders",
     label: (
-      <Link href="/myself/orders">Orders</Link>
+      <Link href="/profile/orders">Orders</Link>
     )
   }, {
     key: "addresses",
     label: (
-      <Link href="/myself/address">Address</Link>
+      <Link href="/profile/address">Address</Link>
     )
   }, {
     key: "singout",
@@ -189,7 +189,7 @@ export default function Header() {
 
                 )}
               </div>
-              <Link href="/myself/profile">
+              <Link href="/profile/myself">
                 <div className='border-b text-md border-gray-200 pb-4 mb-4'>
                   Profile
                 </div>

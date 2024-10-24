@@ -29,18 +29,20 @@ export default function Home() {
 
   return (
     <main className="relative mx-auto max-w-c-1440 pt-5 pb-10 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
-			<BannerInIndex banners={banners} />
+			{/* <BannerInIndex banners={banners} /> */}
 
-			<Category />
-
+      <Adpage />
 			<NewsLists />
 
       <Adpage />
 			<NewsLists />
+
       <Adpage />
       <HotLists />
+
       <Adpage />
       <TopLists />
+
       <Adpage />
       <DiscountLists />
 

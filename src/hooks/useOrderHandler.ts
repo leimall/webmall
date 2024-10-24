@@ -78,13 +78,11 @@ export const useOrderHandler = () => {
     createOrder(orderData);
     try {
       const response = await createOrderForDB(orderData)
-      console.log('订单创建成功:', response);
       if (response.code === 0 && isClearCart) {
         clearCart();
       }
       router.push('/checkout');
     } catch (error) {
-      console.error('订单创建失败:', error);
       alert('订单创建失败，请稍后再试。');
     }
   };

@@ -34,3 +34,18 @@ export const updateMyselfAddress = (data: any) => {
   })
 }
 
+export const setDefaultAddress = (data: any) => {
+  return request({
+    url: '/myself/default',
+    method: 'put',
+    data
+  })
+}
+
+export const deleteAddress = (data: any) => {
+  return request({
+    url: '/myself/address',
+    method: 'delete',
+    data
+  })
+}

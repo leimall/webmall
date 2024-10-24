@@ -167,7 +167,6 @@ export const useCartStore = create<CartStore>()(
       },
       fetchCartItems: async () => {
         const response = await getUserCartList();
-        console.error("fetchCartItems response  object", response);
         const data:CartItem[] = response.data;
         if (data?.length) {
           const totalPrice = data.reduce((total, item) => total + item.price * item.quantity, 0);

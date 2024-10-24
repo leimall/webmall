@@ -1,46 +1,11 @@
 'use client'
-import { Typography, Row, Col } from 'antd';
 import { useCartStore } from '@/stores/useCartStore';
-import { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import CheckoutForm from '@/components/Common/pay/CheckoutForm';
 import '@/styles/pay.css';
 import ShoppingCartList from '@/components/Common/ShoppingCartList/one';
 import Link from 'next/link';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-
 export default function Cart() {
   const { items, addItem,  removeItem, totalPrice } = useCartStore();
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-
-  // const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
-  const totalAmount = totalPrice * 100;
-
-
-  const handleCheckout = async () => {
-    const response = await fetch('/api/create-payment-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: totalAmount }),
-    })
-    if (response.ok) {
-      const data = await response.json();
-      setClientSecret(data.clientSecret);
-    } else {
-      console.error('Error creating payment intent');
-    }
-  };
-
-  const appearance = {
-    theme: 'stripe',
-  };
-
-  const options = {
-    clientSecret,
-    appearance,
-  };
 
   return (
     <div className="relative mx-auto max-w-c-1280 py-5 justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
@@ -73,14 +38,6 @@ export default function Cart() {
       ) : (
         <ShoppingCartList />
       )}
-
-      <div className='mb-8'>
-        {clientSecret && (
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <CheckoutForm />
-          </Elements>
-        )}
-      </div>
     </div>
   );
 }

@@ -1,28 +1,72 @@
 'use client'
 import ProductList from '@/components/Common/checkout/productItem';
-import { Form, Input, Button, Checkbox, Collapse, Select, Flex, Spin, Descriptions, Card, Radio } from 'antd';
 import { useEffect, useState } from 'react';
 import { useOrderStore } from '@/stores/useOrdersStore';
-import { getMyselfAddress } from '@/apis/address'
+import { getCountry, getMyselfAddress, setDefaultAddress } from '@/apis/address'
 import type { AddressItem } from '@/types/address';
+import AddressPage from '@/components/Common/address';
 
-const { Panel } = Collapse;
-const { Option } = Select;
+import AddressSelector from '@/components/UI/Radio';
+import ToggleContent from '@/components/Common/checkout/Toggle';
+
+import AddressSkeleton from '@/components/Common/address/skeleton'
+import { Order } from '@/types/stores/orders';
+import AddressModal from '@/components/Common/profile/address';
 
 const CheckoutPage = () => {
-  const [address, setAddress] = useState<AddressItem[]>([]);
-  const [sameAddress, setSameAddress] = useState(false);
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
   const { order } = useOrderStore();
+  const [updateOrder, setUpdateOrder] = useState<Order>() || null;
+  const [address, setAddress] = useState<AddressItem[]>([]);
+  const [defaultAddress, setDefaultAddress] = useState('Please select the shipping address.');
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [value, setValue] = useState(true)
+  const [num, setNum] = useState(1)
+  const [isModal, setIsModal] = useState(false)
 
+  const [formData, setFormData] = useState<AddressItem | null>(null);
+
+  // useEffect(() => {
+  //   if (authenticated) {
+
+  //   } else{
+
+  //   }
+  // }, [authenticated])
 
   useEffect(() => {
+    setLoading(true);
     if (order?.products) {
       setItems(order?.products)
     }
     getAddress()
   }, [order]);
+
+  useEffect(() => {
+    if (order?.shippingAddressId) {
+      if (address && address.length > 0) {
+        const finddefautl = address.find((e) => e.ID === order.shippingAddressId)
+        if (finddefautl) {
+          setSeletedAddress(finddefautl)
+          setValue(false)
+          handleShippingAddressID(finddefautl.ID)
+          setNum(finddefautl.ID)
+        }
+      }
+    } else {
+      if (address && address.length > 0) {
+        const finddefautl = address.find((e) => e.isDefault === num)
+        if (finddefautl) {
+          setSeletedAddress(finddefautl)
+          setValue(false)
+          handleShippingAddressID(finddefautl.ID)
+          setNum(finddefautl.ID)
+        }
+      }
+    }
+    setLoading(false)
+  }, [address])
+
 
 
   const getAddress = async () => {
@@ -30,6 +74,21 @@ const CheckoutPage = () => {
     if (res.code === 0) {
       setAddress(res.data?.list ?? [])
     }
+  }
+
+  const handleShippingAddressID = (id: number) => {
+    setUpdateOrder((order) => {
+      if (order) {
+        return { ...order, shippingAddressId: id }
+      }
+      return { shippingAddressId: id } as Order
+    })
+  }
+
+
+  const setSeletedAddress = (address: AddressItem) => {
+    const fullAddress = `${address.firstName} ${address.lastName} ${address.street1}`;
+    setDefaultAddress(fullAddress)
   }
 
   const onFinish = (values: any) => {
@@ -40,155 +99,66 @@ const CheckoutPage = () => {
     console.log('Failed:', errorInfo);
   };
 
+  const handleAddressSelect = (selectedAddress: AddressItem) => {
+    setSeletedAddress(selectedAddress)
+    handleShippingAddressID(selectedAddress.ID)
+  };
+
+  const handleSNewAddress = () => {
+    setFormData(null)
+    setIsModal(true)
+  };
+  const handleCloseModal = () => {
+    setIsModal(false)
+  }
+
+
   return (
     <div>
-      <Flex gap="middle" vertical>
-        <Spin spinning={loading} size="large" tip="Loading...">
-          <div className="relative mx-auto max-w-c-1280 py-5 justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
-            <div className="flex flex-col  md:flex-row ">
-              <div className="w-full md:w-4/6">
-                <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 pb-4">
-                  {address.length > 0 && (address.map((e) => (
-                    <Card size="small" style={{border: '1px solid blue' }} key={e.ID} >
-                      <p className='font-bold'>{e.firstName} {e.lastName} {e.phone}</p>
-                      <p>{e.street1} {e.street2} {e.city}, {e.region}, {e.country}</p>
-                      <p>{e.zipCode}</p>
-                    </Card>
-                  )))}
-                </div>
-                <Form
-                  name="checkout"
-                  initialValues={{ remember: true }}
-                  onFinish={onFinish}
-                  onFinishFailed={onFinishFailed}
-                  layout="vertical"
-                >
-                  <Collapse defaultActiveKey={['1']}>
-                    <Panel header="Personal Details" key="1">
-                      <Form.Item
-                        label="First Name"
-                        name="firstName"
-                        rules={[{ required: true, message: 'Please input your first name!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
+      <div className="relative mx-auto max-w-c-1024 py-5 justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
+        <h2 className="text-2xl font-bold text-gray-800 pb-2 md:pb-8">Complete your information</h2>
 
-                      <Form.Item
-                        label="Last Name"
-                        name="lastName"
-                        rules={[{ required: true, message: 'Please input your last name!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Email Address"
-                        name="email"
-                        rules={[{ required: true, message: 'Please input your email address!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Phone"
-                        name="phone"
-                        rules={[{ required: true, message: 'Please input your phone number!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Mailing Address"
-                        name="mailingAddress"
-                        rules={[{ required: true, message: 'Please input your mailing address!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="City"
-                        name="city"
-                        rules={[{ required: true, message: 'Please input your city!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Post Code"
-                        name="postCode"
-                        rules={[{ required: true, message: 'Please input your post code!' }]}
-                      >
-                        <Input />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Country"
-                        name="country"
-                        rules={[{ required: true, message: 'Please select your country!' }]}
-                      >
-                        <Select>
-                          <Option value="USA">USA</Option>
-                          <Option value="Canada">Canada</Option>
-                          <Option value="UK">UK</Option>
-                          {/* Add more countries as needed */}
-                        </Select>
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Region/State"
-                        name="region"
-                        rules={[{ required: true, message: 'Please select your region/state!' }]}
-                      >
-                        <Select>
-                          <Option value="California">California</Option>
-                          <Option value="Texas">Texas</Option>
-                          <Option value="New York">New York</Option>
-                          {/* Add more regions/states as needed */}
-                        </Select>
-                      </Form.Item>
-
-                      <Form.Item name="sameAddress" valuePropName="checked">
-                        <Checkbox onChange={(e) => setSameAddress(e.target.checked)}>
-                          My delivery and mailing addresses are the same.
-                        </Checkbox>
-                      </Form.Item>
-
-                      <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                          Next Step
-                        </Button>
-                      </Form.Item>
-                    </Panel>
-
-                    {sameAddress && (
-                      <Panel header="Shipping Address" key="2">
-                        {/* Similar form items as personal details but for shipping address */}
-                      </Panel>
-                    )}
-
-                    <Panel header="Payment method" key="3">
-                      {/* Payment form items here */}
-                    </Panel>
-                  </Collapse>
-                </Form>
-              </div>
-              <div className='w-full md:w-2/6 md:ml-8 sx:ml-0 '>
-                <div className="border rounded-md md:mt-0 mt-4 sm:ml-0 p-4 bg-background-back1">
-                  {items.map((item) => (
-                    <ProductList item={item} key={item.product_id} />
-                  ))}
-                  <div className='flex justify-between'>
-                    <div className="text-md font-bold">Total:</div>
-                    <div className="text-md font-bold text-red-600">${order?.totalPrice.toFixed(2)}</div>
+        {loading ? (
+          <AddressSkeleton />
+        ) : (
+          <div className="flex flex-col  md:flex-row ">
+            <div className="w-full md:w-7/12">
+              <div className="space-y-4">
+                <h3>Set shipping address</h3>
+                <ToggleContent title={defaultAddress} value={value}>
+                  <AddressSelector
+                    addresses={address}
+                    defaultValue={num}
+                    onSelect={handleAddressSelect}
+                  />
+                  <div className='text-right'>
+                  <button type="button" onClick={handleSNewAddress}
+                    className="px-3 py-2.5 rounded-lg text-white text-sm tracking-wider font-medium border border-current outline-none bg-orange-700 hover:bg-orange-800 active:bg-orange-700">Add New Address</button>
                   </div>
+                </ToggleContent>
+                <h3>Checkout</h3>
+                <ToggleContent title="Fill in payment information" value={true}>
+                  <p className="text-sm text-gray-600">Content for the second question goes here.</p>
+                </ToggleContent>
+              </div>
+            </div>
+            <div className='w-full md:w-5/12 md:ml-8 sx:ml-0 '>
+              <div className="border rounded-md md:mt-0 mt-4 sm:ml-0 p-4 bg-background-back1">
+                {items.map((item) => (
+                  <ProductList item={item} key={item.product_id} />
+                ))}
+                <div className='flex justify-between'>
+                  <div className="text-md font-bold">Total:</div>
+                  <div className="text-md font-bold text-red-600">${order?.totalPrice.toFixed(2)}</div>
                 </div>
               </div>
             </div>
           </div>
-        </Spin>
-      </Flex>
+        )}
+        <AddressModal isOpen={isModal} initialData={formData}  onClose={handleCloseModal} onGetData={getAddress} />
+      </div>
     </div>
-
   );
-};
+}
+
 export default CheckoutPage;

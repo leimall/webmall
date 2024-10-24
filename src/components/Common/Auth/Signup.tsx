@@ -62,10 +62,9 @@ export default function Signup() {
         message.success("Signed up successfully");
         router.push("/auth/signin"); // Redirect to home page or any other page
       } catch (error) {
-        message.error(" to sign in");
+        message.error("Please check your email or password and enter the correct captcha!");
         setCaptcha(""); // Reset captcha on failed login
         fetchCaptcha(); // Refresh captcha on failed login
-
       }
     };
   };
@@ -77,7 +76,7 @@ export default function Signup() {
 			<section className="py-4 md:py-20">
 				<div className="font-[sans-serif] relative">
 					<div className="relative m-4">
-						<form className="bg-white max-w-xl w-full mx-auto shadow-md p-4 md:p-16 rounded-2xl">
+						<form className="bg-white max-w-xl w-full mx-auto shadow-md p-4 md:p-16 rounded-2xl" onSubmit={handleSubmit}>
 							<div className="mb-12">
 								<h3 className="text-gray-800 text-3xl font-bold text-center">Create account</h3>
 							</div>
@@ -180,7 +179,7 @@ export default function Signup() {
 							</div>
 
 							<div className="mt-8">
-								<button type="button" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white  bg-fta-primary-500 hover:bg-fta-primary-400 focus:outline-none transition-all" onClick={handleSubmit}>
+								<button type="submit" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white  bg-fta-primary-500 hover:bg-fta-primary-400 focus:outline-none transition-all">
 									Register
 								</button>
 								<p className="text-gray-800 text-sm mt-8 text-center">Already have an account?

@@ -5,12 +5,12 @@ export type AddressItem = {
   firstName: string;
   lastName: string;
   street1: string;
-  street2: string;
+  email: string;
   city: string;
-  region: string;
+  state: string;
   country: string;
   countryCode: string;
   zipCode: string;
-  isDefault: boolean;
+  isDefault: number;
   UpdatedAt: string
 }

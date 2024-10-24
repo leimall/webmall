@@ -14,7 +14,7 @@ export default function ProductLists({ item }: { item: OrderProduct }) {
               <Image
                 src={item.main_img}
                 alt={item.title}
-                objectFit='fixed'
+                style={{ objectFit: 'cover' }}
                 width={96}
                 height={96}
                 className="rounded h-full w-full "
@@ -26,21 +26,21 @@ export default function ProductLists({ item }: { item: OrderProduct }) {
               </div>
               <div className="flex justify-between items-center font-sans py-1">
                 <div className='text-sm'>
-                  Size:
+                  Size
                 </div>
                 <div className=" text-sm">{item.size}</div>
               </div>
 
               <div className="flex justify-between items-center font-sans py-1">
                 <div className='text-sm'>
-                  Quantity:
+                  Quantity
                 </div>
                 <div className=" text-sm">{item.quantity}</div>
               </div>
 
               <div className="flex justify-between items-center font-sans py-1">
                 <div className='text-sm'>
-                  Price:
+                Total Price
                 </div>
                 <div className="text-sm">${item.price * item.quantity}</div>
               </div>
