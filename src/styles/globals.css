@@ -28,3 +28,24 @@ body {
     text-wrap: balance;
   }
 }
+
+/* 如果你使用全局样式文件，可以添加如下样式 */
+.timeline-event {
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+.timeline-event::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background-color: #e2e8f0; /* light gray */
+}
+
+.icon img {
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

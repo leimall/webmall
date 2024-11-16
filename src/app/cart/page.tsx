@@ -3,9 +3,14 @@ import { useCartStore } from '@/stores/useCartStore';
 import '@/styles/pay.css';
 import ShoppingCartList from '@/components/Common/ShoppingCartList/one';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function Cart() {
-  const { items, addItem,  removeItem, totalPrice } = useCartStore();
+  const [loading, setLoading] = useState(true);
+  const { items } = useCartStore();
+  useEffect(() => {
+    setLoading(false);
+  }, [items]);
 
   return (
     <div className="relative mx-auto max-w-c-1280 py-5 justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
@@ -29,15 +34,25 @@ export default function Cart() {
         </ul>
       </div>
       <h1 className="text-xl md:text-3xl py-1 md:py-4 mb-2">Shopping Cart</h1>
-      {items.length === 0 ? (
+      {loading ?
         <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white sm:rounded-lg p-6 text-center">
-            <p className="text-3xl lg:h-96">Your cart is empty</p>
+          <div className="bg-white sm:rounded-lg p-12 text-center text-xl">
+            Loading...
           </div>
         </div>
-      ) : (
-        <ShoppingCartList />
-      )}
+        :
+        <div>
+          {items.length === 0 ? (
+            <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-white sm:rounded-lg p-6 text-center">
+                <p className="text-3xl lg:h-96">Your cart is empty</p>
+              </div>
+            </div>
+          ) : (
+            <ShoppingCartList />
+          )}
+        </div>
+      }
     </div>
   );
 }

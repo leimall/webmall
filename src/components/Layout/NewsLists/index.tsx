@@ -20,7 +20,7 @@ export default function NewsLists() {
       setProducts(response.data);
       setTimeout(() => {
         setLoading(false);
-      }, 2000)
+      }, 1000)
     } catch (error) {
       setLoading(false);
       message.error("Failed to fetch products");

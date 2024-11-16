@@ -35,11 +35,10 @@ export const updateCartItem = (data: any) => {
   })
 }
 
-export const deleteCartItem = (data: any) => {
+export const deleteCartItem = () => {
   return request({
     url: '/cart/delete',
     method: 'post',
-    data
   })
 }
 

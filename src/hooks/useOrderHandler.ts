@@ -1,18 +1,39 @@
-import { useOrderStore } from '@/stores/useOrdersStore';
 import { useCartStore } from '@/stores/useCartStore';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
 import { useRouter } from 'next/navigation';
 import { Order, OrderProduct, OrderItem } from '@/types/stores/orders';
 import { CartItem } from '@/types/stores/cart';
 import { getOrderId, createOrderForDB } from '@/apis/orders'
+import { useEffect, useState } from 'react';
+import { useOrderStore } from '@/stores/useOrdersStore';
+import { get } from 'http';
 
 
 export const useOrderHandler = () => {
-  const { items, totalPrice, clearCart } = useCartStore();
+  const [orderId, setOrderId] = useState('');
   const { createOrder } = useOrderStore();
+  const { items, totalPrice, clearCart } = useCartStore();
   const { user } = useAuthStore();
   const router = useRouter();
 
+  const getOrdierId = async () => {
+    try {
+      const res = await getOrderId();
+      if (res.code === 0 && res.data) {
+        setOrderId(res.data);
+        console.log('Order ID set:', res.data); // 添加调试日志
+      } else {
+        alert('Error getting order id. Please try again later.');
+        return;
+      }
+    } catch (error) {
+      console.error('Error getting order id:', error);
+      alert('Error getting order id. Please try again later.');
+      return;
+    }
+  };
+
+  
   const handleBuyNow = async (list: CartItem[]) => {
     if (items.length === 0) {
       alert('No products selected');
@@ -24,6 +45,7 @@ export const useOrderHandler = () => {
       router.push('/login');
       return;
     }
+    getOrdierId();
 
     // const outOfStockItems = items.filter(item => item.stock < item.quantity);
     // if (outOfStockItems.length > 0) {
@@ -31,15 +53,7 @@ export const useOrderHandler = () => {
     //   return;
     // }
 
-    let orderId: string;
-
-    try {
-      const res = await getOrderId();
-      orderId = res.data;
-    } catch (error) {
-      console.error('Error creating order:', error);
-      return;
-    }
+  
 
     let OrderList: CartItem[] = [];
     let isClearCart = false;
@@ -52,11 +66,12 @@ export const useOrderHandler = () => {
 
 
     const orderData: Order = {
+      ID: 0,
       orderId,
       userId: user.userId,
       totalPrice,
       paymentMethod: '',
-      paymentStatus:'pending',
+      paymentStatus: 'pending',
       orderStatus: 'pending',
       shippingMethod: 'standard',
       shippingPrice: 10.00,
@@ -75,16 +90,18 @@ export const useOrderHandler = () => {
         color: item.color,
       })),
     };
-    createOrder(orderData);
-    try {
-      const response = await createOrderForDB(orderData)
-      if (response.code === 0 && isClearCart) {
-        clearCart();
-      }
-      router.push('/checkout');
-    } catch (error) {
-      alert('订单创建失败，请稍后再试。');
-    }
+    console.error(orderData)
+    // createOrder(orderData)
+    // try {
+    //   const response = await createOrderForDB(orderData)
+    //   if (response.code === 0 && isClearCart) {
+    //     clearCart();
+    //   }
+      
+    //   router.push("/checkout/");
+    // } catch (error) {
+    //   alert('Error creating order. Please try again later.');
+    // }
   };
   return { handleBuyNow };
 };

@@ -1,15 +1,10 @@
 'use client'
 
-import DeliveryDetails from '@/components/Layout/shipping/show'
-import { useAuthenticated } from '@/hooks/useAuthentication'
-import { Card } from 'antd'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
-export default function OrderPage() {
-  const { authenticated } = useAuthenticated()
-  const [orders, setOrders] = useState(null)
-  const pathname = usePathname()
+import { useState } from "react";
 
+export default function OrderPage() {
+  const [orders, setOrders] = useState([]);
+  
 
   return (
     <div className="relative mx-auto max-w-c-1280 py-5 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
@@ -33,7 +28,6 @@ export default function OrderPage() {
             <div className="w-full px-6 pb-8 mt-8 sm:max-w-xl sm:rounded-lg">
               <h2 className="pl-6 text-2xl font-bold sm:text-xl">Order Profile</h2>
 
-              <DeliveryDetails />
             </div>
           </div>
         </div>

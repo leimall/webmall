@@ -1,14 +1,11 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { message, Select } from 'antd'; // 使用 Ant Design 的 message 组件来显示反馈信息
+import { message } from 'antd'; // 使用 Ant Design 的 message 组件来显示反馈信息
 import { getCountry, createMyselfAddress, updateMyselfAddress } from '@/apis/address';
 import type { CountryItem } from '@/types/category';
 import type { AddressItem } from '@/types/address';
 
 import Dropdown from '@/components/UI/Dropdown';
-import style from 'styled-jsx/style';
-import { close } from 'fs';
-import { init } from 'next/dist/compiled/webpack/webpack';
 
 interface ModalProps {
   isOpen: boolean;

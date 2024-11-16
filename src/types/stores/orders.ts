@@ -13,6 +13,7 @@ export type OrderProduct = {
 };
 
 export type Order = {
+  ID: number
   orderId: string;
   userId: string;
   totalPrice: number;
@@ -22,6 +23,20 @@ export type Order = {
   shippingMethod: string;
   shippingPrice: number;
   shippingAddressId: number;
+  products: OrderProduct[];
+};
+
+export type OrderType = {
+  ID: number
+  order_id: string;
+  user_id: string;
+  total_price: number;
+  order_status: string;
+  payment_method: string;
+  payment_status: string;
+  shipping_method: string;
+  shipping_price: number;
+  shipping_address_id: number;
   products: OrderProduct[];
 };
 

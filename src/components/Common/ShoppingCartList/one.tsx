@@ -1,19 +1,91 @@
 import CartListItem from './cartItem';
+import { useCartStore } from '@/stores/useCartStore';
+import type { Order } from '@/types/stores/orders';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/useUserinfoStroe';
+import { createOrderForDB, getOrderId } from '@/apis/orders';
+import { useState, useEffect } from 'react';
 import { Flex, Spin, Divider } from 'antd';
 import Link from 'next/link';
-import { useCartStore } from '@/stores/useCartStore';
-import { useOrderHandler } from '@/hooks/useOrderHandler'; // 引入订单处理 Hook
-import { useState } from 'react';
-
+import { useOrderStore } from '@/stores/useOrdersStore';
+import { useNowBuyStore } from '@/stores/useNowBuyStore'; // 引入 Zustand store
 
 export default function ShoppingCartList() {
   const [loading, setLoading] = useState(false);
+  const { createOrder } = useOrderStore();
   const { items, totalPrice, price } = useCartStore();
-  const { handleBuyNow } = useOrderHandler(); // 使用 Hook
+  const [orderId, setOrderId] = useState('');
+  const router = useRouter();
+  const { user } = useAuthStore();
+  const [userId, setUserId] = useState("");
+  const {update} = useNowBuyStore(); // 引入 Zustand store}
 
-  const BuyNowHandle = () => {
+  useEffect(() => {
+    if (!orderId) {
+      handleGetOrderId()
+    }
+  }, [orderId]);
+
+  useEffect(() => {
+    if (user?.userId) {
+      setUserId(user.userId)
+    }
+  }, [user?.userId]);
+
+
+  const handleGetOrderId = async () => {
+    try {
+      const res = await getOrderId();
+      if (res.code === 0 && res.data) {
+        setOrderId(res.data);
+        console.log('Order ID set:', res.data); // 添加调试日志
+      } else {
+        alert('Error getting order id. Please try again later.');
+        return;
+      }
+    } catch (error) {
+      console.error('Error getting order id:', error);
+      alert('Error getting order id. Please try again later.');
+      return;
+    }
+  };
+
+
+
+  const BuyNowHandle = async () => {
     setLoading(true);
-    handleBuyNow(items); // 调用 Hook 中的方法
+
+    const products = items.map((item) => ({
+      ...item,
+      ID: 0,
+      order_id: orderId,
+      user_id: userId,
+    }))
+
+    const orderData: Order = {
+      ID: 0,
+      orderId,
+      userId: userId,
+      totalPrice,
+      paymentMethod: '',
+      paymentStatus: 'pending',
+      orderStatus: 'pending',
+      shippingMethod: 'standard',
+      shippingPrice: 10.00,
+      shippingAddressId: 0,
+      products,
+    };
+    console.error(orderData)
+    createOrder(orderData)
+    update(orderId)
+    try {
+      const response = await createOrderForDB(orderData)
+      if (response.code === 0) {
+        router.push("/checkout/");
+      }
+    } catch (error) {
+      alert('Error creating order. Please try again later.');
+    }
   };
 
   return (
@@ -21,11 +93,13 @@ export default function ShoppingCartList() {
       <Flex gap="middle" vertical>
         <Spin spinning={loading} size="large" tip="Loading...">
           <div className="flex flex-col  md:flex-row ">
-            <div className="flex-1 bg-background-back0 border rounded-md p-2 md:p-4">
-              <div className='p-0 md:p-4'>
-                {items.map((item, index) => (
-                  <CartListItem item={item} key={item.product_id} length={items.length} index={index} />
-                ))}
+            <div className='w-full md:w-3/4'>
+              <div className="flex-1 bg-background-back0 border rounded-md p-2 md:p-4">
+                <div className='p-0 md:p-4'>
+                  {items?.map((e, index) => (
+                    <CartListItem item={e} key={e.product_id} length={items.length} index={index} />
+                  ))}
+                </div>
               </div>
             </div>
             <div className='w-full md:w-1/4 md:ml-8 sx:ml-0 '>

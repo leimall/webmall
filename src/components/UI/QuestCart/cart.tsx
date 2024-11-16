@@ -1,15 +1,19 @@
 'use client'
 
 import { useCartStore } from '@/stores/useCartStore'; // 引入 Zustand store
+import { useNowBuyStore } from '@/stores/useNowBuyStore'; // 引入 Zustand store
 import { useAuthStore } from '@/stores/useUserinfoStroe';
 import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CartItem } from '@/types/stores/cart';
 import type { ProductDetail } from "@/types/products";
 import { Divider } from 'antd';
+import { getOrderId, createOrderForDB } from '@/apis/orders';
+import type { Order } from '@/types/stores/orders';
 
 export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
+  const { update } = useNowBuyStore();
   const { addItem, setQuantity, setSkuValue, items, fetchCartItems } = useCartStore();
   const { user } = useAuthStore();
   const [userId, setUserId] = useState('');
@@ -114,43 +118,71 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   }, [selfItem?.size]);
 
+  const handleGetOrderId = async () => {
+    try {
+      const res = await getOrderId();
+      if (res.code === 0 && res.data) {
+        console.log('Order ID set:', res.data); // 添加调试日志
+        return res.data
+      } else {
+        alert('Error getting order id. Please try again later.');
+        return '';
+      }
+    } catch (error) {
+      console.error('Error getting order id:', error);
+      alert('Error getting order id. Please try again later.');
+      return '';
+    }
+  };
+
+
 
   const handleBuyNow = async () => {
     setLoading(true);
-    if (selfItem) {
-      // Step 1: 本地状态的同步 (Zustand store)
-      selfItem.user_id = userId;
-      selfItem.size = size;
-      selfItem.price = selfPrice;
-      selfItem.quantity = selfQuantity;
+    if(selfItem) {
+      const orderId = await handleGetOrderId()
+
   
-      addItem(selfItem); // 添加商品到购物车或本地存储
-  
-      // Step 2: 订单信息准备
-      const orderData = {
-        user_id: userId,
-        order_id: `ORD-${new Date().getTime()}`, // 假设你生成订单号的方式
-        total_price: selfItem.price * selfItem.quantity,
-        payment_method: 'pending', // 可以根据实际情况动态调整
-        order_status: 'pending',
-        shipping_method: 'standard', // 示例配送方式
-        shipping_price: 10.00, // 假设有固定运费
-        shipping_address_id: 123, // 假设用户的默认地址ID
-        order_items: [
-          {
-            product_id: selfItem.product_id,
-            quantity: selfItem.quantity,
-            price: selfItem.price,
-            title: selfItem.title,
-            size: selfItem.size,
-            color: selfItem.color,
-            main_img: selfItem.main_img
-          }
-        ]
+      const orderData: Order = {
+        ID: 0,
+        orderId,
+        userId: userId,
+        totalPrice:  selfItem.price * selfItem.quantity,
+        paymentMethod: '',
+        paymentStatus: 'pending',
+        orderStatus: 'pending',
+        shippingMethod: 'standard',
+        shippingPrice: 10.00,
+        shippingAddressId: 0,
+        products: [{
+          product_id: selfItem.product_id,
+          title: selfItem.title,
+          price: selfItem.price,
+          old_price: selfItem.old_price,
+          price_off: selfItem.price_off,
+          quantity: selfItem.quantity,
+          main_img: selfItem.main_img,
+          size: selfItem.size,
+          color: selfItem.color,
+          order_id: orderId,
+          user_id: userId,
+        }]
       };
+
+      console.error("first", orderData)
+      console.error("selfItem", selfItem)
+      console.error(orderData)
+      update(orderId) 
+      try {
+        const response = await createOrderForDB(orderData)
+        console.error("response: ", response)
+        router.push("/checkout/");
+      } catch (error) {
+        alert('Error creating order. Please try again later.');
+      }
     }
   };
-  
+
 
   const handleAddToCart = () => {
     if (selfItem) {

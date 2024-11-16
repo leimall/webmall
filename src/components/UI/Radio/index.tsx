@@ -7,9 +7,10 @@ interface AddressSelectorProps {
   addresses: AddressItem[];
   defaultValue?: number;
   onSelect: (address: AddressItem) => void;
+  onEdit: (address: AddressItem) => void;
 }
 
-const AddressSelector: React.FC<AddressSelectorProps> = ({ addresses, defaultValue, onSelect }) => {
+const AddressSelector: React.FC<AddressSelectorProps> = ({ addresses, defaultValue, onSelect, onEdit }) => {
   const [selectedValue, setSelectedValue] = useState<number | undefined>(defaultValue);
 
   const handleSelect = (address: AddressItem) => {
@@ -29,13 +30,17 @@ const AddressSelector: React.FC<AddressSelectorProps> = ({ addresses, defaultVal
             onChange={() => handleSelect(e)}    // 改变时触发
             className="mr-2"
           />
-          <label htmlFor={e.ID.toString()} className="cursor-pointer w-full">
+          <label htmlFor={e.ID.toString()} className="cursor-pointer w-full z-1">
             <div className={`border relative rounded-md p-4 ${selectedValue === e.ID ? "border-fta-background-400" : ''}`} key={e.ID} >
               {e.isDefault ? <div className="absolute top-0 right-0 bg-orange-600 text-white text-xs px-2 py-1 rounded-bl-md">Default</div> : ''}
               <p className='font-bold'>{e.firstName} {e.lastName} {e.phone}</p>
               <p>{e.street1}, {e.city}, {e.state}</p>
               <p>{e.country}, {e.zipCode}</p>
               <p>{e.email}</p>
+              <div onClick={(event) => {
+                event.stopPropagation();
+                onEdit(e);
+              }} className="absolute bottom-0 z-9 right-0 bg-fta-background-200 text-fta-primary-500 text-xs px-2 py-1 rounded-tl-md">Edit</div>
             </div>
           </label>
         </div>

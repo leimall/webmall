@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { CartItem } from '@/types/stores/cart';
 import { getUserCartList, updateCartItem, createCartItem, deleteCartItem, deleteCartItemOne } from '@/apis/cart';
-
+import item from '@/components/Common/Category/item';
 interface CartStore {
   items: CartItem[];
   totalQuantity: number;
@@ -13,14 +13,15 @@ interface CartStore {
   addItem: (item: CartItem) => void;
   removeItem: (product_id: string) => void;
   clearCart: () => void;
-  clearCartItem: (item: CartItem) => void;
+  clearCartItem: () => void;
   setQuantity: (product_id: string, quantity: number) => void;
   setSkuValue: (product_id: string, size: string) => void;
   applyCoupon: (couponCode: string, discount: number) => void; // 新增：应用优惠券
   removeCoupon: () => void;                                  // 新增：移除优惠券
+  totalPriceOptions: () => void;
   fetchCartItems: () => Promise<void>;
   updateCart: (item: CartItem) => Promise<void>;
-  deleteCart: (item: CartItem) => Promise<void>;
+  deleteCart: () => Promise<void>;
   deleteCartOne: (item: CartItem) => Promise<void>;
   createCart: (item: CartItem) => Promise<void>;
 }
@@ -36,13 +37,11 @@ export const useCartStore = create<CartStore>()(
       couponCode: null, // 没有优惠券时为null
 
       // 添加商品
-      addItem: (item) => set((state) => {
+      addItem: (item) => {
         // 首先过滤掉 `null` 值
-        let validItems = state.items.filter((i) => i !== null);
-
+        let validItems = get().items.filter((i) => i !== null);
         // 检查购物车中是否已经有该商品
         const existingItem = validItems.find((i) => i.product_id === item.product_id);
-
         let newItems;
         if (existingItem) {
           // 如果商品已存在，更新数量
@@ -59,75 +58,60 @@ export const useCartStore = create<CartStore>()(
             await get().createCart(item);
           });
         }
-
-        // 计算总价
-        const totalPrice = newItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-        return {
+        set({
           items: newItems,
-          totalQuantity: newItems.reduce((total, item) => total + item.quantity, 0),
-          price: newItems.reduce((total, item) => total + item.old_price * item.quantity, 0),
-          totalPrice: totalPrice - get().discount,  // 实时更新总价（考虑折扣）
-        };
-      }),
+        })
+        get().totalPriceOptions()
+      },
 
 
       // 移除商品
-      removeItem: (pid) => set((state) => {
-        const validItems = state.items.filter((i) => i.product_id === pid);
+      removeItem: (pid) => {
+        const validItems = get().items.filter((i) => i.product_id === pid);
         if (validItems.length > 0) {
-          const newItems = state.items.filter((item) => item.product_id !== pid);
-          const totalPrice = newItems.reduce((total, item) => total + item.price * item.quantity, 0);
-          // deleteCartItemOne(validItems)
-          return {
+          const newItems = get().items.filter((item) => item.product_id !== pid);
+          set({
             items: newItems,
-            totalQuantity: newItems.reduce((total, item) => total + item.quantity, 0),
-            price: newItems.reduce((total, item) => total + item.old_price * item.quantity, 0),
-            totalPrice: totalPrice - get().discount,  // 实时更新总价（考虑折扣）
-          };
+          });
+          get().totalPriceOptions()
         }
-        return state;
-      }),
-
+      },
       // 清空购物车
       clearCart: () => {
         set({ items: [], totalQuantity: 0, totalPrice: 0, discount: 0, couponCode: null });
       },
 
-      clearCartItem: (item: CartItem) => {
-        get().deleteCart(item)
+      clearCartItem: () => {
+        const data = get
+        get().deleteCart()
         get().clearCart()
       },
 
       // 设置商品数量
-      setQuantity: (pid, quantity) => set((state) => {
+      setQuantity: (pid, quantity) => {
         // 过滤掉 `null` 值
-        let validItems = state.items.filter((i) => i !== null);
-
+        let validItems = get().items.filter((i) => i !== null);
         const newItems = validItems
           .map((item) =>
             item.product_id === pid ? { ...item, quantity: Math.max(0, quantity) } : item
           )
           .filter((item) => item.quantity > 0);
 
-        const totalPrice = newItems.reduce((total, item) => total + item.price * item.quantity, 0);
         const upitem = validItems.find((i) => i.product_id === pid)
         if (upitem) {
           setImmediate(async () => {
             await get().updateCart({ ...upitem, quantity: quantity });
           });
         }
-        return {
+        set({
           items: newItems,
-          totalQuantity: newItems.reduce((total, item) => total + item.quantity, 0),
-          price: newItems.reduce((total, item) => total + item.old_price * item.quantity, 0),
-          totalPrice: totalPrice - get().discount,  // 实时更新总价（考虑折扣）
-        };
-      }),
+        })
+        get().totalPriceOptions()
+      },
 
-      setSkuValue: (pid, size) => set((state) => {
+      setSkuValue: (pid, size) => {
         // 过滤掉 `null` 值
-        let validItems = state.items.filter((i) => i !== null);
+        let validItems = get().items.filter((i) => i !== null);
 
         const newItems = validItems
           .map((item) =>
@@ -141,38 +125,47 @@ export const useCartStore = create<CartStore>()(
             await get().updateCart(upitem);
           });
         }
-        return {
+        set({
           items: newItems,
-        };
-      }),
+        })
+        get().totalPriceOptions()
+      },
 
       // 应用优惠券
       applyCoupon: (couponCode, discount) => {
-        const totalPrice = get().items.reduce((total, item) => total + item.price * item.quantity, 0);
         set({
           couponCode: couponCode,
           discount: discount,
-          totalPrice: totalPrice - discount,  // 应用优惠券后的价格
         });
+        get().totalPriceOptions()
       },
 
       // 移除优惠券
       removeCoupon: () => {
-        const totalPrice = get().items.reduce((total, item) => total + item.price * item.quantity, 0);
         set({
           couponCode: null,
           discount: 0,
-          totalPrice,  // 移除优惠券，恢复原价
         });
+        get().totalPriceOptions()
+      },
+      totalPriceOptions: () => {
+        const totalPrice = get().items.reduce((total, item) => total + item.price * item.quantity, 0)
+        const totalQuantity = get().items.reduce((total, item) => total + item.quantity, 0)
+        const price = get().items.reduce((total, item) => total + item.old_price * item.quantity, 0);
+        const total = parseFloat(totalPrice.toFixed(2))
+        const p = parseFloat(price.toFixed(2))
+        set({
+          totalPrice: total,
+          totalQuantity,
+          price: p,
+        })
       },
       fetchCartItems: async () => {
         const response = await getUserCartList();
-        const data:CartItem[] = response.data;
+        const data: CartItem[] = response.data;
         if (data?.length) {
-          const totalPrice = data.reduce((total, item) => total + item.price * item.quantity, 0);
-          const totalQuantity = data.reduce((total, item) => total + item.quantity, 0)
-          const price = data.reduce((total, item) => total + item.old_price * item.quantity, 0);
-          set({ items: data, totalPrice: totalPrice, totalQuantity: totalQuantity, price: price });
+          set({ items: data });
+          get().totalPriceOptions()
         } else {
           set({ items: [] })
         }
@@ -180,19 +173,15 @@ export const useCartStore = create<CartStore>()(
       },
       updateCart: async (item: CartItem) => {
         const response = await updateCartItem(item);
-        console.error("updateCartItem", response);
       },
-      deleteCart: async (item: CartItem) => {
-        const response = await deleteCartItem(item);
-        console.error("deleteCartItem", response);
+      deleteCart: async () => {
+        const response = await deleteCartItem();
       },
       deleteCartOne: async (item: CartItem) => {
         const response = await deleteCartItemOne(item);
-        console.error("deleteCartItemOne", response);
       },
       createCart: async (item: CartItem) => {
         const response = await createCartItem(item);
-        console.error("createCartItem", response);
       }
     }),
     {

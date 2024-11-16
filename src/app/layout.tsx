@@ -5,6 +5,7 @@ import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 
 import "@/styles/globals.css";
+import { Script } from "vm";
 
 export const metadata: Metadata = {
   title: "FTAnails | ",
@@ -28,6 +29,11 @@ const HotjarScript = () => {
   />
   )
 }
+const LLpayScript = () => {
+  return (
+    <script src="https://gacashier.lianlianpay-inc.com/sandbox2/llpay.min.js" />
+  )
+}
 
 export default function RootLayout({
   children,
@@ -38,6 +44,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <HotjarScript />
+        <LLpayScript />
         <GoogleAnalytics gaId="G-WNPBNMJSN8" />
       </head>
 

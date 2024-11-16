@@ -32,9 +32,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   try {
     const res = await getProductByCategory(id);
     const data: Product[] | null = res.data;
-
-    console.error("object", res);
-
     if (!data) {
       return <div>Document not found</div>;
     }
