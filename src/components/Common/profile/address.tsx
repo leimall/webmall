@@ -22,26 +22,28 @@ const AddressModal: React.FC<ModalProps> = ({ isOpen, initialData, onClose, onGe
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    street1: '',
+    line1: '',
+    line2: '',
     email: '',
     city: '',
     state: '',
     country: '',
-    countryCode: '',
-    zipCode: '',
+    countryName: '',
+    postalCode: '',
     phone: '',
     isDefault: 0,
   });
   const init = {
     firstName: '',
     lastName: '',
-    street1: '',
+    line1: '',
+    line2: '',
     email: '',
     city: '',
     state: '',
     country: '',
-    countryCode: '',
-    zipCode: '',
+    countryName: '',
+    postalCode: '',
     phone: '',
     isDefault: 0,
   }
@@ -59,7 +61,7 @@ const AddressModal: React.FC<ModalProps> = ({ isOpen, initialData, onClose, onGe
     if (initialData) {
       setFormData(initialData);
     } else {
-      setFormData(init)
+      setFormData(init);
     }
   }, [initialData, isOpen]);
 
@@ -73,7 +75,7 @@ const AddressModal: React.FC<ModalProps> = ({ isOpen, initialData, onClose, onGe
       setFormData({
         ...formData,
         country: selectedCountry.name_en,
-        countryCode: selectedCountry.code,
+        countryName: selectedCountry.code,
       });
     }
   };
@@ -127,7 +129,7 @@ const AddressModal: React.FC<ModalProps> = ({ isOpen, initialData, onClose, onGe
     setFormData({
       ...formData,
       country: selectedOption.label,
-      countryCode: selectedOption.value,
+      countryName: selectedOption.value,
     });;
   };
 
@@ -206,7 +208,7 @@ const AddressModal: React.FC<ModalProps> = ({ isOpen, initialData, onClose, onGe
                   id="street1"
                   name="street1"
                   type="text"
-                  value={formData.street1}
+                  value={formData.line1}
                   onChange={handleChange}
                   placeholder="Address Line"
                   className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />
@@ -236,7 +238,7 @@ const AddressModal: React.FC<ModalProps> = ({ isOpen, initialData, onClose, onGe
                   <input id="zipCode"
                     name="zipCode"
                     type="text"
-                    value={formData.zipCode}
+                    value={formData.postalCode}
                     onChange={handleChange}
                     placeholder="Zip Code"
                     className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />

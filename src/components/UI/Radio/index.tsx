@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 
 import type { AddressItem } from '@/types/address';
 import item from '@/components/Common/Category/item';
@@ -12,6 +12,10 @@ interface AddressSelectorProps {
 
 const AddressSelector: React.FC<AddressSelectorProps> = ({ addresses, defaultValue, onSelect, onEdit }) => {
   const [selectedValue, setSelectedValue] = useState<number | undefined>(defaultValue);
+
+  useEffect(() => {
+    setSelectedValue(defaultValue);
+  }, [defaultValue])
 
   const handleSelect = (address: AddressItem) => {
     setSelectedValue(address.ID);
@@ -34,9 +38,14 @@ const AddressSelector: React.FC<AddressSelectorProps> = ({ addresses, defaultVal
             <div className={`border relative rounded-md p-4 ${selectedValue === e.ID ? "border-fta-background-400" : ''}`} key={e.ID} >
               {e.isDefault ? <div className="absolute top-0 right-0 bg-orange-600 text-white text-xs px-2 py-1 rounded-bl-md">Default</div> : ''}
               <p className='font-bold'>{e.firstName} {e.lastName} {e.phone}</p>
-              <p>{e.street1}, {e.city}, {e.state}</p>
-              <p>{e.country}, {e.zipCode}</p>
+              <div className='text-gray-600'>
+              <p>{e.line1}, {e.line2}</p>
+              <p>{e.city}, {e.state}</p>
+              <p>{e.country}, {e.postalCode}</p>
               <p>{e.email}</p>
+              <p>ID:{e.ID}</p>
+              </div>
+              
               <div onClick={(event) => {
                 event.stopPropagation();
                 onEdit(e);

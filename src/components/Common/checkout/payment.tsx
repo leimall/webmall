@@ -35,11 +35,8 @@ const PaymentForm: React.FC<ModalProps> = ({ onPaymentSubmit, onLoading }) => {
       getLLPayTokenIframe()
     }
 
-    // 确保 LLP 在脚本加载后可用
-    console.error("1. token: ", token, llpayLoaded, window.LLP)
     if (token && window.LLP) {
       setTimeout(() => {
-        console.error("4. loading: token: ", token)
         const elements = window.LLP.elements();
         const card = elements.create('card', {
           token: token,

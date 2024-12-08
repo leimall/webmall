@@ -1,3 +1,4 @@
+import { data } from 'tailwindcss/defaultTheme';
 import type { Response  } from '@/types/respones'
 import type { Order, OrderType} from '@/types/stores/orders';
 import request from '@/utils/request'
@@ -41,9 +42,10 @@ export const getOneOrderById = (id: string): Promise<orderResponse> => {
   })
 }
 
-export const getMyselfOrder = (): Promise<orderResponse> => {
+export const getMyselfOrder = (data: any): Promise<orderResponse> => {
   return request({
     url: '/orders/myself',
-    method: 'get'
+    method: 'get',
+    params: data
   })
 }

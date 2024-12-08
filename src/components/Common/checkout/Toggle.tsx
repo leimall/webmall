@@ -32,7 +32,7 @@ const ToggleContent: React.FC<ToggleContentProps> = ({ title, children, value })
         <button
           type="button"
           onClick={toggleContent}
-          className="w-full text-base font-semibold text-left p-6 text-[#333] flex items-center"
+          className="w-full bg-white rounded-md text-base font-semibold text-left p-6 text-[#333] flex items-center"
         >
           <div className="mr-4">{title}</div>
           <svg xmlns="http://www.w3.org/2000/svg" className="w-4 fill-current ml-auto shrink-0 transform transition-transform" viewBox="0 0 24 24">

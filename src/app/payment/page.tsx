@@ -51,6 +51,12 @@ function PaymentContent () {
     }, 300);
   }, [searchParams]);
 
+  const updatePaymentStatus = (payment_status: string) => {
+    setPaymentInfo({...paymentInfo, payment_status });
+  };
+
+
+
   return (
     <div className="relative flex flex-col justify-center items-center py-12 px-6">
       <LoadingOverlay isLoading={loading} />

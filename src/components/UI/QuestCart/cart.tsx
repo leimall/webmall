@@ -235,14 +235,13 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       <div className="flex flex-wrap gap-4 mt-4">
         {
           sizeList.map((e, index) => (
-            <button
+            <div
               key={index}
-              type="button"
               className={`w-10 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-fta-primary-50 bg-white'}`}
               onClick={() => setSelfSize(e)}
             >
               {e}
-            </button>
+            </div>
           ))}
       </div>
       <Divider />

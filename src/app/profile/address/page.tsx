@@ -124,8 +124,9 @@ export default function AddressPage() {
                     <li key={item.ID} className={`${item.isDefault ? "border-fta-background-400": ""} p-4 border rounded-md relative`}>
                       {item.isDefault ? <div className="absolute top-0 right-0 bg-orange-600 text-white text-xs px-2 py-1 rounded-bl-md">Default</div> : ''}
                       <p>{item.firstName} {item.lastName} {item.phone}</p>
-                      <p>{item.street1}, {item.city}, {item.state}</p>
-                      <p>{item.country}, {item.zipCode}</p>
+                      <p>{item.line1},</p>
+                      <p>{item.line2}, {item.city}, {item.state}</p>
+                      <p>{item.country}, {item.postalCode}</p>
 
                      
                         <div className="text-right space-x-2">

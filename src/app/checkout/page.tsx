@@ -66,34 +66,39 @@ const CheckoutPage = () => {
   }
 
   const setAddressDefault = (id: number) => {
-    if (id === 0) {
-      if (address && address.length > 0) {
-        const finddefautl = address.find((e) => e.isDefault === num)
-        if (finddefautl) {
-          setSeletedAddress(finddefautl)
-          setValue(false)
-          handleShippingAddressID(finddefautl.ID)
-          setNum(finddefautl.ID)
-          setBillingAddress(finddefautl)
-        }
-      }
-    } else {
-      setNum(id)
-      const finddefautl = address.find((e) => e.ID === id)
-      if (finddefautl) {
-        setSeletedAddress(finddefautl)
-        setValue(false)
-        handleShippingAddressID(finddefautl.ID)
-        setBillingAddress(finddefautl)
-      }
+    const tiem = setTimeout(() => {
+      console.error("setAddressDefault", address)
+      clearTimeout(tiem)
+    }, 1000)
+    const finddefautl = address.find((e) => e.ID === id)
+    if (finddefautl) {
+      console.error("setAddressDefault", id)
+      setValue(false)
+      optionfunc(finddefautl)
     }
   }
 
   const getAddress = async () => {
     const res = await getMyselfAddress()
-    if (res.code === 0) {
-      setAddress(res.data?.list ?? [])
+    if (res.code === 0 && res.data) {
+      const list = res.data.list
+      if (list && list.length > 0) {
+        setAddress(list)
+        const finddefautl = list.find((e) => e.isDefault === 1)
+        if (finddefautl) {
+          optionfunc(finddefautl)
+          setValue(false)
+        }
+      }
     }
+  }
+
+  const optionfunc = (item: AddressItem) => {
+    setNum(item.ID)
+    setSeletedAddress(item)
+    setBillingAddress(item)
+    handleShippingAddressID(item.ID)
+    updateAddressForOrder(item.ID)
   }
 
   const handleShippingAddressID = (id: number) => {
@@ -105,9 +110,8 @@ const CheckoutPage = () => {
     })
   }
 
-
   const setSeletedAddress = (address: AddressItem) => {
-    const fullAddress = `${address.firstName} ${address.lastName} ${address.street1}`;
+    const fullAddress = `${address.firstName} ${address.lastName} ${address.line1}`;
     setDefaultAddress(fullAddress)
   }
 
@@ -121,12 +125,13 @@ const CheckoutPage = () => {
 
   const handleAddressSelect = async (selectedAddress: AddressItem) => {
     setAddressloading(true)
-    setNum(selectedAddress.ID)
-    setBillingAddress(selectedAddress)
-    setSeletedAddress(selectedAddress)
+    optionfunc(selectedAddress)
+  };
+
+  const updateAddressForOrder = async (aID: number) => {
     try {
       if (myselfOrder) {
-        myselfOrder.shipping_address_id = selectedAddress.ID
+        myselfOrder.shipping_address_id = aID
         const res = await updateOrderInfo(myselfOrder)
         if (res.code === 0) {
           setMyselfOrder(myselfOrder)
@@ -138,7 +143,7 @@ const CheckoutPage = () => {
       console.log(error)
       setAddressloading(false)
     }
-  };
+  }
 
   const handlePaymentOrder = (method: 'llpay' | 'paypal') => {
     try {
@@ -165,7 +170,7 @@ const CheckoutPage = () => {
     setIsModal(false)
   }
   const gotoSuccessPage = (order: any) => {
-    const {merchant_transaction_id, payment_data} = order
+    const { merchant_transaction_id, payment_data } = order
     const mid = `merchant_transaction_id=${merchant_transaction_id}&payment_currency_code=${payment_data.payment_currency_code}&payment_amount=${payment_data.payment_amount}&payment_status=${payment_data.payment_status}&order_amount=${payment_data.payment_amount}`
     const url = `http://localhost:3008/payment/?${mid}`
     window.location.href = url

@@ -4,15 +4,16 @@ export type AddressItem = {
   phone: string;
   firstName: string;
   lastName: string;
-  street1: string;
+  line1: string;
+  line2: string;
   email: string;
   city: string;
   state: string;
   country: string;
-  countryCode: string;
-  zipCode: string;
+  countryName: string;
+  postalCode: string;
   isDefault: number;
-  UpdatedAt: string
+  mark: string;
 }
 export type BillingAddressItem = {
   ID: number;
@@ -20,14 +21,12 @@ export type BillingAddressItem = {
   phone: string;
   firstName: string;
   lastName: string;
-  street1: string;
+  line1: string;
+  line2: string;
   email: string;
   city: string;
   state: string;
   country: string;
-  countryCode: string;
-  zipCode: string;
-  isDefault: number;
-  UpdatedAt: string
+  postalCode: string;
 }
 
