@@ -6,33 +6,27 @@ interface InputProps {
   name: string;
   label: string;
   type?: string;
-  defaultValue?: string;
+  value?: string;  // 使用 value 来接收值
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // 传递 onChange 事件
   required?: boolean;
   className?: string;
 }
 
 const Input: FC<InputProps> = ({
   id,
-  name,
   label,
-  type = "text",
-  defaultValue,
-  required = false,
   className,
+  ...field
 }) => {
   return (
-    <div className="relative z-0 w-full mb-5 group">
+    <div className="relative z-0 w-full group">
       <input
-        type={type}
-        id={id}
-        name={name}
-        defaultValue={defaultValue}
-        required={required}
         placeholder=" "
         className={clsx(
           "block h-12 py-2 pt-7 px-4 w-full text-sm font-bold text-fta-primary-500 bg-fta-background-50 border-1 border-gray-200 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-fta-background-400 focus:border-fta-background-400 peer hover:border-fta-background-400 transition-colors duration-200",
           className
         )}
+        {...field}
       />
       <label
         htmlFor={id}

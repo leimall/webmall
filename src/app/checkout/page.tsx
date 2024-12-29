@@ -22,6 +22,8 @@ import { postCreatLLPayOrder } from '@/apis/llpay';
 import type { ReqCreateOrderType } from '@/types/llpay/createOrder'
 import { useNowBuyStore } from '@/stores/useNowBuyStore';
 import { useCartStore } from '@/stores/useCartStore';
+import AddressForm from '@/components/Layout/Address'
+import { set } from 'react-hook-form';
 
 
 const CheckoutPage = () => {
@@ -39,6 +41,7 @@ const CheckoutPage = () => {
   const [value, setValue] = useState(true)
   const [num, setNum] = useState(1)
   const [isModal, setIsModal] = useState(false)
+  const [modeTitle, setModeTitle] = useState<"create" | "edit">("create");
 
   const [formData, setFormData] = useState<AddressItem | null>(null);
 
@@ -158,11 +161,13 @@ const CheckoutPage = () => {
 
   const handleSNewAddress = () => {
     setFormData(null)
+    setModeTitle('create')
     setIsModal(true)
   };
 
   const handleEditAddress = (address: AddressItem) => {
     setFormData(address)
+    setModeTitle('edit')
     setIsModal(true)
   };
 
@@ -231,7 +236,6 @@ const CheckoutPage = () => {
   };
 
 
-
   return (
     <div>
       <div className="relative mx-auto max-w-c-1024 py-5 justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
@@ -263,7 +267,8 @@ const CheckoutPage = () => {
                 <h3>Set Billing Information</h3>
                 <ToggleContent title="Billing Information" value={true}>
                   <div className="flex flex-col">
-                    <BillingAddressModal address={billingAddress} />
+                    <BillingAddressModal isOpen={isModal} onClose={handleCloseModal} onGetData={getAddress} addressData={formData} mode={modeTitle} />
+                    
                   </div>
                 </ToggleContent>
                 <h3>Checkout</h3>
@@ -321,7 +326,7 @@ const CheckoutPage = () => {
             </div>
           </div>
         )}
-        <AddressModal isOpen={isModal} initialData={formData} onClose={handleCloseModal} onGetData={getAddress} />
+        <AddressModal isOpen={isModal} onClose={handleCloseModal} onGetData={getAddress} addressData={formData} mode={modeTitle} />
       </div>
     </div>
   );

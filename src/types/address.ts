@@ -30,3 +30,17 @@ export type BillingAddressItem = {
   postalCode: string;
 }
 
+export type AddressFormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  line1: string;
+  line2: string;
+  city: string;
+  state: string;
+  stateName: string;
+  country: string;
+  countryName: string;
+  postalCode: string;
+}

@@ -10,7 +10,7 @@ import { useAuthStore } from '@/stores/useUserinfoStroe';
 const service = axios.create({
   // baseURL: '//localhost:3009/api/web',
   baseURL: process.env.NEXT_PUBLIC_API_URL + '/api/web',
-  timeout: 5000,
+  timeout: 100000,
 });
 
 // 添加一个请求拦截器

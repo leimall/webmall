@@ -5,7 +5,6 @@ import { getCountry, getMyselfAddress, setDefaultAddress, deleteAddress } from '
 import type { CountryItem } from '@/types/category';
 import type { AddressItem } from '@/types/address';
 import { useAuthenticated } from '@/hooks/useAuthentication';
-import item from '@/components/Common/Category/item';
 import AddressModal from '@/components/Common/profile/address';
 // import address from '@/components/Common/address';
 
@@ -17,6 +16,7 @@ export default function AddressPage() {
   const [isModal, setIsModal] = useState(false)
 
   const [formData, setFormData] = useState<AddressItem | null>(null);
+  const [modeTitle, setModeTitle] = useState<"create" | "edit">("create");
 
   // useEffect(() => {
   //   if (authenticated) {
@@ -74,11 +74,13 @@ export default function AddressPage() {
 
   const handleEditAddress = (address: AddressItem) => {
     setFormData(address)
+    setModeTitle("edit")
     setIsModal(true)
   };
 
   const handleSNewAddress =  () => {
     setFormData(null)
+    setModeTitle("create")
     setIsModal(true)
   };
   const handleCloseModal = () => {
@@ -160,7 +162,7 @@ export default function AddressPage() {
               <p className="mt-8">No addresses available.</p>
             )}
             <div>
-              <AddressModal isOpen={isModal} initialData={formData} onClose={handleCloseModal} onGetData={fetchMyselfAddress} />
+              <AddressModal isOpen={isModal} addressData={formData} onClose={handleCloseModal} onGetData={fetchMyselfAddress} mode={modeTitle} />
             </div>
           </div>
         </div>

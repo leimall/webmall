@@ -4,9 +4,11 @@ import { getMyselfOrder } from "@/apis/orders";
 import { useState, useEffect } from "react";
 import Pagination from "@/components/UI/Pagination";
 import ProductList from '@/components/Common/checkout/productItem';
+import type { OrderType } from "@/types/orders";
+import { formatDate } from "@/utils/formatDate";
 
 export default function OrderPage() {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<OrderType[]>();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const pageSize = 10;
@@ -58,7 +60,7 @@ export default function OrderPage() {
             <div className="w-full md:px-6 pb-8 mt-0 md:mt-8 sm:rounded-lg">
               <h2 className="md:pl-6 text-2xl font-bold sm:text-xl">Order Profile</h2>
 
-              {orders.map((order, index) => (
+              {orders?.map((order, index) => (
                 <div key={index} className="flex flex-col gap-4 p-4 my-4 bg-white border rounded-md">
                   <div className="flex justify-between items-center">
                     <h3 className="text-sm md:text-lg font-semibold">Order #{order.order_id}</h3>
@@ -66,27 +68,28 @@ export default function OrderPage() {
                   </div>
   
                   <div className="flex flex-col gap-2">
-                    <h3 className="text-sm md:text-md font-semibold">Order Date: {order.updateAt}</h3>
-                    <p className="text-sm font-semibold">payment status: {order.payment_status}</p>
-                    <p className="text-sm font-semibold">Total Amount: {order.total_price}</p>
+                    <p className="text-sm text-gray-500">Order Date: {formatDate(order.UpdatedAt)}</p>
+                    <p className="text-sm text-gray-500">payment status: {order.payment_status}</p>
+                    <p className="text-sm text-gray-500">Total Amount: {order.total_price}</p>
                   </div>
 
                   <div className="flex flex-col gap-2">
                     <p className="text-md font-semibold">Shipping Address:</p>
-                    <p className="text-sm font-semibold text-gray-600">{order.Address.street1}, {order.Address.city}, {order.Address.state}, {order.Address.country}, {order.Address.zipcode}</p>
+                    <p className="text-sm text-gray-500">
+                      {order.Address?.line1}, {order.Address?.line2}<br />
+                      {order.Address?.city}, {order.Address?.state}, {order.Address?.country}, {order.Address?.postalCode}</p>
                   </div>
 
                   <div className="text-md font-semibold">Products:</div>
                   <div className="flex flex-col gap-2">
-                    {order.Products?.map((item, index) => (
+                    {order.Products?.map((item) => (
                       <ProductList item={item} key={item.product_id} />
                     ))}
                     <p className="text-sm font-semibold text-right">Total Amount: {order.total_price}</p>
                   </div>
                 </div>
-              )
-            )}
-
+              ))
+              }
             </div>
           </div>
           <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />

@@ -8,7 +8,7 @@ import MiniPage from "@/components/Layout/Minilist";
 import NewsLists from "@/components/Layout/NewsLists";
 import TeamPage from "@/components/Layout/Team";
 import TopLists from "@/components/Layout/TopLists";
-import { SafetyOutlined, ShoppingCartOutlined, DollarOutlined, CustomerServiceOutlined } from "@ant-design/icons";
+import Informatin from "@/template/indexInfo"
 
 export default function Home() {
 
@@ -52,36 +52,7 @@ export default function Home() {
 
       <FaqPage />
 
-      <div className="flex flex-col md:flex-row justify-between py-8">
-      <div className="text-center md:w-1/4 p-2 xl:p-4">
-        <SafetyOutlined style={{ fontSize: '4rem', color: '#603813' }} />
-        <div className="text-lg font-bold pt-2">
-          Secure payments
-        </div>
-        <p>Your payment are 100% safe and protected</p>
-      </div>
-      <div className="text-center md:w-1/4  p-2 xl:p-4">
-        <ShoppingCartOutlined style={{ fontSize: '4rem', color: '#603813' }} />
-        <div className="text-lg font-bold pt-2">
-          Fast Shipping
-        </div>
-        <p>On your doorstep in just 7-15 days.</p>
-      </div>
-      <div className="text-center md:w-1/4 p-2 xl:p-4">
-        <DollarOutlined style={{ fontSize: '4rem', color: '#603813' }} />
-        <div className="text-lg font-bold pt-2">
-          Duty Free
-        </div>
-        <p>No extra taxes or tips.</p>
-      </div>
-      <div className="text-center md:w-1/4 p-2 xl:p-4">
-        <CustomerServiceOutlined style={{ fontSize: '4rem', color: '#603813' }} />
-        <div className="text-lg font-bold pt-2">
-          Customer Servic
-        </div>
-        <p>24/7 customer support</p>
-      </div>
-    </div>
+      <Informatin />
     </main>
   );
 }
