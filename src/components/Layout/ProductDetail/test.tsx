@@ -12,6 +12,11 @@ import Price from "./price"
 import CartItemComponent from "@/components/UI/QuestCart/cart";
 import CustomRate from "@/components/Common/Rate";
 
+import { FaTruck, FaShieldHalved, FaCheck, FaCopy } from "react-icons/fa6";
+import ReviewList from "@/components/Common/ReviewList";
+import Info from "./info";
+import ReviewSummary from "@/components/Common/ReviewList/ReviewSummary";
+
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
   const carouselRef = useRef<CarouselRef>(null);
@@ -25,6 +30,12 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
       setRate(product.Review.average)
     }
   }, [selectedImageIndex, product.Review.average]);
+
+  useEffect(() => {
+    if (product.Review.average) {
+      setRate(product.Review.average)
+    }
+  }, [product.Review.average]);
 
 
   return (
@@ -61,6 +72,12 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
               />
             ))}
           </div>
+
+          <div className="w-full">
+          <ReviewSummary />
+          <Divider />
+          <ReviewList productID={product.productId} />
+        </div>
         </div>
 
         <div className="lg:col-span-5 md:p-4">
@@ -71,33 +88,55 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
                   {product.title}
                 </h1>
               </div>
-              <div className="text-xs text-gray-500 pt-2">
-                SKU: {product.productId}
-              </div>
-
-              <div className="flex space-x-1 mt-4">
+              <div className="flex text-xs text-gray-500 pt-2">
+                <div className="flex items-center gap-2 text-gray-400">SKU: {product.productId} <FaCopy className="mr-4 text-blue-500" /></div>
                 <CustomRate rating={rate} />
               </div>
             </div>
           </div>
 
           <Divider />
-
           <div>
             <Price product={product} />
           </div>
+          <Divider />
+          <div>
+            <CartItemComponent product={product} />
+          </div>
+
+         
+
+          <Divider />
+
+
+          <div className="bg-gray-50 p-4 rounded-sm border border-gray-200">
+            <div className="flex items-center gap-2 text-sm font-bold mb-1"><FaTruck className="text-xl text-green-800" /> Free Shipping</div>
+            <div className="text-sm text-gray-500 ml-7">
+              Free shipping worldwide for orders over $69 (USD)
+            </div>
+            <div className="flex items-center gap-2 text-sm font-bold mt-2 mb-1"><FaShieldHalved className="text-xl text-green-800" /> Shopping Security</div>
+            <div className="text-sm text-gray-500 ml-7">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1"><FaCheck className="text-sm text-green-800" /> Customer Service</div>
+                <div className="flex items-center gap-1"><FaCheck className="text-sm text-green-800" /> Safe Payments </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1"><FaCheck className="text-sm text-green-800" /> Privacy Protection</div>
+                <div className="flex items-center gap-1"><FaCheck className="text-sm text-green-800" /> Secure Logistics </div>
+              </div>
+            </div>
+          </div>
+
 
           <Divider />
           <div>
             <h3 className="text-md font-bold text-gray-800">Description</h3>
             <p className="text-gray-700 text-sm mt-2">{product.desction}</p>
           </div>
-          <Divider />
-
-          <div>
-            <CartItemComponent product={product} />
-          </div>
         </div>
+        
+
+
       </div>
 
     </div>

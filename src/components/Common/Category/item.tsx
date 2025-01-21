@@ -8,9 +8,21 @@ export default function CategoryItem({ item }: { item: CategoryItem }) {
       <div className="flex flex-col items-center">
         {
           item.ID % 2 === 0 ? (
-            <img src='/images/category/1.png' className="w-20 h-20 object-cover" />
+            <img
+              src="/images/category/1.webp"
+              alt={item.title_en}
+              width={80}
+              height={80}
+              className="w-20 h-20 object-cover"
+            />
           ) : (
-            <img src='/images/category/2.png' className="w-20 h-20 object-cover" />
+            <img
+              src="/images/category/2.webp"
+              alt={item.title_en}
+              width={80}
+              height={80}
+              className="w-20 h-20 object-cover"
+            />
           )
         }
         <div className="mt-5 text-center">

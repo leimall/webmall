@@ -23,19 +23,18 @@ export default function ProductCardOne({ product }: { product: Product }) {
 						<div className="absolute inset-0"></div>
 					</div>
 
-					<div className="p-4">
-						<h2 className="text-sm font-extrabold text-fta-primary-800 h-10 line-clamp-2">{product.title}</h2>
+					<div className="p-1 md:p-4">
+						<h2 className="text-sm md:font-extrabold text-fta-primary-800 h-6 line-clamp-1">{product.title}</h2>
 						{/* <p className="text-fta-primary-600 text-xs mt-2 h-12 line-clamp-3">{product.desction}</p> */}
-						<div className="flex items-center mt-2.5 mb-3">
+						{/* <div className="md:flex md:items-center mt-2.5 mb-3">
 							<div className="flex items-center space-x-1 rtl:space-x-reverse">
               <CustomRate rating={product.Review.average} />
 							</div>
 							<span className="bg-fta-accent1 text-fta-primary-300 text-xs font-semibold px-2.5 py-0.5 rounded ms-3">{product.Review.average}</span>
 							<span className="text-sm text-fta-black-100 font-medium ms-3">({product.Review.reviews} Reviews)</span>
-						</div>
-						<div className="flex items-center justify-between text-fta-black-100">
+						</div> */}
+						<div className="md:flex md:items-center md:justify-between text-fta-black-100">
               <Price product={product} />
-							<div className="bg-white text-fta-primary-500 border p-1 rounded-md">Add to cart</div>
 						</div>
 					</div>
 				</div>

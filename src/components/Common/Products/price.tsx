@@ -20,14 +20,14 @@ export default function ProductInfoPage({ product }: { product: Product }) {
     }
   }, [product]);
   return (
-    <div className="flex justify-center items-end font-sans">
-      <span className="line-through text-sm text-gray-500 px-2">${oldprice}</span>
+    <div className="flex justify-start md:justify-center items-end font-sans">
       <div className="flex items-center">
-        <div className="text-gray-800 text-md font-bold">${newprice}</div>
-        <div className="text-red-600 text-sm font-bold px-2">
-          {product.priceOff > 0 ? `(-${off})` : ''}
+        <div className="text-red-400 border-red-400 border rounded-sm px-1 text-sm">
+          {product.priceOff > 0 ? `-${off}` : ''}
         </div>
+        <div className="text-gray-800 pl-2 text-lg font-bold">${newprice}</div>
       </div>
+      <span className="line-through text-sm text-gray-500 pl-2">${oldprice}</span>
     </div>
   );
 }

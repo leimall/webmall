@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 // Zustand 状态管理接口
 interface NowBuyState {
@@ -18,7 +18,7 @@ export const useNowBuyStore = create<NowBuyState>()(
     }),
     {
       name: 'nowbuy-storage', // 存储到本地
-      getStorage: () => localStorage, // 使用 localStorage
+      storage: createJSONStorage(() => localStorage), // 使用 localStorage
     }
   )
 )

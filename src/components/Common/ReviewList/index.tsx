@@ -1,15 +1,36 @@
 'use client'
 
-import { Button, List, Rate, Divider } from "antd";
+import { Button, List, Rate, Divider, message } from "antd";
 import { Review } from "@/types/review";
 import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
 import ReviewSummary from "./ReviewSummary";
 import DetailTitle from "../Title";
+import React, { useEffect } from "react";
+import { getProductList } from "@/apis/product";
 
 
 export default function ReviewList({ productID }: { productID: string }) {
+  const [reviews, setReviews] = React.useState<Review[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | null>(null);
+  useEffect(() => {
+    fetchData()
+  }, [])
 
-  const reviews = [{
+  const fetchData = async () => {
+    try {
+      const response = await getProductList();
+      setReviews(response.data);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000)
+    } catch (error) {
+      setLoading(false);
+      message.error("Failed to fetch products");
+    }
+  };
+
+  const reviewss = [{
     username: "Richard",
     rating: 4.5,
     comment: "This is a very nice product. I love it.",
@@ -28,7 +49,7 @@ export default function ReviewList({ productID }: { productID: string }) {
   }, {
     username: "Richard",
     rating: 4.5,
-    comment: "This is a very nice product. I love it.",
+    comment: "This is a very nice product. I love it. This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.",
     profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
     likes: 10,
     dislikes: 2,
@@ -36,7 +57,7 @@ export default function ReviewList({ productID }: { productID: string }) {
   }, {
     username: "Richard",
     rating: 4.5,
-    comment: "This is a very nice product. I love it.",
+    comment: "This is a very nice product. I love it. aaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbb",
     profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
     likes: 10,
     dislikes: 2,
@@ -83,13 +104,13 @@ export default function ReviewList({ productID }: { productID: string }) {
                   </div>
                 </div>
 
-                <div className="pl-13 py-4">
-                  <p className="text-sm text-fta-blake">{review.comment}</p>
+                <div className="pl-13 py-4 text-left">
+                  <div className="text-sm break-words text-justify text-fta-blake">{review.comment}</div>
                 </div>
               </List.Item>
             )}
           />
-          <button type="button" className="w-full mt-8 px-4 py-2.5 bg-transparent border border-orange-400 text-gray-800 font-semibold rounded-lg">Read all reviews</button>
+          
         </div>
       </div>
     </div>

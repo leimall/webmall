@@ -17,9 +17,9 @@ const reviewSummary = {
 export default function ReviewSummary() {
   const rate = reviewSummary.averageRating / 5.0 * 100;
   return (
-    <div className='pt-8'>
-      <h1 className="text-3xl font-bold text-fta-primary-600 mb-4">Customer Reviews</h1>
-      <div className="p-4 bg-white rounded-md border-2 border-gray-50">
+    <div className='pt-2'>
+      <h1 className="text-xl text-left font-bold text-slate-900 mb-4">Customer Reviews</h1>
+      <div className="p-4 rounded-md border border-gray-200 bg-slate-50">
         <div className="flex items-center mt-4">
           <div className="flex flex-col items-center mr-8">
             <div className="text-4xl font-bold text-fta-primary-600">

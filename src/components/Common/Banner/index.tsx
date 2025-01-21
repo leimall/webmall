@@ -28,7 +28,13 @@ export default function BannerInIndex({ banners }: { banners: Banner[] }) {
                     className="px-6 py-3 mt-8 rounded-md text-white text-sm tracking-wider border-none outline-none bg-fta-primary-300 hover:bg-fta-primary-500">Sign Up</button>
                 </Link>
               </div>
-              <img src="/images/banner/banner2.jpg" className="w-full h-full object-cover shrink-0" alt={"banner"} />
+              <img
+                src="/images/banner/banner2.webp"
+                alt="banner"
+                width={1920}
+                height={947}
+                className="w-full h-full object-cover shrink-0"
+              />
             </div>
           </div>
         </div>

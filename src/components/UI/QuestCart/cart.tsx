@@ -7,9 +7,12 @@ import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CartItem } from '@/types/stores/cart';
 import type { ProductDetail } from "@/types/products";
-import { Divider } from 'antd';
+import { Divider, Table } from 'antd';
 import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
+
+import { AiOutlineHeart } from "react-icons/ai";
+import { columns } from 'tailwindcss/defaultTheme';
 
 export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
@@ -22,7 +25,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [selfPrice, setSelfPrice] = useState<number>(0);
   const [skuTitle, setSkuTitle] = useState<string>('Size');
   const [size, setSize] = useState<string>('M');
-  const [sizeList, setSizeList] = useState<string[]>(['L', 'M', 'S', 'XS']);
+  const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -139,15 +142,15 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
   const handleBuyNow = async () => {
     setLoading(true);
-    if(selfItem) {
+    if (selfItem) {
       const orderId = await handleGetOrderId()
 
-  
+
       const orderData: Order = {
         ID: 0,
         orderId,
         userId: userId,
-        totalPrice:  selfItem.price * selfItem.quantity,
+        totalPrice: selfItem.price * selfItem.quantity,
         paymentMethod: '',
         paymentStatus: 'pending',
         orderStatus: 'pending',
@@ -172,7 +175,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       console.error("first", orderData)
       console.error("selfItem", selfItem)
       console.error(orderData)
-      update(orderId) 
+      update(orderId)
       try {
         const response = await createOrderForDB(orderData)
         console.error("response: ", response)
@@ -228,10 +231,82 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   }
 
+  const dataSource = [
+    {
+      key: '1',
+      size: 'XS',
+      thumb: 17,
+      ifinger: 32,
+      mfinger: 23,
+      rfinger:34,
+      pinky: 23,
+    },
+    {
+      key: '2',
+      size: 'S',
+      thumb: 17,
+      ifinger: 32,
+      mfinger: 23,
+      rfinger:34,
+      pinky: 23,
+    },
+    {
+      key: '3',
+      size: 'M',
+      thumb: 17,
+      ifinger: 32,
+      mfinger: 23,
+      rfinger:34,
+      pinky: 23,
+    },
+    {
+      key: '4',
+      size: 'L',
+      thumb: 17,
+      ifinger: 32,
+      mfinger: 23,
+      rfinger:34,
+      pinky: 23,
+    }
+  ];
+
+  const columns = [
+    {
+      title: 'Size',
+      dataIndex: 'size',
+      key: 'size',
+    },
+    {
+      title: 'Thumb',
+      dataIndex: 'thumb',
+      key: 'thumb',
+    },
+    {
+      title: 'Index',
+      dataIndex: 'ifinger',
+      key: 'ifinger',
+    },
+    {
+      title: 'Middle',
+      dataIndex: 'mfinger',
+      key: 'mfinger',
+    },
+    {
+      title: 'Ring',
+      dataIndex: 'rfinger',
+      key: 'rfinger',
+    },
+    {
+      title: 'Pinky',
+      dataIndex: 'pinky',
+      key: 'pinky',
+    },
+  ];
+
 
   return (
     <div>
-      <h2 className="text-md md:text-md font-bold text-gray-800">Choose a {skuTitle}</h2>
+      <h2 className="text-md md:text-md font-bold text-gray-800">{skuTitle}</h2>
       <div className="flex flex-wrap gap-4 mt-4">
         {
           sizeList.map((e, index) => (
@@ -244,47 +319,23 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             </div>
           ))}
       </div>
-      <Divider />
-      <h3 className="text-md font-bold text-gray-800">Quantity</h3>
-      <div className="flex md:justify-between md:flex-row gap-1 items-center md:mt-2">
-        {show && (
-          <div className="md:w-1/3 pt-4">
-            <div className='w-28'>
-              <div className='bg-white'>
-                <div className="flex items-center border border-gray-300 text-gray-800 text-md outline-none bg-transparent rounded">
-                  <div onClick={handleDecrease} className="px-3 py-3 bg-orange-50 cursor-pointer rounded-l ">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 fill-current" viewBox="0 0 124 124">
-                      <path d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z" data-original="#000000"></path>
-                    </svg>
-                  </div>
-                  <span className="mx-2.5 w-5 text-center">{selfQuantity}</span>
-                  <div onClick={handleIncrease} className="px-3 py-3 bg-orange-50 cursor-pointer rounded-r">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-2.5 fill-current" viewBox="0 0 42 42">
-                      <path d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z" data-original="#000000"></path>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+      <div className="mt-4">
+        <Table bordered dataSource={dataSource} pagination={false} columns={columns} />
+      </div>
 
-        <div className="md:w-2/3 pt-4">
-          <div className="flex gap-1 md:gap-4">
-            <button
-              type="button"
-              onClick={handleBuyNow}
-              className="min-w-[100px] md:min-w-[120px] py-1 px-2 md:px-4 md:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded"
-            >
-              Buy now
-            </button>
+      <div className="flex md:justify-between md:flex-row gap-1 items-center md:mt-2">
+        <div className="pt-4">
+          <div className="flex justify-between items-center gap-8 md:gap-16">
             <button
               type="button"
               onClick={handleAddToCart}
-              className="min-w-[120px] px-4 py-2.5 border border-orange-500 bg-transparent hover:bg-orange-500 hover:text-zinc-50 text-gray-800 text-sm font-semibold rounded"
+              className="min-w-[280px] md:min-w-[300px] h-12 py-1 px-2 md:px-4 md:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded"
             >
               Add to cart
             </button>
+            <div className="gap-4 border h-12 w-12 flex items-center justify-center rounded-full hover:bg-gray-200 cursor-pointer">
+              <AiOutlineHeart className='h-6 w-6 text-gray-500' />
+            </div>
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ export default function CustomRate({rating}: {rating: number}) {
   return (
     <div>
       <Rate disabled defaultValue={value} style={{ fontSize: 14, color: '#FFA407FF' }} />
+      <span className='ml-2'>({value})</span>
     </div>
   );
 }
