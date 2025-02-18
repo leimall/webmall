@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     }
 
     return (
-      <div className="relative mx-auto max-w-c-1280 py-5 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
+      <div className="relative mx-auto max-w-c-1280 py-3 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
         <div>
           <Title title="Lastest Products" />
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 py-8 gap-4 sm:gap-6 md:gap-8">

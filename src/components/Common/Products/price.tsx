@@ -22,12 +22,12 @@ export default function ProductInfoPage({ product }: { product: Product }) {
   return (
     <div className="flex justify-start md:justify-center items-end font-sans">
       <div className="flex items-center">
-        <div className="text-red-400 border-red-400 border rounded-sm px-1 text-sm">
+        <div className="text-red-400 border-red-400 border rounded-sm px-1 text-xs md:text-sm">
           {product.priceOff > 0 ? `-${off}` : ''}
         </div>
-        <div className="text-gray-800 pl-2 text-lg font-bold">${newprice}</div>
+        <div className="text-gray-800 pl-1 md:pl-2 md:text-lg text-sm font-bold">${newprice}</div>
       </div>
-      <span className="line-through text-sm text-gray-500 pl-2">${oldprice}</span>
+      <span className="line-through text-xs md:text-sm text-gray-500 pl-2">${oldprice}</span>
     </div>
   );
 }

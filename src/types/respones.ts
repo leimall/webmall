@@ -15,3 +15,14 @@ export interface ResponseLists<T> {
   msg?: string;
   data?: T;
 }
+
+export interface ResponsePageList<T> {
+  code: number;
+  msg?: string;
+  data?: {
+    list: T;
+    page: number;
+    pageSize: number;
+    total: number;
+  }
+}

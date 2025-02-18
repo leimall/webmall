@@ -14,20 +14,21 @@ import CustomRate from "@/components/Common/Rate";
 
 import { FaTruck, FaShieldHalved, FaCheck, FaCopy } from "react-icons/fa6";
 import ReviewList from "@/components/Common/ReviewList";
-import Info from "./info";
 import ReviewSummary from "@/components/Common/ReviewList/ReviewSummary";
+import SizeTable from "./sizeTable";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
   const carouselRef = useRef<CarouselRef>(null);
-  const [rate, setRate] = React.useState<number>(5);
+  const [rate, setRate] = React.useState<number>(5.0);
 
   useEffect(() => {
     if (carouselRef.current) {
       carouselRef.current.goTo(selectedImageIndex, false);
     }
     if (product.Review.average) {
-      setRate(product.Review.average)
+      const averRate = product.Review.average
+      setRate(averRate)
     }
   }, [selectedImageIndex, product.Review.average]);
 
@@ -73,17 +74,17 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
             ))}
           </div>
 
-          <div className="w-full">
-          <ReviewSummary />
-          <Divider />
-          <ReviewList productID={product.productId} />
-        </div>
+          <div className="w-full hidden md:block">
+            <ReviewSummary Review={product.Review} />
+            <Divider />
+            <ReviewList productID={product.productId} />
+          </div>
         </div>
 
         <div className="lg:col-span-5 md:p-4">
           <div className="flex flex-wrap items-start gap-4">
             <div className="w-full">
-              <div className="text-sm font-extrabold line-clamp-2 overflow-hidden">
+              <div className="text-md font-extrabold line-clamp-2 overflow-hidden">
                 <h1 style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, lineHeight: '1.5em', maxHeight: '4.5em' }}>
                   {product.title}
                 </h1>
@@ -104,7 +105,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
             <CartItemComponent product={product} />
           </div>
 
-         
+
 
           <Divider />
 
@@ -133,8 +134,15 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
             <h3 className="text-md font-bold text-gray-800">Description</h3>
             <p className="text-gray-700 text-sm mt-2">{product.desction}</p>
           </div>
+
+          <Divider />
+          <div className="w-full lg:hidden">
+            <ReviewSummary Review={product.Review} />
+            <Divider />
+            <ReviewList productID={product.productId} />
+          </div>
         </div>
-        
+
 
 
       </div>

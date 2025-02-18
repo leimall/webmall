@@ -1,16 +1,13 @@
 'use client'
 
-import { Button, List, Rate, Divider, message } from "antd";
-import { Review } from "@/types/review";
-import { DislikeOutlined, LikeOutlined } from "@ant-design/icons";
-import ReviewSummary from "./ReviewSummary";
-import DetailTitle from "../Title";
+import { List, Rate, message } from "antd";
 import React, { useEffect } from "react";
-import { getProductList } from "@/apis/product";
+import { getProductByComment } from "@/apis/product";
+import type { ProductComment } from "@/types/product_comment";
 
 
 export default function ReviewList({ productID }: { productID: string }) {
-  const [reviews, setReviews] = React.useState<Review[]>([]);
+  const [reviews, setReviews] = React.useState<ProductComment[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
   useEffect(() => {
@@ -19,8 +16,11 @@ export default function ReviewList({ productID }: { productID: string }) {
 
   const fetchData = async () => {
     try {
-      const response = await getProductList();
-      setReviews(response.data);
+      const response = await getProductByComment({ productId: productID, page: 1, pageSize: 3 });
+      const { code, data } = response;
+      if (code === 0 && data && data.list.length > 0) {
+        setReviews(data.list);
+      }
       setTimeout(() => {
         setLoading(false);
       }, 1000)
@@ -29,49 +29,6 @@ export default function ReviewList({ productID }: { productID: string }) {
       message.error("Failed to fetch products");
     }
   };
-
-  const reviewss = [{
-    username: "Richard",
-    rating: 4.5,
-    comment: "This is a very nice product. I love it.",
-    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    likes: 10,
-    dislikes: 2,
-    createdAt: "2021-10-10"
-  }, {
-    username: "Richard",
-    rating: 4.5,
-    comment: "This is a very nice product. I love it.",
-    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    likes: 10,
-    dislikes: 2,
-    createdAt: "2021-10-10"
-  }, {
-    username: "Richard",
-    rating: 4.5,
-    comment: "This is a very nice product. I love it. This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.This is a very nice product. I love it.",
-    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    likes: 10,
-    dislikes: 2,
-    createdAt: "2021-10-10"
-  }, {
-    username: "Richard",
-    rating: 4.5,
-    comment: "This is a very nice product. I love it. aaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbb",
-    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    likes: 10,
-    dislikes: 2,
-    createdAt: "2021-10-10"
-  }, {
-    username: "Richard",
-    rating: 4.5,
-    comment: "This is a very nice product. I love it.",
-    profileImage: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    likes: 10,
-    dislikes: 2,
-    createdAt: "2021-10-10"
-  }]
-
   return (
     <div>
       <div className="mt-8">
@@ -83,34 +40,32 @@ export default function ReviewList({ productID }: { productID: string }) {
               <List.Item className="border-b pb-4 mb-4">
                 <div className="flex justify-between">
                   <div className="flex items-center">
-                    <img src={review.profileImage} alt={review.username} className="w-12 h-12 rounded-full mr-2" />
-                    <div>
-                      <h3 className="text-sm font-bold">{review.username}</h3>
-                      {/* <p className="text-sm text-fta-blake1">CHINA</p> */}
+                    <img src="/images/logo/hlogo.png" alt={review.userName} className="w-12 h-12 rounded-full mr-2 border" />
+                    <div className="ml-1">
+                      <h3 className="text-sm text-left font-bold">{review.userName}</h3>
                     </div>
                   </div>
-                  <div className="flex items-cente">
+                  <div className="flex items-center">
                     <div className="flex items-center ml-1">
-                      <p className="text-gray-300">{review.createdAt}</p>
+                      <p className="text-gray-300">{review.date}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex justify-between">
-                  <div className="flex items-center ml-1">
-                    <div className="w-12"></div>
-                    <Rate disabled style={{ fontSize: 16 }} allowHalf defaultValue={review.rating} />
-                    <div className="text-gray-700 text-md ml-4">{review.rating}</div>
+                <div className="flex py-1">
+                  <div className="flex items-center">
+                    <Rate disabled style={{ fontSize: 16, color: '#FF9100FF' }} allowHalf defaultValue={review.star} />
                   </div>
+                  <h3 className="text-md ml-4 font-bold">{review.title}</h3>
                 </div>
 
-                <div className="pl-13 py-4 text-left">
-                  <div className="text-sm break-words text-justify text-fta-blake">{review.comment}</div>
+                <div className="pl-13 py-1 text-left">
+                  <div className="text-sm break-words text-slate-500">{review.content}</div>
                 </div>
               </List.Item>
             )}
           />
-          
+
         </div>
       </div>
     </div>

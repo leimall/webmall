@@ -8,8 +8,8 @@ import "@/styles/globals.css";
 import { Script } from "vm";
 
 export const metadata: Metadata = {
-  title: "FTAnails | ",
-  description: "",
+  title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
+  description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
 };
 const HotjarScript = () => {
   return (
@@ -48,7 +48,7 @@ export default function RootLayout({
         <GoogleAnalytics gaId="G-WNPBNMJSN8" />
       </head>
 
-      <body className="min-h-screen flex flex-col">
+      <body suppressHydrationWarning={true} className="min-h-screen flex flex-col">
         <Header />
         <div className="flex-grow bg-white">
           {children}

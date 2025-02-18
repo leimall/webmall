@@ -37,7 +37,25 @@ export type ProductDetail = Product & {
 	Sku: Sku & {
 		List: Sku[];
 	};
+  Brand: {
+    Info: BrandItem;
+    Tags: tagsChild[];
+  };
 }
+export type tagsChild = TagItem & {
+  Children: TagItem[];
+}
+
+export type BrandItem = {
+  ID: number;
+  brand_id: number;
+  brand_title: string;
+  product_id: string;
+  shape_id: number;
+  shape_title: string;
+  tag_id: number;
+}
+
 
 export type CartItem = Product & {
   quantity: number;
@@ -50,6 +68,14 @@ export type CartItem = Product & {
 export type Tags = {
 	id: number;
 	title: string;
+}
+
+export type TagItem = {
+  id: number;
+  title: string;
+  title_en: string;
+  value: string;
+  value_cm: string;
 }
 
 export type Sku = {

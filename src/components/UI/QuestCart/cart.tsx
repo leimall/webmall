@@ -7,12 +7,12 @@ import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CartItem } from '@/types/stores/cart';
 import type { ProductDetail } from "@/types/products";
-import { Divider, Table } from 'antd';
 import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
 import { AiOutlineHeart } from "react-icons/ai";
-import { columns } from 'tailwindcss/defaultTheme';
+import SizeTable from '@/components/Layout/ProductDetail/sizeTable';
+import FingerWidthInput from './FingerWidthInput';
 
 export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
@@ -25,9 +25,10 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [selfPrice, setSelfPrice] = useState<number>(0);
   const [skuTitle, setSkuTitle] = useState<string>('Size');
   const [size, setSize] = useState<string>('M');
-  const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L']);
+  const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L', 'Custom']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
+  const { Info, Tags } = product.Brand
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -195,6 +196,8 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       selfItem.quantity = selfQuantity;
       addItem(selfItem);
     }
+
+    console.error("11111", selfItem);
   };
 
   const handleDecrease = () => {
@@ -226,90 +229,47 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     if (selfItem) {
       setSelfItem({
         ...selfItem,
+        size_title: 'Size',
         size: e,
       });
     }
   }
 
-  const dataSource = [
-    {
-      key: '1',
-      size: 'XS',
-      thumb: 17,
-      ifinger: 32,
-      mfinger: 23,
-      rfinger:34,
-      pinky: 23,
-    },
-    {
-      key: '2',
-      size: 'S',
-      thumb: 17,
-      ifinger: 32,
-      mfinger: 23,
-      rfinger:34,
-      pinky: 23,
-    },
-    {
-      key: '3',
-      size: 'M',
-      thumb: 17,
-      ifinger: 32,
-      mfinger: 23,
-      rfinger:34,
-      pinky: 23,
-    },
-    {
-      key: '4',
-      size: 'L',
-      thumb: 17,
-      ifinger: 32,
-      mfinger: 23,
-      rfinger:34,
-      pinky: 23,
+  const setOpenCustom = (e: string) => {
+    setSize(e)
+    if (selfItem) {
+      setSelfItem({
+        ...selfItem,
+        size: e,
+      });
     }
-  ];
+  }
 
-  const columns = [
-    {
-      title: 'Size',
-      dataIndex: 'size',
-      key: 'size',
-    },
-    {
-      title: 'Thumb',
-      dataIndex: 'thumb',
-      key: 'thumb',
-    },
-    {
-      title: 'Index',
-      dataIndex: 'ifinger',
-      key: 'ifinger',
-    },
-    {
-      title: 'Middle',
-      dataIndex: 'mfinger',
-      key: 'mfinger',
-    },
-    {
-      title: 'Ring',
-      dataIndex: 'rfinger',
-      key: 'rfinger',
-    },
-    {
-      title: 'Pinky',
-      dataIndex: 'pinky',
-      key: 'pinky',
-    },
-  ];
+  const handleWidthsChange = (widths: string) => {
+    if (selfItem) {
+      setSelfItem({
+        ...selfItem,
+        size_title: widths,
+      });
+    }
+  };
 
 
   return (
     <div>
       <h2 className="text-md md:text-md font-bold text-gray-800">{skuTitle}</h2>
-      <div className="flex flex-wrap gap-4 mt-4">
+      <div className="flex flex-wrap gap-4 my-4">
         {
           sizeList.map((e, index) => (
+            e === 'Custom' &&
+            <div
+              key={index}
+              className={`w-auto px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-fta-primary-50 bg-white'}`}
+              onClick={() => setOpenCustom(e)}
+            >
+              {e}
+            </div>
+            ||
             <div
               key={index}
               className={`w-10 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-fta-primary-50 bg-white'}`}
@@ -319,13 +279,26 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             </div>
           ))}
       </div>
-      <div className="mt-4">
-        <Table bordered dataSource={dataSource} pagination={false} columns={columns} />
-      </div>
+      {
+        size==="Custom" &&
+        <div className="bg-gray-50 p-2 rounded-sm border border-gray-200">
+          <span className='text-sm text-gray-500'>Please enter the width of the customized fingers in millimeter size. 
+            If the two hands are different, please email me.</span>
+          <FingerWidthInput onWidthsChange={handleWidthsChange} />
+        </div>
+      }
+      
+
+      {
+        Info.ID &&
+        <div className="my-2 md:my-4">
+          <SizeTable brand={Info} tags={Tags} />
+        </div>
+      }
 
       <div className="flex md:justify-between md:flex-row gap-1 items-center md:mt-2">
         <div className="pt-4">
-          <div className="flex justify-between items-center gap-8 md:gap-16">
+          <div className="flex justify-between items-center gap-4 md:gap-16">
             <button
               type="button"
               onClick={handleAddToCart}
@@ -333,7 +306,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             >
               Add to cart
             </button>
-            <div className="gap-4 border h-12 w-12 flex items-center justify-center rounded-full hover:bg-gray-200 cursor-pointer">
+            <div className="gap-1 md:gap-4 border h-12 w-12 flex items-center justify-center rounded-full hover:bg-gray-200 cursor-pointer">
               <AiOutlineHeart className='h-6 w-6 text-gray-500' />
             </div>
           </div>

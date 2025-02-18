@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { getCategoryList } from '@/apis/category';
+import { getCategoryList, getstyleList } from '@/apis/category';
 import { message } from 'antd';
 import type { Category } from '@/types/category';
 import { ChildProcess } from 'child_process';
@@ -36,7 +36,8 @@ const useMenuStore = create<MenuState>()(
       fetchCategories: async () => {
         try {
           const response = await getCategoryList();
-          get().organizeCategories(response.data);
+          const styleData = [...response.data];
+          get().organizeCategories(styleData);
         } catch (error) {
           message.error("Failed to fetch categories");
         }

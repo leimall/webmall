@@ -9,3 +9,11 @@ export const getCategoryList = (): Promise<CategoryResponse> => {
     method: 'get'
   })
 };
+
+
+export const getstyleList = (): Promise<CategoryResponse> => {
+  return request({
+    url: `/category/style`,
+    method: 'get'
+  })
+};
