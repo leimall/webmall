@@ -49,12 +49,11 @@
   "devDependencies": {
     "@ant-design/cssinjs": "^1.18.2",
     "@builder.io/partytown": "^0.10.3",
-    "@eslint/compat": "^1.1.0",
     "@eslint/js": "^9.6.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8.56.0",
+    "eslint": "8.56.0",
     "globals": "^15.8.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
