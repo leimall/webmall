@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3008",
     "build": "next build",
-    "build:pro": "NODE_ENV=pro  next build ",
+    "build:prod": "NODE_ENV=prod  next build ",
     "build:test": "NODE_ENV=test next build",
     "start": "next start --port 3008",
     "start:test": "NODE_ENV=test next start --port 3008",
