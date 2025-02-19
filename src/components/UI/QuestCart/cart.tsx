@@ -252,6 +252,10 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         size_title: widths,
       });
     }
+    console.error('11111', widths);
+
+
+    console.error("2222", selfItem);
   };
 
 
@@ -284,7 +288,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         <div className="bg-gray-50 p-2 rounded-sm border border-gray-200">
           <span className='text-sm text-gray-500'>Please enter the width of the customized fingers in millimeter size. 
             If the two hands are different, please email me.</span>
-          <FingerWidthInput onWidthsChange={handleWidthsChange} />
+          <FingerWidthInput onWidthsChange={handleWidthsChange} initialValues="" />
         </div>
       }
       

@@ -6,7 +6,7 @@ import { useCartStore } from '@/stores/useCartStore';
 import { CartItem } from '@/types/stores/cart';
 import { Divider, Select } from 'antd';
 import Link from 'next/link';
-import { off } from 'process';
+import FingerWidthInput from '@/components/UI/QuestCart/FingerWidthInput';
 
 export default function CartListItem({ item, index, length }: { item: CartItem, index: number, length: number }) {
   const { setQuantity, removeItem, setSkuValue } = useCartStore();
@@ -46,12 +46,20 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
     setSkuValue(item.product_id, value)
   }
 
+  const handleWidthsChange = (widths: string) => {
+    console.error("object", widths);
+    item.size_title = widths;
+    console.error("3333", item);
+  }
+
+  console.error("object", item);
+
   return (
     <>
       <div className="md:col-span-2 rounded-md">
         <div className="items-center gap-4">
           <div className="md:col-span-2 flex items-center gap-2">
-            <div className="w-24 md:w-32 h-24 md:h-32 shrink-0 border rounded bg-white">
+            <div className="w-28 md:w-32 h-28 md:h-32 shrink-0 border rounded bg-white">
               <Image
                 src={item.main_img}
                 alt={item.title}
@@ -66,37 +74,38 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
               <div className="flex-1">
                 <h3 className="text-md font-bold text-gray-800 truncate">
                   <Link href={`/product/${item.product_id}`}>
-                    <div className="text-sm text-pretty font-extrabold text-fta-primary-800 h-auto md:h-10 line-clamp-1 md:line-clamp-2">
+                    <div className="text-sm text-gray-900 text-pretty font-extrabold h-auto line-clamp-1">
                       {item.title}
                     </div>
                   </Link>
                 </h3>
-                <div className="text-sm py-1">
+                <div className="text-sm">
                   <div className="flex items-center">
-                    <div className="text-gray-800 mr-2 text-xl font-bold">${(item.price * item.quantity).toFixed(2)}</div>
-                    {item.old_price * item.quantity > 0 && <span className="text-gray-500 line-through text-sm">${(item.old_price * item.quantity).toFixed(2)}</span>}
-                    <div className="text-red-600 text-md font-bold px-2">
-                      {item.price_off > 0 ? `(-${100 - item.price_off}%)` : ''}
+                    <div className="flex items-end">
+                      <div className="text-red-500 text-xl font-bold">${(item.price * item.quantity).toFixed(2)}</div>
+                      {item.old_price * item.quantity > 0 && <span className="line-through text-sm text-gray-400 px-1">${(item.old_price * item.quantity).toFixed(2)}</span>}
+                      {item.price_off > 0 && <div className="border bg-black text-white text-sm font-bold mb-1 mx-1 px-1">
+                        {item.price_off > 0 ? `-${off}` : ''}
+                      </div>}
+
                     </div>
+
                   </div>
 
                 </div>
               </div>
 
               <div className="flex items-center justify-end">
-                <div className="flex justify-center items-end font-sans">
-            
-                  <div>
-                      <svg onClick={() => removeItem(item.product_id)} xmlns="http://www.w3.org/2000/svg" className="w-4 cursor-pointer inline-block" viewBox="0 0 24 24">
-                        <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" data-original="#000000"></path>
-                        <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" data-original="#000000"></path>
-                      </svg>
-                      <span onClick={() => removeItem(item.product_id)} className='px-2 cursor-pointer text-gray-400 text-sm md:text-md'>REMOVE</span>
-                    </div>
-                </div>
+                  <div className='py-1'>
+                    <svg onClick={() => removeItem(item.product_id)} xmlns="http://www.w3.org/2000/svg" className="w-4 cursor-pointer inline-block" viewBox="0 0 24 24">
+                      <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" data-original="#000000"></path>
+                      <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" data-original="#000000"></path>
+                    </svg>
+                    <span onClick={() => removeItem(item.product_id)} className='px-2 cursor-pointer text-gray-400 text-sm md:text-md'>REMOVE</span>
+                  </div>
               </div>
 
-              <div className="flex justify-between md:justify-start md:gap-4 mt-1 md:mt-2 ">
+              <div className="flex justify-between md:justify-start md:gap-4">
                 <div className="relative group bg-white text-sm md:text-base">
                   <div>
                     <Select
@@ -129,6 +138,14 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
               </div>
             </div>
           </div>
+          {
+            item.size === 'Custom' &&
+            <div className="text-sm text-gray-500 mt-2">
+              Please enter the width of the customized fingers in millimeter size.
+              If the two hands are different, please email me.
+              <FingerWidthInput onWidthsChange={handleWidthsChange} initialValues={item.size_title} />
+            </div>
+          }
 
         </div>
       </div>
