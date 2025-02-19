@@ -40,7 +40,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 
   return (
     <div className="relative w-full mx-auto">
-      <div onClick={toggleDropdown} className='flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-transparent text-gray-800 w-full text-sm rounded-md hover:border-fta-primary-300 border-2 border-transparent transition-all duration-300'>
+      <div onClick={toggleDropdown} className='flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-transparent text-gray-800 w-full text-sm rounded-md hover:border-primary-300 border-2 border-transparent transition-all duration-300'>
         <div className='w-full'>
           {selectedLabel ?
             <div className='flex justify-between items-center'>

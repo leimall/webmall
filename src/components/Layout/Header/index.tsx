@@ -97,7 +97,7 @@ export default function Header() {
           <MenuUnfoldOutlined />
         </div>
         <Link href="/">
-          <div className='flex justify-center text-fta-primary-500 items-end'>
+          <div className='flex justify-center text-primary-500 items-end'>
             <Image src="/images/logo/hlogo.png" alt="logo" width={48} height={48} />
             <span className='text-md md:text-xl'>F</span>inger
             <span className='text-md md:text-xl'>T</span>ip
@@ -106,7 +106,7 @@ export default function Header() {
         </Link>
 
         <div className="hidden w-1/2 max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:w-full max-lg:h-full max-lg:bg-white max-lg:z-50 transition-transform duration-300 transform lg:flex lg:ml-14 lg:gap-x-5">
-          <div className="flex w-full max-xl:w-full bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-fta-primary-500 focus-within:bg-transparent">
+          <div className="flex w-full max-xl:w-full bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-primary-500 focus-within:bg-transparent">
             <input type="text" placeholder="Search something..." className="w-full text-sm bg-transparent rounded outline-none pr-2" />
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" className="cursor-pointer fill-gray-400">
               <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
@@ -118,7 +118,7 @@ export default function Header() {
 
         <div className="flex items-center lg:ml-auto max-lg:w-full">
           <Suspense fallback={<div>Loading...</div>}>
-            <div onClick={handleCartClick} className="text-2xl font-bold text-fta-primary-400 pl-0 pr-4 md:px-4">
+            <div onClick={handleCartClick} className="text-2xl font-bold text-primary-400 pl-0 pr-4 md:px-4">
               <CartIcon />
             </div>
           </Suspense>
@@ -136,7 +136,7 @@ export default function Header() {
             </Dropdown>
           ) : (
             <Link href="/auth/signin">
-              <div className="text-sm md:text-md font-bold text-fta-primary-400 pr-1 md:px-4">
+              <div className="text-sm md:text-md font-bold text-primary-400 pr-1 md:px-4">
                 Sign in
               </div>
             </Link>
@@ -144,7 +144,7 @@ export default function Header() {
         </div>
 
         <div className="lg:hidden lg:w-96 w-full lg:pt-0 pt-2">
-          <div className="flex w-full max-xl:w-full bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-fta-primary-500 focus-within:bg-transparent">
+          <div className="flex w-full max-xl:w-full bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-primary-500 focus-within:bg-transparent">
             <input type="text" placeholder="Search something..." className="w-full text-sm bg-transparent rounded outline-none pr-2" />
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" className="cursor-pointer fill-gray-400">
               <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
@@ -218,7 +218,7 @@ export default function Header() {
       <div className="hidden md:block">
         <div className='mx-auto max-w-c-1280 flex flex-wrap gap-12 items-center justify-center mt-4 text-sm font-bold'>
           <Link href="/">
-            <div className=' text-fta-primary-500'>
+            <div className=' text-primary-500'>
               Home
             </div>
           </Link>
@@ -226,7 +226,7 @@ export default function Header() {
             list.map((mainCategory) => (
               <div key={mainCategory.ID} className="relative group">
                 <Link href={`/category/${mainCategory.url}`}>
-                  <div className=' text-fta-primary-500'>
+                  <div className=' text-primary-500'>
                     {mainCategory.title_en}
                   </div>
                 </Link>
@@ -234,7 +234,7 @@ export default function Header() {
                   <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10 w-52">
                     {mainCategory.children.map((subCategory) => (
                       <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
-                        <div className='text-sm text-fta-primary-500 p-3 hover:bg-gray-100'>
+                        <div className='text-sm text-primary-500 p-3 hover:bg-gray-100'>
                           {subCategory.title_en}
                         </div>
                       </Link>
@@ -248,12 +248,12 @@ export default function Header() {
           )}
 
           <Link href="/document/faq">
-            <div className=' text-fta-primary-500'>
+            <div className=' text-primary-500'>
               FAQ
             </div>
           </Link>
           <Link href="/document/about">
-            <div className=' text-fta-primary-500'>
+            <div className=' text-primary-500'>
               About us
             </div>
           </Link>

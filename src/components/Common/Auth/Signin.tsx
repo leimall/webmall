@@ -93,7 +93,7 @@ export default function Signin() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+              className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
               placeholder="Enter email"
             />
           </div>
@@ -106,7 +106,7 @@ export default function Signin() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+              className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
               placeholder="Enter password"
             />
           </div>
@@ -120,7 +120,7 @@ export default function Signin() {
               required
               value={captcha}
               onChange={(e) => setCaptcha(e.target.value)}
-              className="w-2/3 bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+              className="w-2/3 bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
               placeholder="Enter captcha"
             />
             {data?.picPath ? (
@@ -133,13 +133,13 @@ export default function Signin() {
                 onClick={fetchCaptcha}
               />
             ) : (
-              <button className="text-fta-primary-500 border p-2 border-fta-primary-400" onClick={fetchCaptcha}>Refresh Captcha</button>
+              <button className="text-primary-500 border p-2 border-primary-400" onClick={fetchCaptcha}>Refresh Captcha</button>
             )}
             </div>
           </div>
 
           <div className="mt-8">
-            <button type="submit" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white bg-fta-primary-500 hover:bg-fta-primary-400 focus:outline-none transition-all">
+            <button type="submit" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white bg-primary-500 hover:bg-primary-400 focus:outline-none transition-all">
               Sign in
             </button>
           </div>
@@ -147,7 +147,7 @@ export default function Signin() {
           <div className="pt-10">
             <Divider><span className="text-gray-800 text-sm mt-8 text-center"> New to FTAnails? </span></Divider>
             <Link href="/auth/signup">
-              <p className="border-2 border-fta-background-200 p-1 rounded-md text-fta-primary-400 text-center font-semibold hover:underline ml-1">Create your FTAnails account</p>
+              <p className="border-2 border-bg-200 p-1 rounded-md text-primary-400 text-center font-semibold hover:underline ml-1">Create your FTAnails account</p>
             </Link>
           </div>
         </form>

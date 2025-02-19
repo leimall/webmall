@@ -144,12 +144,12 @@ export default function ShoppingCartList() {
                   </div>
                 </div>
                 <div className="mt-8 space-y-4">
-                  <button onClick={BuyNowHandle} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-fta-primary-500 hover:bg-fta-primary-600 text-white rounded-md">
+                  <button onClick={BuyNowHandle} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-primary-500 hover:bg-primary-600 text-white rounded-md">
                     Buy Now
                   </button>
                   <div className='w-4'></div>
                   <Link href="/">
-                    <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-fta-background-100 hover:bg-fta-background-100 border text-fta-primary-500 rounded-md">
+                    <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-bg-100 hover:bg-bg-100 border text-primary-500 rounded-md">
                       Continue Shopping
                     </button>
                   </Link>

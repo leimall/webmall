@@ -93,16 +93,16 @@ export default function AddressPage() {
         <div className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
           <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
             <h2 className="pl-3 mb-4 text-center text-2xl font-semibold">Settings</h2>
-            <a href="/profile/myself" className="flex justify-center items-center px-3 py-2.5 font-semibold hover:text-fta-primary-500 hover:border hover:rounded-full border-fta-primary-500">
+            <a href="/profile/myself" className="flex justify-center items-center px-3 py-2.5 font-semibold hover:text-primary-500 hover:border hover:rounded-full border-primary-500">
               Profile
             </a>
-            <a href="/profile/orders" className="flex justify-center items-center px-3 py-2.5 font-semibold hover:text-fta-primary-500 hover:border hover:rounded-full border-fta-primary-500">
+            <a href="/profile/orders" className="flex justify-center items-center px-3 py-2.5 font-semibold hover:text-primary-500 hover:border hover:rounded-full border-primary-500">
               Order
             </a>
-            <div className="flex text-bold items-center justify-center px-3 py-2.5 font-bold bg-white text-fta-primary-500 border rounded-full border-fta-primary-500">
+            <div className="flex text-bold items-center justify-center px-3 py-2.5 font-bold bg-white text-primary-500 border rounded-full border-primary-500">
               Address
             </div>
-            {/* <a href="#" className="flex items-center px-3 py-2.5 font-semibold hover:text-fta-primary-500 hover:border hover:rounded-full">
+            {/* <a href="#" className="flex items-center px-3 py-2.5 font-semibold hover:text-primary-500 hover:border hover:rounded-full">
               PRO Account
             </a> */}
           </div>
@@ -123,7 +123,7 @@ export default function AddressPage() {
                 </div>
                 <ul className="mt-4 space-y-4">
                   {address.map((item: AddressItem) => (
-                    <li key={item.ID} className={`${item.isDefault ? "border-fta-background-400": ""} p-4 border rounded-md relative`}>
+                    <li key={item.ID} className={`${item.isDefault ? "border-bg-400": ""} p-4 border rounded-md relative`}>
                       {item.isDefault ? <div className="absolute top-0 right-0 bg-orange-600 text-white text-xs px-2 py-1 rounded-bl-md">Default</div> : ''}
                       <p>{item.firstName} {item.lastName} {item.phone}</p>
                       <p>{item.line1},</p>

@@ -68,7 +68,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
                 key={index}
                 src={image.img_url}
                 alt={product.title}
-                className={`w-16 h-16 border-2 rounded cursor-pointer ${selectedImageIndex === index ? 'border-gray-800 bg-slate-100' : 'border-fta-primary-50'} `}
+                className={`w-16 h-16 border-2 rounded cursor-pointer ${selectedImageIndex === index ? 'border-gray-800 bg-slate-100' : 'border-primary-50'} `}
                 onClick={() => setSelectedImageIndex(index)}
               />
             ))}

@@ -44,7 +44,7 @@ export default function CatagoryListOfDetails() {
 
 
 	return (
-		<div className="border-2 border-fta-primary-100 rounded-md p-6 my-8 ml-8">
+		<div className="border-2 border-primary-100 rounded-md p-6 my-8 ml-8">
 			<div className="container mx-auto py-2">
 					{categories.map((category) => (
 						<div key={category.id} className="bg-white p-4 rounded shadow mb-4">

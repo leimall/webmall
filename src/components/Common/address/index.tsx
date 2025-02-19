@@ -131,7 +131,7 @@ export default function Address() {
                   value={formData.firstName}
                   onChange={handleChange}
                   placeholder="First Name"
-                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-fta-primary-700 w-full text-sm rounded-md focus:outline-fta-primary-300" />
+                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-primary-700 w-full text-sm rounded-md focus:outline-primary-300" />
               </div>
 
               <div>
@@ -142,7 +142,7 @@ export default function Address() {
                   value={formData.lastName}
                   onChange={handleChange}
                   placeholder="Last Name"
-                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />
+                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-primary-300" />
               </div>
 
               <div>
@@ -153,7 +153,7 @@ export default function Address() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Email"
-                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />
+                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-primary-300" />
               </div>
 
               <div>
@@ -164,7 +164,7 @@ export default function Address() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Phone No."
-                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />
+                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-primary-300" />
               </div>
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function Address() {
                 value={formData.street1}
                 onChange={handleChange}
                 placeholder="Address Line"
-                className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />
+                className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-primary-300" />
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
@@ -190,7 +190,7 @@ export default function Address() {
                   value={formData.city}
                   onChange={handleChange}
                   placeholder="City"
-                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />
+                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-primary-300" />
               </div>
               <div>
                 <input
@@ -200,7 +200,7 @@ export default function Address() {
                   value={formData.state}
                   onChange={handleChange}
                   placeholder="State"
-                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />
+                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-primary-300" />
               </div>
               <div>
                 <input id="zipCode"
@@ -209,7 +209,7 @@ export default function Address() {
                   value={formData.zipCode}
                   onChange={handleChange}
                   placeholder="Zip Code"
-                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-fta-primary-300" />
+                  className="px-4 py-3 bg-gray-50 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-primary-300" />
               </div>
               <div>
                 <Dropdown options={countries} onSelect={handleSelect} />

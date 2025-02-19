@@ -37,16 +37,16 @@ export default function QuestCart({ product }: { product: Product }) {
 	return (
 		<div className="flex items-center">
 			{quantity === 0 ? (
-				<button onClick={handleAdd} className="text-white bg-fta-primary-500 hover:bg-fta-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+				<button onClick={handleAdd} className="text-white bg-primary-500 hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 					Add to cart
 				</button>
 			) : (
 				<div className="flex items-center">
-					<button onClick={handleRemove} className="text-white bg-fta-primary-500 hover:bg-fta-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+					<button onClick={handleRemove} className="text-white bg-primary-500 hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 						<MinusOutlined />
 					</button>
-					<span className="mx-2 text-fta-primary-500 font-bold">{quantity}</span>
-					<button onClick={handleAdd} className="text-white bg-fta-primary-500 hover:bg-fta-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+					<span className="mx-2 text-primary-500 font-bold">{quantity}</span>
+					<button onClick={handleAdd} className="text-white bg-primary-500 hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 						<PlusOutlined />
 					</button>
 				</div>

@@ -85,7 +85,7 @@ export default function ProductDetail({ product }: { product: ProductDetail }) {
 						</div>
 						<Divider />
 						<div className='pb-2'>
-							<p className="text-fta-primary-500 text-lg md:text-2xl font-bold">${product.price}</p>
+							<p className="text-primary-500 text-lg md:text-2xl font-bold">${product.price}</p>
 							<p className="text-gray-500 text-sm mt-2"><del>$199.99</del> <span className="text-sm ml-1">Tax included</span></p>
 						</div>
 						<Tag color="cyan">FREE Returns</Tag>
@@ -134,7 +134,7 @@ export default function ProductDetail({ product }: { product: ProductDetail }) {
 
 								<div className="w-full sm:mb-5">
 									<Link href="/cart">
-										<button className="text-white w-full bg-fta-primary-400 hover:bg-fta-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Buy Now</button>
+										<button className="text-white w-full bg-primary-400 hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Buy Now</button>
 									</Link>
 								</div>
 								<div className="flex mt-4">
@@ -144,8 +144,8 @@ export default function ProductDetail({ product }: { product: ProductDetail }) {
 
 						{/* {quantity <= 0 && (
 							<div className="flex flex-wrap gap-4">
-							<button onClick={handleAddToCart} type="button" className="min-w-[200px] px-4 py-3 bg-fta-primary-500 hover:bg-fta-primary-600 text-white text-sm font-semibold rounded-md">Buy now</button>
-							<button onClick={handleAddToCart} type="button" className="min-w-[200px] px-4 py-2.5 border border-fta-primary-500 bg-transparent hover:bg-fta-background-100 text-fta-primary-500 text-sm font-semibold rounded-md">Add to cart</button>
+							<button onClick={handleAddToCart} type="button" className="min-w-[200px] px-4 py-3 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-md">Buy now</button>
+							<button onClick={handleAddToCart} type="button" className="min-w-[200px] px-4 py-2.5 border border-primary-500 bg-transparent hover:bg-bg-100 text-primary-500 text-sm font-semibold rounded-md">Add to cart</button>
 						</div>
 						)} */}
 					</div>

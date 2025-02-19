@@ -90,7 +90,7 @@ export default function Signup() {
 										required
 										value={userName}
 										onChange={(e) => setUsername(e.target.value)}
-										className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+										className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
 										placeholder="Enter your name"
 									/>
 									<svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 24 24">
@@ -109,7 +109,7 @@ export default function Signup() {
 										required
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+										className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
 										placeholder="Enter email"
 									/>
 									<svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 682.667 682.667">
@@ -135,7 +135,7 @@ export default function Signup() {
 										required
 										value={password}
 										onChange={(e) => setPassword(e.target.value)}
-										className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+										className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
 										placeholder="Enter password"
 									/>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2 cursor-pointer" viewBox="0 0 128 128">
@@ -154,7 +154,7 @@ export default function Signup() {
 											required
 											value={captcha}
 											onChange={(e) => setCaptcha(e.target.value)}
-											className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-fta-primary-400 px-2 py-3 outline-none"
+											className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
 											placeholder="Enter captcha"
 										/>
 									</div>
@@ -171,20 +171,20 @@ export default function Signup() {
 									type="checkbox"
 									checked={rememberMe}
 									onChange={(e) => setRememberMe(e.target.checked)}
-									className="h-4 w-4 shrink-0 rounded bg-fta-primary-500"
+									className="h-4 w-4 shrink-0 rounded bg-primary-500"
 								/>
 								<label className="ml-3 block text-sm">
-                  I accept the  <Link className="text-fta-primary-400 hover:text-fta-primary-500" href={"/document/terms"}>Terms of Service</Link> and <Link className="text-fta-primary-400 hover:text-fta-primary-500" href={"/document/privacy"}>Privacy Policy</Link>. 
+                  I accept the  <Link className="text-primary-400 hover:text-primary-500" href={"/document/terms"}>Terms of Service</Link> and <Link className="text-primary-400 hover:text-primary-500" href={"/document/privacy"}>Privacy Policy</Link>. 
                 </label>
 							</div>
 
 							<div className="mt-8">
-								<button type="submit" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white  bg-fta-primary-500 hover:bg-fta-primary-400 focus:outline-none transition-all">
+								<button type="submit" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white  bg-primary-500 hover:bg-primary-400 focus:outline-none transition-all">
 									Register
 								</button>
 								<p className="text-gray-800 text-sm mt-8 text-center">Already have an account?
 									<Link href="/auth/signin">
-									 <span className="text-fta-primary-400 font-semibold hover:underline ml-1">Sign in here</span>
+									 <span className="text-primary-400 font-semibold hover:underline ml-1">Sign in here</span>
 									</Link>
 								</p>
 							</div>

@@ -180,7 +180,7 @@ export default function ProductDetail() {
 
 							<div className="w-full sm:mb-5">
 								<Link href="/cart">
-									<button className="text-white w-full bg-fta-primary-400 hover:bg-fta-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Buy Now</button>
+									<button className="text-white w-full bg-primary-400 hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Buy Now</button>
 								</Link>
 							</div>
 							<div className="flex mt-4">
@@ -190,8 +190,8 @@ export default function ProductDetail() {
 
 					{/* {quantity <= 0 && (
 						<div className="flex my-4">
-							<button onClick={handleAddToCart} className="w-full md:w-1/2 mr-2 text-white bg-fta-primary-400 hover:bg-fta-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Buy Now</button>
-							<button onClick={handleAddToCart} className="w-full md:w-1/2 border-2 border-fta-primary-300 text-fta-primary-500 bg-fta-accent1 hover:bg-fta-primary-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Add to Cart</button>
+							<button onClick={handleAddToCart} className="w-full md:w-1/2 mr-2 text-white bg-primary-400 hover:bg-primary-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Buy Now</button>
+							<button onClick={handleAddToCart} className="w-full md:w-1/2 border-2 border-primary-300 text-primary-500 bg-fta-accent1 hover:bg-primary-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center">Add to Cart</button>
 						</div>
 					)} */}
 				</div>

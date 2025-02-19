@@ -20,8 +20,8 @@ export default function ProductLists({ item }: { item: OrderProduct }) {
                 className="rounded h-full w-full "
               />
             </div>
-            <div className='w-full ml-4 text-fta-primary-600'>
-              <div className="text-sm text-pretty font-extrabold text-fta-primary-600 h-10 line-clamp-2">
+            <div className='w-full ml-4 text-primary-600'>
+              <div className="text-sm text-pretty font-extrabold text-primary-600 h-10 line-clamp-2">
                 {item.title}
               </div>
               <div className="flex justify-between items-center font-sans py-1">

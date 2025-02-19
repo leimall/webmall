@@ -8,10 +8,10 @@ export default function Adpage() {
 
         <div className="flex flex-col md:flex-row items-center md:max-h-[375px] overflow-hidden">
           <div className="px-2 md:px-16">
-            <h4 className="text-xl md:text-3xl font-bold text-fta-primary-500 pt-8 py-2 md:pt-0 md:py-4">Celebrate Day Sale!</h4>
+            <h4 className="text-xl md:text-3xl font-bold text-primary-500 pt-8 py-2 md:pt-0 md:py-4">Celebrate Day Sale!</h4>
             <h3 className="text-2xl md:text-4xl font-bold text-black pb-8 md:pb-12">Save <span className="text-brand-primary-500">25%</span> Of On Al Cars Collection
             </h3>
-            <a href="#" className="my-8 text-center py-2 px-4 bg-brand-primary-500 text-white rounded-md hover:bg-fta-primary-600">Shop now</a>
+            <a href="#" className="my-8 text-center py-2 px-4 bg-brand-primary-500 text-white rounded-md hover:bg-primary-600">Shop now</a>
           </div>
           {/* <div className="hidden md:block"></div> */}
           <div className="md:h-[375px] relative">

@@ -35,7 +35,7 @@ const AddressSelector: React.FC<AddressSelectorProps> = ({ addresses, defaultVal
             className="mr-2 pointer-events-none"
           />
           <label htmlFor={e.ID.toString()} className="cursor-pointer w-full z-1" onClick={(event) => event.stopPropagation()}>
-            <div className={`border relative rounded-md p-4 ${selectedValue === e.ID ? "border-fta-background-400" : ''}`} key={e.ID} >
+            <div className={`border relative rounded-md p-4 ${selectedValue === e.ID ? "border-bg-400" : ''}`} key={e.ID} >
               {e.isDefault ? <div className="absolute top-0 right-0 bg-orange-600 text-white text-xs px-2 py-1 rounded-bl-md">Default</div> : ''}
               <p className='font-bold'>{e.firstName} {e.lastName} {e.phone}</p>
               <div className='text-gray-600'>
@@ -47,7 +47,7 @@ const AddressSelector: React.FC<AddressSelectorProps> = ({ addresses, defaultVal
               <div onClick={(event) => {
                 event.stopPropagation();
                 onEdit(e);
-              }} className="absolute bottom-0 z-9 right-0 bg-fta-background-200 text-fta-primary-500 text-xs px-2 py-1 rounded-tl-md">Edit</div>
+              }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md">Edit</div>
             </div>
           </label>
         </div>

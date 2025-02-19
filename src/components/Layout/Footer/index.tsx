@@ -68,56 +68,56 @@ const Footer = () => {
 
 
         <div className="md:pl-20">
-          <h4 className="text-fta-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">FTAnails SUPORT
+          <h4 className="text-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">FTAnails SUPORT
           </h4>
           <ul className="space-y-5 mt-6 max-sm:hidden">
             <li>
-              <a href='/document/faq' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>FAQ</a>
+              <a href='/document/faq' className='hover:text-primary-800 text-primary-700 text-sm'>FAQ</a>
             </li>
             <li>
-              <a href='/document/shipping' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>SHIPPING POLICY</a>
+              <a href='/document/shipping' className='hover:text-primary-800 text-primary-700 text-sm'>SHIPPING POLICY</a>
             </li>
             <li>
-              <a href='/document/return' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>RETURN & REFUND</a>
+              <a href='/document/return' className='hover:text-primary-800 text-primary-700 text-sm'>RETURN & REFUND</a>
             </li>
             <li>
-              <a href='/document/payment' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>PAYMENT METHOD</a>
+              <a href='/document/payment' className='hover:text-primary-800 text-primary-700 text-sm'>PAYMENT METHOD</a>
             </li>
           </ul>
         </div>
 
         <div className="md:pl-20">
-          <h4 className="text-fta-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">FTANAILS SERVICE
+          <h4 className="text-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">FTANAILS SERVICE
           </h4>
 
           <ul className="space-y-5 mt-6 max-sm:hidden">
             <li>
-              <a href='/document/about' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>ABOUT US</a>
+              <a href='/document/about' className='hover:text-primary-800 text-primary-700 text-sm'>ABOUT US</a>
             </li>
             <li>
-              <a href='/document/contact' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>CONTACT US</a>
+              <a href='/document/contact' className='hover:text-primary-800 text-primary-700 text-sm'>CONTACT US</a>
             </li>
 
           </ul>
         </div>
 
       </div>
-      <hr className="my-10 border-fta-background-300" />
+      <hr className="my-10 border-bg-300" />
 
       <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c-1440 flex flex-wrap max-md:flex-col gap-4">
         <ul className="md:flex md:space-x-6 max-md:space-y-2">
           <li>
-            <a href='/document/terms' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Terms of Service</a>
+            <a href='/document/terms' className='hover:text-primary-800 text-primary-700 text-sm'>Terms of Service</a>
           </li>
           <li>
-            <a href='/document/privacy' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Privacy Policy</a>
+            <a href='/document/privacy' className='hover:text-primary-800 text-primary-700 text-sm'>Privacy Policy</a>
           </li>
           <li>
-            <a href='/document/privacy' className='hover:text-fta-primary-800 text-fta-primary-700 text-sm'>Cookie Policy</a>
+            <a href='/document/privacy' className='hover:text-primary-800 text-primary-700 text-sm'>Cookie Policy</a>
           </li>
         </ul>
 
-        <p className='text-fta-primary-700 text-sm md:ml-auto'>Copyright © 2024<a href='https://ftanails.com/'
+        <p className='text-primary-700 text-sm md:ml-auto'>Copyright © 2024<a href='https://ftanails.com/'
           target='_blank' className="hover:underline mx-1">FTAnails</a>All Rights Reserved.</p>
       </div>
 
