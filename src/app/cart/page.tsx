@@ -1,6 +1,5 @@
 'use client'
 import { useCartStore } from '@/stores/useCartStore';
-import '@/styles/pay.css';
 import ShoppingCartList from '@/components/Common/ShoppingCartList/one';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

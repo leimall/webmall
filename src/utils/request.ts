@@ -16,19 +16,12 @@ const service = axios.create({
 // 添加一个请求拦截器
 service.interceptors.request.use(
   (config) => {
-    const { token, user} =  useAuthStore.getState();
-    if (token) {
-      config.headers = config.headers || {};
-      config.headers['x-token'] = token;
+    if (typeof window !== 'undefined') {
+      const { token, user } = useAuthStore.getState();
+      if (token) config.headers['x-token'] = token;
+      if (user?.userId) config.headers['x-user-id'] = user.userId;
     }
-    if(user?.userId) {
-      config.headers = config.headers || {};
-      config.headers['x-user-id'] = user.userId;
-    }
-    
-    config.headers = config.headers || {};
     config.headers['Content-Type'] = 'application/json';
-
 
     // message.loading({
     //   content: 'Loading...',
@@ -36,7 +29,6 @@ service.interceptors.request.use(
     // });
     return config;
   },  (error: AxiosError) => {
-    message.destroy;
     message.error({
       content: '请求错误，请稍后再试',
       duration: 5,
@@ -54,7 +46,7 @@ service.interceptors.response.use(
         // 接口请求结果正确
         return data;
       } else {
-        return Promise.reject(data);
+        return Promise.reject({ code: data.code, message: data.message });
       }
     }
   },
@@ -62,7 +54,6 @@ service.interceptors.response.use(
     // const router = useRouter()
     const { response } = error;
     const { clearAuth } = useAuthStore.getState();
-    message.destroy();
     if (JSON.stringify(error).includes('Network Error')) {
       message.error({
         content: '网络超时',

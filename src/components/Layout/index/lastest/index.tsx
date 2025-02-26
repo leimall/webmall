@@ -8,10 +8,10 @@ import React from 'react'
 import ProductCardSkeleton from '@/components/Common/Products/skeleton'
 
 
-export default function NewsLists({ products }: { products: Product[] }) {
+export default function NewsLists({ products, title }: { products: Product[], title: string }) {
   return (
     <div>
-      <Title title="Lastest Products" />
+      <Title title={title} />
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 py-4 gap-2 sm:gap-3 md:gap-4">
       {
         products.map((product) => (

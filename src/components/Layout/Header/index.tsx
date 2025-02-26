@@ -1,10 +1,10 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, use, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, Drawer, Dropdown, type MenuProps } from 'antd';
-import { MenuUnfoldOutlined } from '@ant-design/icons';
+import { CommentOutlined, CustomerServiceOutlined, DownSquareOutlined, FallOutlined, HomeOutlined } from '@ant-design/icons';
 import CartIcon from "@/components/Common/CartIcon";
 import { usePathStore } from '@/stores/usePathStore';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
@@ -13,6 +13,9 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { Category } from '@/types/category';
 import useMenuStore from '@/stores/useMenuStore';
+
+import { FaXmark, FaIndent, FaAngleDown, FaCaretRight, FaUsers, FaGenderless, FaAngleRight } from "react-icons/fa6";
+import { FaHome, FaSignOutAlt } from "react-icons/fa";
 
 export default function Header() {
   const [list, setList] = useState<Category[]>([]);
@@ -85,7 +88,7 @@ export default function Header() {
   }, {
     key: "singout",
     label: (
-      <div onClick={signout}>Sign Out</div>
+      <div className='text-blue-600' onClick={signout}>Sign Out</div>
     )
   }]
 
@@ -93,15 +96,21 @@ export default function Header() {
   return (
     <header className="border-b py-4 px-4 sm:px-10 bg-background-back1 font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
       <div className="mx-auto max-w-c-1440 flex flex-wrap justify-between align-middle items-center gap-2 w-full">
-        <div onClick={showDrawer} className="lg:hidden text-3xl font-bold">
-          <MenuUnfoldOutlined />
-        </div>
+        <FaIndent onClick={showDrawer} className="lg:hidden text-3xl font-bold" />
         <Link href="/">
-          <div className='flex justify-center text-primary-500 items-end'>
+          <div className='hidden md:block  '>
+            <div className='flex justify-center text-primary-500 items-end'>
+              <Image src="/images/logo/hlogo.png" alt="logo" width={48} height={48} />
+              <span className='text-md md:text-xl'>F</span>inger
+              <span className='text-md md:text-xl'>T</span>ip
+              <span className='text-md md:text-xl'>A</span>rtistry
+            </div>
+          </div>
+          <div className='flex lg:hidden justify-center text-primary-500 items-end'>
             <Image src="/images/logo/hlogo.png" alt="logo" width={48} height={48} />
-            <span className='text-md md:text-xl'>F</span>inger
-            <span className='text-md md:text-xl'>T</span>ip
-            <span className='text-md md:text-xl'>A</span>rtistry
+            <span className='text-md'>FTA</span>
+            <span className='text-xs'>nails</span>
+
           </div>
         </Link>
 
@@ -152,27 +161,25 @@ export default function Header() {
           </div>
         </div>
 
-        <Drawer title="FingerTipArtistry" placement={"left"} closable={false} onClose={onClose} open={open} width={280} key={"left"} footer="https://ftanails.com">
-          <div id="toggleClose" onClick={onClose} className="fixed w-8 h-8 top-4 right-8 cursor-pointer bg-white z-[2222] rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" className="m-2 w-4 items-center  bg-white text-black" viewBox="0 0 320.591 320.591">
-              <path d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-14.072-18.752-32.142-18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
-            </svg>
+        <Drawer title="FingerTipArtistry" placement={"left"} closable={false} onClose={onClose} open={open} footer="https://ftanails.com">
+          <div id="toggleClose" onClick={onClose} className="fixed w-8 h-8 top-4 right-4 cursor-pointer z-[2222]">
+            <FaXmark className='text-2xl text-gray-500' />
           </div>
           <Link href="/">
-            <div className='border-b text-md border-gray-200 pb-4 mb-4'>
-              Home
+            <div className='text-primary-500 flex items-center border-b text-md border-gray-200 pb-4 mb-4'>
+            <FaHome className='text-primary-500 text-sm mr-2' /> Home
             </div>
           </Link>
           {list && list.length > 0 ? (
             list.map((mainCategory) => (
               <div key={mainCategory.ID}>
-                <div className='border-b text-md border-gray-200 pb-4 mb-4'>
-                    {mainCategory.title_en}
+                <div className='flex items-center border-b text-md border-gray-200 pb-4 mb-4'>
+                <FaAngleDown className='text-primary-500 text-sm mr-2' /> {mainCategory.title_en}
                 </div>
                 {mainCategory.children && mainCategory.children.map((subCategory) => (
                   <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
-                    <div className='border-b text-sm border-gray-200 pb-2 mb-2 pl-4'>
-                      {subCategory.title_en}
+                    <div className='text-primary-500 flex items-center border-b text-sm border-gray-200 pb-2 mb-2 pl-4'>
+                    <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
                     </div>
                   </Link>
                 ))}
@@ -181,22 +188,36 @@ export default function Header() {
           ) : (
             <div>No categories available</div>
           )}
+          <Link href="/sales">
+            <div className='text-primary-500 border-b text-md border-gray-200 pb-4 mb-4'>
+            <FallOutlined className='mr-2' /> Sale
+            </div>
+          </Link>
+          <Link href="/faq">
+          <div className='text-primary-500 border-b text-md border-gray-200 pb-4 mb-4'>
+          <CommentOutlined className='mr-2' /> FAQ
+          </div>
+          </Link>
+          <Link href="/about">
+            <div className='flex items-center text-primary-500 border-b text-md border-gray-200 pb-4 mb-4'>
+            <FaUsers className='mr-2' /> About Us
+            </div>
+          </Link>
+          
+          
           {user ? (
             <>
-              <div className='fixed top-0 left-52 z-[1001] p-3'>
+              <div className='fixed top-0 right-14 z-[1001] p-3'>
                 {user.headerImg ? (
-                  <Avatar src={user.headerImg} size={32} shape="square" />) : (
-                  <Avatar size={32} shape="square" style={{ backgroundColor: '#8d1a25' }}>
+                  <Avatar src={user.headerImg} size={32} />) : (
+                  <Avatar size={32} style={{ backgroundColor: '#8d1a25' }}>
                     {user.userName.charAt(0).toUpperCase()}
                   </Avatar>
 
                 )}
               </div>
-              <Link href="/profile/myself">
-                <div className='border-b text-md border-gray-200 pb-4 mb-4'>
-                  Profile
-                </div>
-              </Link>
+              <div className='text-primary-500 flex items-center' onClick={signout}> 
+                <FaSignOutAlt className='mr-2' /> Sign Out</div>
             </>
           ) : (
             <>
@@ -218,24 +239,24 @@ export default function Header() {
       <div className="hidden md:block">
         <div className='mx-auto max-w-c-1280 flex flex-wrap gap-12 items-center justify-center mt-4 text-sm font-bold'>
           <Link href="/">
-            <div className=' text-primary-500'>
+            <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
               Home
             </div>
           </Link>
           {list && list.length > 0 ? (
             list.map((mainCategory) => (
               <div key={mainCategory.ID} className="relative group">
-                <Link href={`/category/${mainCategory.url}`}>
-                  <div className=' text-primary-500'>
-                    {mainCategory.title_en}
+                <div className='text-primary-500 cursor-pointer'>
+                  <div className='flex items-center'>
+                    <FaAngleRight className='text-primary-500 text-xs mr-1' />{mainCategory.title_en}
                   </div>
-                </Link>
+                </div>
                 {mainCategory.children && mainCategory.children.length > 0 && (
                   <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10 w-52">
                     {mainCategory.children.map((subCategory) => (
                       <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
-                        <div className='text-sm text-primary-500 p-3 hover:bg-gray-100'>
-                          {subCategory.title_en}
+                        <div className='flex items-center text-sm text-primary-500 p-3 hover:bg-gray-100'>
+                        <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
                         </div>
                       </Link>
                     ))}
@@ -244,16 +265,21 @@ export default function Header() {
               </div>
             ))
           ) : (
-            <div className='text-sm'>No categories available</div>
+            <div className='text-sm text-primary-500'>No categories available</div>
           )}
 
+          <Link href="/sales">
+          <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
+              Sale
+            </div>
+          </Link>
           <Link href="/document/faq">
-            <div className=' text-primary-500'>
+          <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
               FAQ
             </div>
           </Link>
           <Link href="/document/about">
-            <div className=' text-primary-500'>
+          <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
               About us
             </div>
           </Link>

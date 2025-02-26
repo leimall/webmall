@@ -6,9 +6,11 @@ import { useCartStore } from '@/stores/useCartStore';
 import { CartItem } from '@/types/stores/cart';
 import { Divider, Select } from 'antd';
 import Link from 'next/link';
-import FingerWidthInput from '@/components/UI/QuestCart/FingerWidthInput';
+import FingerWidthInput from '@/components/UI/QuestCart/custom';
+import Measure from '@/components/UI/QuestCart/measure';
+import SmartSelect from '@/components/UI/Selector';
 
-export default function CartListItem({ item, index, length }: { item: CartItem, index: number, length: number }) {
+export default function CartListItem({ item, index, length, form }: { item: CartItem, index: number, length: number, form: any }) {
   const { setQuantity, removeItem, setSkuValue } = useCartStore();
   const [sizeList, setSizeList] = useState<string[]>(['L', 'M', 'S', 'XS', 'Custom']);
   const [options, setOptions] = useState<{ value: string; label: string }[]>([]);
@@ -34,25 +36,23 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
 
   const handleDecrease = () => {
     if (item.quantity > 1) {
-      setQuantity(item.product_id, item.quantity - 1);
+      setQuantity(item.unique_id, item.quantity - 1);
     }
   };
 
   const handleIncrease = () => {
-    setQuantity(item.product_id, item.quantity + 1);
+    setQuantity(item.unique_id, item.quantity + 1);
   };
 
-  const setSelfSize = (value: string) => {
-    setSkuValue(item.product_id, value)
+  const setSelfSize = (newVal: string) => {
+    console.error("1234567832456782345678934567", newVal);
+    setSkuValue(item.unique_id, newVal);
   }
 
-  const handleWidthsChange = (widths: string) => {
-    console.error("object", widths);
-    item.size_title = widths;
-    console.error("3333", item);
+  const handleWidthsChange = (shape: string | null | undefined, inputValue: string) => {
+    item.size_title = inputValue;
+    item.shape = shape;
   }
-
-  console.error("object", item);
 
   return (
     <>
@@ -96,13 +96,13 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
               </div>
 
               <div className="flex items-center justify-end">
-                  <div className='py-1'>
-                    <svg onClick={() => removeItem(item.product_id)} xmlns="http://www.w3.org/2000/svg" className="w-4 cursor-pointer inline-block" viewBox="0 0 24 24">
-                      <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" data-original="#000000"></path>
-                      <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" data-original="#000000"></path>
-                    </svg>
-                    <span onClick={() => removeItem(item.product_id)} className='px-2 cursor-pointer text-gray-400 text-sm md:text-md'>REMOVE</span>
-                  </div>
+                <div className='py-1'>
+                  <svg onClick={() => removeItem(item.unique_id)} xmlns="http://www.w3.org/2000/svg" className="w-4 cursor-pointer inline-block" viewBox="0 0 24 24">
+                    <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" data-original="#000000"></path>
+                    <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" data-original="#000000"></path>
+                  </svg>
+                  <span onClick={() => removeItem(item.unique_id)} className='px-2 cursor-pointer text-gray-400 text-sm md:text-md'>REMOVE</span>
+                </div>
               </div>
 
               <div className="flex justify-between md:justify-start md:gap-4">
@@ -140,10 +140,13 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
           </div>
           {
             item.size === 'Custom' &&
-            <div className="text-sm text-gray-500 mt-2">
-              Please enter the width of the customized fingers in millimeter size.
-              If the two hands are different, please email me.
-              <FingerWidthInput onWidthsChange={handleWidthsChange} initialValues={item.size_title} />
+            <div className='flex flex-col md:flex-row justify-between items-center'>
+              <div className="p-2 md:p-4">
+                <FingerWidthInput onChangeValue={handleWidthsChange} initialInputValue={item.size_title} initialShape={item.shape} />
+              </div>
+              <div className="p-2 md:p-4">
+                <Measure />
+              </div>
             </div>
           }
 

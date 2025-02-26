@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
 import { createOrderForDB, getOrderId } from '@/apis/orders';
 import { useState, useEffect } from 'react';
-import { Flex, Spin, Divider } from 'antd';
+import { Flex, Spin, Divider, Form } from 'antd';
 import Link from 'next/link';
 import { useOrderStore } from '@/stores/useOrdersStore';
 import { useNowBuyStore } from '@/stores/useNowBuyStore'; // 引入 Zustand store
 
 export default function ShoppingCartList() {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { createOrder } = useOrderStore();
   const { items, totalPrice, price } = useCartStore();
@@ -55,6 +56,17 @@ export default function ShoppingCartList() {
   const BuyNowHandle = async () => {
     setLoading(true);
 
+    form
+    .validateFields() // Validate all fields in the form
+    .then((values) => {
+      console.log('Form values:', values);
+      // Handle the form submission logic here
+    })
+    .catch((errorInfo) => {
+      console.log('Validation failed:', errorInfo);
+      setLoading(false);
+    });
+
     const products = items.map((item) => ({
       ...item,
       ID: 0,
@@ -76,28 +88,30 @@ export default function ShoppingCartList() {
       products,
     };
     console.error(orderData)
-    createOrder(orderData)
-    update(orderId)
-    try {
-      const response = await createOrderForDB(orderData)
-      if (response.code === 0) {
-        router.push("/checkout/");
-      }
-    } catch (error) {
-      alert('Error creating order. Please try again later.');
-    }
+    // createOrder(orderData)
+    // update(orderId)
+    // try {
+    //   const response = await createOrderForDB(orderData)
+    //   if (response.code === 0) {
+    //     router.push("/checkout/");
+    //   }
+    // } catch (error) {
+    //   alert('Error creating order. Please try again later.');
+    // }
   };
 
   return (
     <>
       <Flex gap="middle" vertical>
         <Spin spinning={loading} size="large" tip="Loading...">
+            <Form form={form} layout="vertical">
           <div className="flex flex-col  md:flex-row ">
             <div className='w-full md:w-3/4'>
               <div className="flex-1 bg-background-back0 border rounded-md p-2 md:p-4">
+              
                 <div className='p-0 md:p-4'>
                   {items?.map((e, index) => (
-                    <CartListItem item={e} key={e.product_id} length={items.length} index={index} />
+                    <CartListItem form={form} item={e} key={e.product_id} length={items.length} index={index} />
                   ))}
                 </div>
               </div>
@@ -157,6 +171,7 @@ export default function ShoppingCartList() {
               </div>
             </div>
           </div>
+            </Form>
         </Spin>
       </Flex>
     </>

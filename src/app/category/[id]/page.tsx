@@ -17,7 +17,7 @@ export async function generateStaticParams() {
     if (res.code === 0 && res.data.length > 0) {
       products.forEach((product: Category) => {
         list.push({
-          id: product.title_en.toLowerCase().replace(/\s+/g, '_'),
+          id: product.title_en.toLowerCase().replace(/[\s\/]+/g, '_'),
         });
       });
     }

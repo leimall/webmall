@@ -17,3 +17,10 @@ export const getstyleList = (): Promise<CategoryResponse> => {
     method: 'get'
   })
 };
+
+export const getShapeLists = (): Promise<CategoryResponse> => {
+  return request({
+    url: '/category/shape',
+    method: 'get',
+  })
+}

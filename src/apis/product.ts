@@ -14,6 +14,19 @@ export const getProductList = () => {
   })
 }
 
+export const getBestProductList = () => {
+  return request({
+    url: '/product/bastseller',
+    method: 'get'
+  })
+}
+
+export const getSaleProductList = () => {
+  return request({
+    url: '/product/sale',
+    method: 'get'
+  })
+}
 
 export const getProductDetail = (id: string): Promise<ProductDetailResponse> => {
   return request({

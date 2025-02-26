@@ -14,11 +14,14 @@ const config: Config = {
     extend: {
       colors: {
         text: {
-          primary: '#FFFFFF',
+          primary: '#fff',
           secondary: '#0C0F19',
           three: '#603813',
+          gray: '#eeeeee',
         },
         primary: {
+          main: '#fd5545',
+          light: '#ff7766',
           50: '#f2e5e7',
           100: '#d9b3b7',
           200: '#bf8086',
@@ -58,6 +61,7 @@ const config: Config = {
           800: '#634d44',
           900: '#342620',
         },
+        
       },
       maxWidth: {
         "c-1440": "90rem",

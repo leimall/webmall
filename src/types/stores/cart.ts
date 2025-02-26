@@ -1,8 +1,11 @@
 
 export type CartItem  = {
+  id: number
+  unique_id: string
   sku: string
   size_title: string
   size: string
+  shape: string | null | undefined
   color: string
   user_id: string 
   product_id: string

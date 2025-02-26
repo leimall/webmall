@@ -1,19 +1,10 @@
 import { Metadata } from 'next';
-import BannerInIndex from "@/components/Common/Banner";
-import Category from "@/components/Common/Category";
 import Adpage from "@/components/Layout/Adpage";
-import DiscountLists from "@/components/Layout/DiscountLists";
-import FaqPage from "@/components/Layout/faq";
-import HotLists from "@/components/Layout/HotLists";
-import MiniPage from "@/components/Layout/Minilist";
 import NewsLists from "@/components/Layout/index/lastest";
-import TeamPage from "@/components/Layout/Team";
-import TopLists from "@/components/Layout/TopLists";
 import Informatin from "@/template/indexInfo";
 import type { Product } from "@/types/products";
-import { getProductList } from "@/apis/product";
+import { getProductList, getBestProductList, getSaleProductList } from "@/apis/product";
 import { notFound } from 'next/navigation';
-import type { HomePageProps } from "@/types/index";
 
 
 export const metadata: Metadata = {
@@ -60,13 +51,20 @@ export async function generateStaticParams() {
 export default async function PageHome() {
   
   let fetchedLasers: Product[] = [];
+  let fetchedBast: Product[] = [];
+  let fetchedSale: Product[] = [];
+  console.error("111111");
   try {
-    const [laserResponse] = await Promise.all([
-      getProductList()
+    const [laserResponse, bestResp, saleResp] = await Promise.all([
+      getProductList(),
+      getBestProductList(),
+      getSaleProductList()
     ]);
 
     // Assuming each API returns an array of objects
     fetchedLasers = laserResponse.data;
+    fetchedBast = bestResp.data;
+    fetchedSale = saleResp.data;
   } catch (error) {
     console.error('Error fetching data:', error);
     notFound(); // 如果获取数据失败，返回 404 页面
@@ -77,10 +75,12 @@ export default async function PageHome() {
     <main className="relative mx-auto max-w-c-1440 pt-5 pb-10 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
       {/* <BannerInIndex banners={banners} /> */}
       <Adpage />
-      <NewsLists products={fetchedLasers} />
-      {/* <MiniPage /> */}
-      {/* <TeamPage /> */}
-      <FaqPage />
+      <NewsLists title="New Release" products={fetchedLasers} />
+      <Adpage />
+      <NewsLists title="Best Seller" products={fetchedBast} />
+      <Adpage />
+      <NewsLists title="Sale" products={fetchedSale} />
+      {/* <FaqPage /> */}
       <Informatin />
     </main>
   );

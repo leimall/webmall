@@ -1,16 +1,22 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { getCategoryList, getstyleList } from '@/apis/category';
+import { getCategoryList, getShapeLists} from '@/apis/category';
 import { message } from 'antd';
 import type { Category } from '@/types/category';
-import { ChildProcess } from 'child_process';
-import { get } from 'http';
-import { url } from 'inspector';
+import { options } from 'marked';
+
+type options = {
+  label: string;
+  value: string;
+}
 
 interface MenuState {
   categories: Category[];
+  shapeOptions: options[];
   setCategories: (categories: Category[]) => void;
+  setShapeOptions: (shape: options[]) => void;
   organizeCategories: (flatCategories: Category[]) => void;
+  optionShap: (categories: Category[]) => void;
   fetchCategories: () => Promise<void>;
 }
 
@@ -18,8 +24,12 @@ const useMenuStore = create<MenuState>()(
   persist(
     (set, get) => ({
       categories: [],
+      shapeOptions: [],
       setCategories: (categories: Category[]) => {
         set({ categories });
+      },
+      setShapeOptions: (shapeOptions: options[]) => {
+        set({ shapeOptions });
       },
       organizeCategories: (flatCategories: Category[]) => {
         const organizedCategories = flatCategories.filter(cat => cat.parent_id === 0).map(mainCat => ({
@@ -32,12 +42,22 @@ const useMenuStore = create<MenuState>()(
         }));
         set({ categories: organizedCategories });
       },
+      optionShap: (categories: Category[]) => {
+        const options = categories.map(item => ({
+          label: item.title_en,
+          value: item.title_en,
+        }))
+        set({ shapeOptions: options });
+      },
 
       fetchCategories: async () => {
         try {
           const response = await getCategoryList();
+          const resshape = await getShapeLists();
           const styleData = [...response.data];
+          const shapeData = [...resshape.data];
           get().organizeCategories(styleData);
+          get().optionShap(shapeData);
         } catch (error) {
           message.error("Failed to fetch categories");
         }

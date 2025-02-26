@@ -10,25 +10,34 @@ import type { ProductDetail } from "@/types/products";
 import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
-import { AiOutlineHeart } from "react-icons/ai";
 import SizeTable from '@/components/Layout/ProductDetail/sizeTable';
-import FingerWidthInput from './FingerWidthInput';
+import FingerWidthInput from './custom';
+import { Button, Drawer, Form, Space } from 'antd';
+import Measure from './measure';
+import CartListItem from './cartItem';
+
+import { FaXmark } from "react-icons/fa6";
+import { getUniqueId } from '@/utils/unique';
+
+
 
 export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
+  const [form] = Form.useForm();
   const { update } = useNowBuyStore();
-  const { addItem, setQuantity, setSkuValue, items, fetchCartItems } = useCartStore();
+  const { addItem, setQuantity, setSkuValue, items, fetchCartItems, totalPrice } = useCartStore();
   const { user } = useAuthStore();
   const [userId, setUserId] = useState('');
   const [selfItem, setSelfItem] = useState<CartItem | null>(null);
   const [selfQuantity, setSelfQuantity] = useState<number>(1);
   const [selfPrice, setSelfPrice] = useState<number>(0);
-  const [skuTitle, setSkuTitle] = useState<string>('Size');
+  const [skuTitle, setSkuTitle] = useState<string>('');
   const [size, setSize] = useState<string>('M');
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L', 'Custom']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const { Info, Tags } = product.Brand
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -64,9 +73,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         setSelfSize(item.size);
       } else {
         setSelfItem({
+          id: product.ID,
+          unique_id: '',
           sku: product.productId,
-          size_title: skuTitle,
+          size_title: '',
           size: size,
+          shape: '',
           color: '',
           old_price: product.price,
           price_off: product.priceOff,
@@ -82,9 +94,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       }
     } else {
       setSelfItem({
+        id: product.ID,
+        unique_id: '',
         sku: product.productId,
-        size_title: skuTitle,
+        size_title: '',
         size: size,
+        shape: '',
         color: '',
         old_price: product.price,
         price_off: product.priceOff,
@@ -105,22 +120,22 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       if (items?.length > 0) {
         const result = items.find(item => item.product_id === product.productId)
         if (result) {
-          setQuantity(selfItem.product_id, selfItem.quantity);
+          setQuantity(selfItem.unique_id, selfItem.quantity);
         }
       }
     }
   }, [selfItem, selfQuantity]);
 
-  useEffect(() => {
-    if (selfItem) {
-      if (items?.length > 0) {
-        const result = items.find(item => item.product_id === product.productId)
-        if (result) {
-          setSkuValue(selfItem.product_id, selfItem.size);
-        }
-      }
-    }
-  }, [selfItem?.size]);
+  // useEffect(() => {
+  //   if (selfItem) {
+  //     if (items?.length > 0) {
+  //       const result = items.find(item => item.product_id === product.productId)
+  //       if (result) {
+  //         setSkuValue(selfItem.product_id, selfItem.size);
+  //       }
+  //     }
+  //   }
+  // }, [selfItem?.size]);
 
   const handleGetOrderId = async () => {
     try {
@@ -189,17 +204,33 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
 
   const handleAddToCart = () => {
-    if (selfItem) {
-      selfItem.user_id = userId;
-      selfItem.size = size;
-      selfItem.price = selfPrice;
-      selfItem.quantity = selfQuantity;
-      addItem(selfItem);
-    }
+    form
+      .validateFields() // Validate all fields in the form
+      .then((values) => {
+        console.log('Form values:', values);
+        if (selfItem) {
+          selfItem.user_id = userId;
+          selfItem.size = size;
+          selfItem.price = selfPrice;
+          selfItem.quantity = selfQuantity;
+          selfItem.unique_id = getUniqueId(selfItem.product_id, selfItem.size);
+          console.error("=-------------------", selfItem);
+          addItem(selfItem);
+          showDrawer()
+        }
+        setLoading(false)
+      })
+      .catch((errorInfo) => {
+        console.log('Validation failed:', errorInfo);
+        // Handle form validation errors here if needed
+        setLoading(false);
+      });
+
+    setLoading(false);
 
     console.error("11111", selfItem);
   };
-
+  
   const handleDecrease = () => {
     if (selfQuantity > 1) {
       const tmp = selfQuantity - 1
@@ -245,77 +276,135 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   }
 
-  const handleWidthsChange = (widths: string) => {
+  const handleWidthsChange = (shape: string | null | undefined, inputValue: string) => {
     if (selfItem) {
       setSelfItem({
         ...selfItem,
-        size_title: widths,
+        size_title: inputValue,
+        shape: shape,
       });
     }
-    console.error('11111', widths);
+  };
 
+  const showDrawer = () => {
+    setOpen(true);
+  };
 
-    console.error("2222", selfItem);
+  const onClose = () => {
+    setOpen(false);
   };
 
 
   return (
     <div>
       <h2 className="text-md md:text-md font-bold text-gray-800">{skuTitle}</h2>
-      <div className="flex flex-wrap gap-4 my-4">
+      <Form form={form} layout="vertical">
+        <div className="flex flex-wrap gap-4 my-4">
+          {
+            sizeList.map((e, index) => (
+              e === 'Custom' &&
+              <div
+                key={index}
+                className={`w-auto px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                onClick={() => setOpenCustom(e)}
+              >
+                {e}
+              </div>
+              ||
+              <div
+                key={index}
+                className={`w-10 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                onClick={() => setSelfSize(e)}
+              >
+                {e}
+              </div>
+            ))}
+        </div>
         {
-          sizeList.map((e, index) => (
-            e === 'Custom' &&
-            <div
-              key={index}
-              className={`w-auto px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
-              onClick={() => setOpenCustom(e)}
-            >
-              {e}
-            </div>
-            ||
-            <div
-              key={index}
-              className={`w-10 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
-              onClick={() => setSelfSize(e)}
-            >
-              {e}
-            </div>
-          ))}
-      </div>
-      {
-        size==="Custom" &&
-        <div className="bg-gray-50 p-2 rounded-sm border border-gray-200">
-          <span className='text-sm text-gray-500'>Please enter the width of the customized fingers in millimeter size. 
-            If the two hands are different, please email me.</span>
-          <FingerWidthInput onWidthsChange={handleWidthsChange} initialValues="" />
-        </div>
-      }
-      
+          size === "Custom" &&
+          <div className="bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">
+            <FingerWidthInput onChangeValue={handleWidthsChange} initialInputValue='' initialShape='' />
+          </div>
+        }
 
-      {
-        Info.ID &&
-        <div className="my-2 md:my-4">
-          <SizeTable brand={Info} tags={Tags} />
-        </div>
-      }
 
-      <div className="flex md:justify-between md:flex-row gap-1 items-center md:mt-2">
+        {
+          Info.ID && size !== "Custom" &&
+          <div className="my-2 md:my-4">
+            <SizeTable brand={Info} tags={Tags} />
+          </div>
+        }
+
+        <div className="bg-gray-50 p-2 md:p-4 rounded-sm border border-gray-200">
+          <Measure />
+        </div>
+
         <div className="pt-4">
-          <div className="flex justify-between items-center gap-4 md:gap-16">
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              className="min-w-[280px] md:min-w-[300px] h-12 py-1 px-2 md:px-4 md:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded"
-            >
-              Add to cart
-            </button>
-            <div className="gap-1 md:gap-4 border h-12 w-12 flex items-center justify-center rounded-full hover:bg-gray-200 cursor-pointer">
-              <AiOutlineHeart className='h-6 w-6 text-gray-500' />
+          <button
+            type="button"
+            onLoad={() => setLoading(true)}
+            onClick={handleAddToCart}
+            className="w-full h-12 py-1 px-2 md:px-4 md:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded"
+          >
+            Add to cart
+          </button>
+
+        </div>
+      </Form>
+
+      <Drawer open={open} width={440}>
+        <div className="z-max fixed inset-y-0 right-0 w-full outline-none focus:outline-none md:w-[440px]">
+          <div className="relative z-20">
+            <div className="overflow-hidden shadow-lg ring-1 ring-black/5">
+              <div className="relative h-screen bg-white">
+                <div className="hiddenScrollbar h-screen overflow-y-auto py-5 px-3 md:py-5 md:px-5">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-semibold">Shopping cart</h3>
+                    <FaXmark className="text-2xl" onClick={onClose} />
+                    
+                  </div>
+                  <div className="divide-y divide-neutral-300">
+                  <div>
+                  {items?.map((e, index) => (
+                    <CartListItem item={e} key={e.product_id} length={items.length} index={index} />
+                  ))}
+                </div>
+                  </div>
+                </div>
+                <div className="absolute bottom-0 left-0 w-full bg-neutral-50 p-5">
+                  <p className="flex justify-between">
+                    <span>
+                      <span className="font-medium">Subtotal</span>
+                      <span className="block text-sm text-neutral-500">
+                        Shipping and taxes calculated at checkout.
+                      </span>
+                    </span>
+                    <span className="text-xl font-medium">${totalPrice}</span>
+                  </p>
+                  <div className="mt-5 flex items-center gap-5">
+                    <Button
+                      href="/checkout"
+                      onClick={onClose}
+                      className="h-12 rounded-full bg-primary-main text-white border-2 border-primary-main w-full flex-1 text-md">
+                      Checkout
+                    </Button>
+                    <Button
+                      onClick={onClose}
+                      href="/cart"
+                      className="rounded-full w-full flex-1 h-12 border-2 border-primary text-primary-main border-primary-main"
+                    >
+                      View cart
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+
+      </Drawer>
+
+
     </div>
   );
 };
