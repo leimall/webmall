@@ -328,12 +328,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         }
 
 
-        {
-          Info.ID && size !== "Custom" &&
+        {/* {
+          Info.ID && Info.ID && size !== "Custom" &&
           <div className="my-2 md:my-4">
             <SizeTable brand={Info} tags={Tags} />
           </div>
-        }
+        } */}
 
         <div className="bg-gray-50 p-2 md:p-4 rounded-sm border border-gray-200">
           <Measure />

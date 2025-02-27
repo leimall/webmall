@@ -11,6 +11,13 @@ const service = axios.create({
   // baseURL: '//localhost:3009/api/web',
   baseURL: process.env.NEXT_PUBLIC_API_URL + '/api/web',
   timeout: 100000,
+  headers: {
+    'Content-Type': 'application/json',
+    'User-Agent': 'PostmanRuntime/7.32.3',
+    'Accept': '*/*',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive'
+  }
 });
 
 // 添加一个请求拦截器
@@ -21,6 +28,7 @@ service.interceptors.request.use(
       if (token) config.headers['x-token'] = token;
       if (user?.userId) config.headers['x-user-id'] = user.userId;
     }
+    config.headers = config.headers || {};
     config.headers['Content-Type'] = 'application/json';
 
     // message.loading({
