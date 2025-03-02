@@ -1,5 +1,5 @@
 "use client";
-import { getCaptcha, signIn, signUp } from "@/apis/auth";
+import { getCaptcha, signUp } from "@/apis/auth";
 import { message } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,7 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [captcha, setCaptcha] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const fetchCaptcha = async () => {
@@ -57,14 +58,17 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateFields() && rememberMe ) {
+      setLoading(true);
       try {
         const response = await signUp({ userName,email, password, captcha, captchaId });
         message.success("Signed up successfully");
         router.push("/auth/signin"); // Redirect to home page or any other page
+        setLoading(false);
       } catch (error) {
         message.error("Please check your email or password and enter the correct captcha!");
         setCaptcha(""); // Reset captcha on failed login
         fetchCaptcha(); // Refresh captcha on failed login
+        setLoading(false);
       }
     };
   };
@@ -179,8 +183,8 @@ export default function Signup() {
 							</div>
 
 							<div className="mt-8">
-								<button type="submit" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white  bg-primary-500 hover:bg-primary-400 focus:outline-none transition-all">
-									Register
+              <button type="submit" className={`w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white bg-primary-500 hover:bg-primary-400 focus:outline-none transition-all ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={loading}>
+              {loading ? 'Loading...' : 'Register'}
 								</button>
 								<p className="text-gray-800 text-sm mt-8 text-center">Already have an account?
 									<Link href="/auth/signin">

@@ -14,8 +14,10 @@ export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [captcha, setCaptcha] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { setAuth, returnUrl, clearReturnUrl } = useAuthStore();
+  // cons
 
   const fetchCaptcha = async (): Promise<void> => {
     try {
@@ -58,6 +60,7 @@ export default function Signin() {
 
   const handleSigin = async () => {
     if (validateFields()) {
+      setLoading(true);
       try {
         const response = await signIn({ email, password, captcha, captchaId: data?.captchaId || "" });
         const { token, user } = response.data;
@@ -69,7 +72,9 @@ export default function Signin() {
           clearReturnUrl();
         }
         router.push("/");
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         message.error("Please check your email or password and enter the correct captcha!");
         setCaptcha(""); // Reset captcha on failed login
         fetchCaptcha(); // Refresh captcha on failed login
@@ -139,8 +144,8 @@ export default function Signin() {
           </div>
 
           <div className="mt-8">
-            <button type="submit" className="w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white bg-primary-500 hover:bg-primary-400 focus:outline-none transition-all">
-              Sign in
+            <button type="submit" className={`w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white bg-primary-500 hover:bg-primary-400 focus:outline-none transition-all ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={loading}>
+              {loading ? 'Loading...' : 'Sign in'}
             </button>
           </div>
 

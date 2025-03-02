@@ -15,7 +15,7 @@ export default function Adpage() {
           </div>
           {/* <div className="hidden md:block"></div> */}
           <div className="md:h-[375px] relative">
-            <img src="https://images.dms.pub/product/uploads/662626495256072192/BgSub_IMG_1560.png" className="w-full h-full object-cover shrink-0" alt={"banner"} />
+            <img src="https://img.ftanails.com/01.jpg" className="w-full h-full object-cover shrink-0" alt={"banner"} />
           </div>
         </div>
 

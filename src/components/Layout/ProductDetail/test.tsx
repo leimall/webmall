@@ -38,7 +38,6 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
     }
   }, [product.Review.average]);
 
-
   return (
     <div className="font-sans tracking-wide mx-auto ">
       <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-8">
