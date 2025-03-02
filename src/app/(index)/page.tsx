@@ -53,7 +53,6 @@ export default async function PageHome() {
   let fetchedLasers: Product[] = [];
   let fetchedBast: Product[] = [];
   let fetchedSale: Product[] = [];
-  console.error("111111");
   try {
     const [laserResponse, bestResp, saleResp] = await Promise.all([
       getProductList(),
