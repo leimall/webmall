@@ -10,14 +10,7 @@ import { useAuthStore } from '@/stores/useUserinfoStroe';
 const service = axios.create({
   // baseURL: '//localhost:3009/api/web',
   baseURL: process.env.NEXT_PUBLIC_API_URL + '/api/web',
-  timeout: 100000,
-  headers: {
-    'Content-Type': 'application/json',
-    'User-Agent': 'PostmanRuntime/7.32.3',
-    'Accept': '*/*',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Connection': 'keep-alive'
-  }
+  timeout: 100000
 });
 
 // 添加一个请求拦截器

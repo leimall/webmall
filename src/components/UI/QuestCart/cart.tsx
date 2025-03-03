@@ -12,11 +12,11 @@ import type { Order } from '@/types/stores/orders';
 
 import SizeTable from '@/components/Layout/ProductDetail/sizeTable';
 import FingerWidthInput from './custom';
-import { Button, Drawer, Form, Space } from 'antd';
+import { Button, Drawer, Form } from 'antd';
 import Measure from './measure';
 import CartListItem from './cartItem';
 
-import { FaXmark } from "react-icons/fa6";
+import { FaXmark, FaCircleCheck } from "react-icons/fa6";
 import { getUniqueId } from '@/utils/unique';
 
 
@@ -38,6 +38,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [loading, setLoading] = useState<boolean>(false);
   const { Info, Tags } = product.Brand
   const [open, setOpen] = useState(false);
+  const [showCustomInfo, setShowCustomInfo] = useState<boolean>(false);
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -49,20 +50,31 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   }, [items]);
 
   useEffect(() => {
-    if (product && user) {
+    if (user?.userId) {
+      setUserId(user.userId)
+    }
+  }, [user?.userId]);
+
+  useEffect(() => {
+    if (product) {
       initData();
     }
-  }, [product, user?.userId]);
+  }, [product]);
 
   const initData = () => {
     if (product.Sku.title) {
       setSkuTitle(product.Sku.title)
     }
     if (product.Sku.List && product.Sku.List.length > 0) {
-      setSizeList(product.Sku.List.map(item => item.title))
-    }
-    if (user?.userId) {
-      setUserId(user.userId)
+      const titles = product.Sku.List.map(item => item.title);
+
+      // 设置尺寸列表
+      setSizeList(titles);
+
+      // 判断是否存在 Custom 标题
+      if (titles.some(title => title === 'Custom')) {
+        setShowCustomInfo(true)
+      }
     }
     setSelfPrice(parseFloat((product.price * (product.priceOff / 100)).toFixed(0) + '.99'))
     if (items?.length > 0) {
@@ -230,7 +242,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
     console.error("11111", selfItem);
   };
-  
+
   const handleDecrease = () => {
     if (selfQuantity > 1) {
       const tmp = selfQuantity - 1
@@ -321,6 +333,18 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             ))}
         </div>
         {
+          showCustomInfo &&
+          <div className=" bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">
+            <div className='flex items-start'>
+              <FaCircleCheck className="md:text-md text-2xl mr-2" />
+              <span className="text-text-secondary font-bold">
+                Custom measurements give the best result for the same price.
+              </span>
+            </div>
+          </div>
+        }
+
+        {
           size === "Custom" &&
           <div className="bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">
             <FingerWidthInput onChangeValue={handleWidthsChange} initialInputValue='' initialShape='' />
@@ -361,14 +385,14 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-semibold">Shopping cart</h3>
                     <FaXmark className="text-2xl" onClick={onClose} />
-                    
+
                   </div>
                   <div className="divide-y divide-neutral-300">
-                  <div>
-                  {items?.map((e, index) => (
-                    <CartListItem item={e} key={e.product_id} length={items.length} index={index} />
-                  ))}
-                </div>
+                    <div>
+                      {items?.map((e, index) => (
+                        <CartListItem item={e} key={e.product_id} length={items.length} index={index} />
+                      ))}
+                    </div>
                   </div>
                 </div>
                 <div className="absolute bottom-0 left-0 w-full bg-neutral-50 p-5">
