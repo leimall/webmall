@@ -6,6 +6,7 @@ import Footer from "@/components/Layout/Footer";
 
 import "@/styles/globals.css";
 import { Script } from "vm";
+import FreeShipping from "@/components/Common/free/shipping";
 
 export const metadata: Metadata = {
   title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
@@ -50,6 +51,7 @@ export default function RootLayout({
 
       <body suppressHydrationWarning={true} className="min-h-screen flex flex-col">
         <Header />
+        <FreeShipping />
         <div className="flex-grow bg-white">
           {children}
         </div>
