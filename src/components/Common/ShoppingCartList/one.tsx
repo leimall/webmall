@@ -88,16 +88,16 @@ export default function ShoppingCartList() {
       products,
     };
     console.error(orderData)
-    // createOrder(orderData)
-    // update(orderId)
-    // try {
-    //   const response = await createOrderForDB(orderData)
-    //   if (response.code === 0) {
-    //     router.push("/checkout/");
-    //   }
-    // } catch (error) {
-    //   alert('Error creating order. Please try again later.');
-    // }
+    createOrder(orderData)
+    update(orderId)
+    try {
+      const response = await createOrderForDB(orderData)
+      if (response.code === 0) {
+        router.push("/checkout/");
+      }
+    } catch (error) {
+      alert('Error creating order. Please try again later.');
+    }
   };
 
   return (

@@ -63,10 +63,10 @@ export default function CartListItem({ item, index, length, form }: { item: Cart
               <Image
                 src={item.main_img}
                 alt={item.title}
-                objectFit='fixed'
                 width={96}
                 height={96}
-                className="rounded h-full w-full "
+                className="rounded h-full w-full"
+                priority
               />
             </div>
 
@@ -83,9 +83,9 @@ export default function CartListItem({ item, index, length, form }: { item: Cart
                   <div className="flex items-center">
                     <div className="flex items-end">
                       <div className="text-red-500 text-xl font-bold">${(item.price * item.quantity).toFixed(2)}</div>
-                      {item.old_price * item.quantity > 0 && <span className="line-through text-sm text-gray-400 px-1">${(item.old_price * item.quantity).toFixed(2)}</span>}
-                      {item.price_off > 0 && <div className="border bg-black text-white text-sm font-bold mb-1 mx-1 px-1">
-                        {item.price_off > 0 ? `-${off}` : ''}
+                      {off > 0 && item.old_price * item.quantity > 0 && <span className="line-through text-sm text-gray-400 px-1">${(item.old_price * item.quantity).toFixed(2)}</span>}
+                      {off > 0 && <div className="border bg-black text-white text-sm font-bold mb-1 mx-1 px-1">
+                        {off > 0 ? `-${off}%` : ''}
                       </div>}
 
                     </div>

@@ -7,8 +7,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.dms.pub',
-        port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.ftanails.com',
+      }
     ],
   },
 };

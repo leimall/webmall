@@ -117,7 +117,7 @@ export default function Signin() {
           </div>
 
           <div className="mt-8">
-            <label className="text-gray-800 text-xs block mb-2">Captcha</label>
+            <label className="text-gray-800 text-xs block mb-2">Captcham (Only lowercase letters.)</label>
             <div className="flex items-center justify-between">
             <input
               name="captcha"
@@ -134,7 +134,7 @@ export default function Signin() {
                 alt="Captcha"
                 width={140}
                 height={60}
-                className="h-12 object-cover cursor-pointer"
+                className="w-1/2 object-cover cursor-pointer"
                 onClick={fetchCaptcha}
               />
             ) : (
