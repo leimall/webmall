@@ -31,6 +31,7 @@ export type BillingAddressItem = {
 }
 
 export type AddressFormValues = {
+  ID: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -43,4 +44,5 @@ export type AddressFormValues = {
   country: string;
   countryName: string;
   postalCode: string;
+  isDefault: number;
 }

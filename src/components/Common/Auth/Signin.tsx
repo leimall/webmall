@@ -16,8 +16,8 @@ export default function Signin() {
   const [captcha, setCaptcha] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setAuth, returnUrl, clearReturnUrl } = useAuthStore();
-  // cons
+  const { user, setAuth, returnUrl, clearReturnUrl } = useAuthStore();
+
 
   const fetchCaptcha = async (): Promise<void> => {
     try {
@@ -31,6 +31,17 @@ export default function Signin() {
   useEffect(() => {
     fetchCaptcha();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      if (returnUrl) {
+        router.push(returnUrl);
+      } else {
+        router.push("/");
+      }
+    }
+  }, [user]);
+
 
   const validateFields = () => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -72,7 +83,6 @@ export default function Signin() {
           clearReturnUrl();
         }
         router.push("/");
-        setLoading(false);
       } catch (error) {
         setLoading(false);
         message.error("Please check your email or password and enter the correct captcha!");
@@ -85,12 +95,12 @@ export default function Signin() {
   return (
     <section className="py-4 md:py-20">
       <div className="relative m-4">
-        <form className="bg-white max-w-xl w-full mx-auto shadow-md p-4 md:p-16 rounded-2xl" onSubmit={handleSubmit}>
+        <form className="bg-white max-w-xl w-full border border-gray-300  mx-auto p-4 md:p-16 rounded-md" onSubmit={handleSubmit}>
           <div className="mb-12">
             <h3 className="text-gray-800 text-3xl font-bold text-center">Sign in</h3>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-4">
             <label className="text-gray-800 text-xs block mb-2">Email</label>
             <input
               name="email"
@@ -117,29 +127,31 @@ export default function Signin() {
           </div>
 
           <div className="mt-8">
-            <label className="text-gray-800 text-xs block mb-2">Captcham (Only lowercase letters.)</label>
+            <label className="text-gray-800 text-xs block mb-2">Captcham (Only enter six lowercase letters.)</label>
             <div className="flex items-center justify-between">
-            <input
-              name="captcha"
-              type="text"
-              required
-              value={captcha}
-              onChange={(e) => setCaptcha(e.target.value)}
-              className="w-2/3 bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
-              placeholder="Enter captcha"
-            />
-            {data?.picPath ? (
-              <Image
-                src={data.picPath}
-                alt="Captcha"
-                width={140}
-                height={60}
-                className="w-1/2 object-cover cursor-pointer"
-                onClick={fetchCaptcha}
+              <input
+                name="captcha"
+                type="text"
+                required
+                value={captcha}
+                onChange={(e) => setCaptcha(e.target.value)}
+                className="w-2/3 bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
+                placeholder="Enter captcha"
               />
-            ) : (
-              <button className="text-primary-500 border p-2 border-primary-400" onClick={fetchCaptcha}>Refresh Captcha</button>
-            )}
+              <div className="pl-1 md:pl-4">
+                {data?.picPath ? (
+                  <Image
+                    src={data.picPath}
+                    alt="Captcha"
+                    width={140}
+                    height={60}
+                    className="object-cover cursor-pointer"
+                    onClick={fetchCaptcha}
+                  />
+                ) : (
+                  <button className="text-primary-500 border p-2 border-primary-400" onClick={fetchCaptcha}>Refresh Captcha</button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -149,7 +161,7 @@ export default function Signin() {
             </button>
           </div>
 
-          <div className="pt-10">
+          <div className="pt-4">
             <Divider><span className="text-gray-800 text-sm mt-8 text-center"> New to FTAnails? </span></Divider>
             <Link href="/auth/signup">
               <p className="border-2 border-bg-200 p-1 rounded-md text-primary-400 text-center font-semibold hover:underline ml-1">Create your FTAnails account</p>

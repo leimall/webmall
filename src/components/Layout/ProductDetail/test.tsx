@@ -2,9 +2,9 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Image from "next/image";
 import { Carousel, Divider, Rate, Tag } from "antd";
 import { useProductStore } from "@/stores/useProductStore";
-import Image from "next/image";
 import type { CarouselRef } from "antd/es/carousel";
 import type { ProductDetail } from "@/types/products";
 import Price from "./price"
@@ -15,7 +15,6 @@ import CustomRate from "@/components/Common/Rate";
 import { FaTruck, FaShieldHalved, FaCheck, FaCopy } from "react-icons/fa6";
 import ReviewList from "@/components/Common/ReviewList";
 import ReviewSummary from "@/components/Common/ReviewList/ReviewSummary";
-import SizeTable from "./sizeTable";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const { selectedImageIndex, setSelectedImageIndex } = useProductStore();

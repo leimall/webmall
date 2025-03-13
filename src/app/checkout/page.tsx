@@ -1,7 +1,7 @@
 'use client'
 import ProductList from '@/components/Common/checkout/productItem';
 import { useEffect, useState } from 'react';
-import { getCountry, getMyselfAddress, getBillingAddress, createBillingAddress, updateBillingAddress } from '@/apis/address'
+import { getMyselfAddress, getBillingAddress, createORUpdateBillingAddress, setDefaultAddress } from '@/apis/address'
 import { updateOrderInfo, getOneOrderById } from '@/apis/orders'
 import type { AddressItem, BillingAddressItem } from '@/types/address';
 import LoadingOverlay from './overlay';
@@ -13,34 +13,33 @@ import AddressSkeleton from '@/components/Common/address/skeleton'
 import { Order, OrderType } from '@/types/stores/orders';
 import AddressModal from '@/components/Common/profile/address';
 import PaymentForm from '@/components/Common/checkout/payment';
-import { useOrderStore } from '@/stores/useOrdersStore';
-import Script from 'next/script';
-import { message } from 'antd';
+import { Checkbox, message, type CheckboxChangeEvent, type CheckboxProps } from 'antd';
 import LoadingPayment from './LoadingPayment';
 import BillingAddressModal from '@/components/Common/profile/billingAddress';
 import { postCreatLLPayOrder } from '@/apis/llpay';
 import type { ReqCreateOrderType } from '@/types/llpay/createOrder'
 import { useNowBuyStore } from '@/stores/useNowBuyStore';
 import { useCartStore } from '@/stores/useCartStore';
-import AddressForm from '@/components/Layout/Address'
-import { set } from 'react-hook-form';
-
+import ShowBillingAddress from '@/components/Layout/Address/showBillingAddress';
 
 const CheckoutPage = () => {
   const { clearCartItem } = useCartStore();
   const { orderId } = useNowBuyStore()
-  const [myselfOrder, setMyselfOrder] = useState<OrderType>() || null;
+  const [myselfOrder, setMyselfOrder] = useState<OrderType | null>(null);
   const [addressloading, setAddressloading] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'llpay' | 'paypal'>('llpay');
   const [payloading, setPayloading] = useState(false);
   const [address, setAddress] = useState<AddressItem[]>([]);
-  const [billingAddress, setBillingAddress] = useState<AddressItem>() || null;
+  const [billingAddress, setBillingAddress] = useState<BillingAddressItem | null>(null);
   const [defaultAddress, setDefaultAddress] = useState('Please select the shipping address.');
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState(true)
+  const [checkedValue, setCheckedValue] = useState(true)
+  const [isShowChecked, setIsShowChecked] = useState(true)
   const [num, setNum] = useState(1)
   const [isModal, setIsModal] = useState(false)
+  const [isModalBilling, setIsModalBilling] = useState(false)
   const [modeTitle, setModeTitle] = useState<"create" | "edit">("create");
 
   const [formData, setFormData] = useState<AddressItem | null>(null);
@@ -48,12 +47,30 @@ const CheckoutPage = () => {
   useEffect(() => {
     if (orderId) {
       getAddress()
+      clearBillingAddress()
       handleGetOrder(orderId)
     }
     setTimeout(() => {
       setLoading(false)
     }, 1000);
   }, [orderId]);
+
+  const clearBillingAddress = () => {
+    setBillingAddress({
+      ID: 0,
+      userId: '',
+      phone: '',
+      firstName: '',
+      lastName: '',
+      line1: '',
+      line2: '',
+      email: '',
+      city: '',
+      state: '',
+      country: '',
+      postalCode: '',
+    });
+  }
 
   const handleGetOrder = async (id: string) => {
     try {
@@ -82,26 +99,59 @@ const CheckoutPage = () => {
   }
 
   const getAddress = async () => {
-    const res = await getMyselfAddress()
-    if (res.code === 0 && res.data) {
-      const list = res.data.list
-      if (list && list.length > 0) {
-        setAddress(list)
-        const finddefautl = list.find((e) => e.isDefault === 1)
-        if (finddefautl) {
-          optionfunc(finddefautl)
-          setValue(false)
+    try {
+      const resbillingAddress = await getBillingAddress()
+      if (resbillingAddress.code === 0 && resbillingAddress.data) {
+        const {data} = resbillingAddress
+        setBillingAddress(data)
+        console.error("4444", resbillingAddress);
+        if (data.ID) {
+          setIsShowChecked(prev => {
+            const newValue = !prev;
+            return newValue;
+          })
+          setCheckedValue(prev => {
+            const newValue =!prev;
+            return newValue;
+          })
+          console.error("2222222");
+        } else {
+          setIsShowChecked(true)
+          setCheckedValue(true)
+          console.error("33333333");
         }
       }
+
+      const res = await getMyselfAddress()
+      if (res.code === 0 && res.data) {
+        const list = res.data.list
+        if (list && list.length > 0) {
+          setAddress(list)
+          const finddefautl = list.find((e) => e.isDefault === 1)
+          console.error("8888888", finddefautl);
+          if (finddefautl) {
+            console.error("999999", finddefautl);
+            optionfunc(finddefautl)
+            setValue(false)
+          }
+        }
+      }
+      console.error("sssdsdfsd", isShowChecked, checkedValue, resbillingAddress);
+    } catch (error) {
+      console.log(error)
     }
   }
 
   const optionfunc = (item: AddressItem) => {
     setNum(item.ID)
     setSeletedAddress(item)
-    setBillingAddress(item)
     handleShippingAddressID(item.ID)
     updateAddressForOrder(item.ID)
+    console.error("optinfunc setbilling address", item);
+    if (isShowChecked && checkedValue) {
+      cORuBillingAddress(item);
+      console.error("optinfunc setbilling address", billingAddress);
+    }
   }
 
   const handleShippingAddressID = (id: number) => {
@@ -111,6 +161,16 @@ const CheckoutPage = () => {
       }
       return myselfOrder
     })
+  }
+
+  const cORuBillingAddress = async (item: any) => {
+    setBillingAddress(item);
+    try {
+      console.error("cORuBillingAddress", item);
+      const res = await createORUpdateBillingAddress(item)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const setSeletedAddress = (address: AddressItem) => {
@@ -129,6 +189,7 @@ const CheckoutPage = () => {
   const handleAddressSelect = async (selectedAddress: AddressItem) => {
     setAddressloading(true)
     optionfunc(selectedAddress)
+    setAddressloading(false)
   };
 
   const updateAddressForOrder = async (aID: number) => {
@@ -141,10 +202,8 @@ const CheckoutPage = () => {
           message.success('Address updated successfully')
         }
       }
-      setAddressloading(false)
     } catch (error) {
       console.log(error)
-      setAddressloading(false)
     }
   }
 
@@ -174,6 +233,10 @@ const CheckoutPage = () => {
   const handleCloseModal = () => {
     setIsModal(false)
   }
+  const handleCloseModalBilling = () => {
+    setIsModalBilling(false)
+  }
+
   const gotoSuccessPage = (order: any) => {
     const { merchant_transaction_id, payment_data } = order
     const mid = `merchant_transaction_id=${merchant_transaction_id}&payment_currency_code=${payment_data.payment_currency_code}&payment_amount=${payment_data.payment_amount}&payment_status=${payment_data.payment_status}&order_amount=${payment_data.payment_amount}`
@@ -235,6 +298,52 @@ const CheckoutPage = () => {
     setSelectedPaymentMethod(method);
   };
 
+  const onChange: CheckboxProps['onChange'] = (checked: CheckboxChangeEvent) => {
+    console.error("11111111", checked.target.checked);
+    setCheckedValue(checked.target.checked);
+    if (checked.target.checked) {
+      const selectedShippingAddress = address.find((e) => e.ID === num);
+      if (selectedShippingAddress) {
+        setBillingAddress(selectedShippingAddress);
+      }
+    } else {
+      clearBillingAddress();
+    }
+  };
+
+  const BillingAddressonEdit = () => {
+    setModeTitle('edit')
+    setIsModalBilling(true)
+  }
+
+  const showAddress = () => {
+    if (!isShowChecked && billingAddress && billingAddress.ID !== 0) {
+      return (
+        <>
+          <div className="border relative rounded-md mt-2 p-4 border-bg-400">
+            <ShowBillingAddress address={billingAddress} />
+            <div onClick={(event) => {
+              event.stopPropagation();
+              BillingAddressonEdit();
+            }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md cursor-pointer">Edit</div>
+          </div>
+        </>
+      );
+    } else if (billingAddress) {
+      return (
+        <>
+        <Checkbox checked={checkedValue} onChange={onChange}>Same as shipping address</Checkbox>
+        <div className="border relative rounded-md mt-2 p-4 border-bg-400">
+            <ShowBillingAddress address={billingAddress} />
+            <button onClick={(event) => {
+              event.stopPropagation();
+              BillingAddressonEdit();
+            }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md cursor-pointer">Edit</button>
+          </div>
+          </>
+      );
+    }
+  }
 
   return (
     <div>
@@ -267,7 +376,21 @@ const CheckoutPage = () => {
                 <h3>Set Billing Information</h3>
                 <ToggleContent title="Billing Information" value={true}>
                   <div className="flex flex-col">
-                    <BillingAddressModal isOpen={isModal} onClose={handleCloseModal} onGetData={getAddress} addressData={formData} mode={modeTitle} />
+                    {
+                      isShowChecked && (
+                        <Checkbox checked={checkedValue} onChange={onChange}>Same as shipping address</Checkbox>
+                      )
+                    }
+                    {
+                      billingAddress && checkedValue &&
+                      <div className="border relative rounded-md mt-2 p-4 border-bg-400">
+                          <ShowBillingAddress address={billingAddress} />
+                          <button onClick={(event) => {
+                            event.stopPropagation();
+                            BillingAddressonEdit();
+                          }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md cursor-pointer">Edit</button>
+                      </div>
+                    }
                     
                   </div>
                 </ToggleContent>
@@ -293,8 +416,6 @@ const CheckoutPage = () => {
                       </label>
                     </div> */}
                   </div>
-
-                  {/* <PaymentForm onPaymentSubmit={onPaymentHandler} onLoading={handleLoading} /> */}
 
                   {selectedPaymentMethod === 'llpay' ? (
                     <PaymentForm onPaymentSubmit={onPaymentHandler} onLoading={handleLoading} />
@@ -327,6 +448,8 @@ const CheckoutPage = () => {
           </div>
         )}
         <AddressModal isOpen={isModal} onClose={handleCloseModal} onGetData={getAddress} addressData={formData} mode={modeTitle} />
+
+        <BillingAddressModal isOpen={isModalBilling} onClose={handleCloseModalBilling} onGetData={getAddress} addressData={billingAddress} mode={modeTitle} />
       </div>
     </div>
   );

@@ -19,33 +19,62 @@ export const useOrderStore = create<OrderState>()(
         if (!state.order) return { order: null };
         const updatedProducts = [...state.order.products, product];
         const updatedTotalPrice = updatedProducts.reduce((acc, p) => acc + p.price * p.quantity, 0);
+        const shippingFee = updatedTotalPrice < 69 ? 10 : 0;
         return {
           order: {
             ...state.order,
             products: updatedProducts,
             totalPrice: updatedTotalPrice,
+            shippingFee,
+            grandTotal: updatedTotalPrice + shippingFee,
           },
         };
       }),
-      createOrder: (order: Order) => set(() => ({ order })),
+      createOrder: (order: Order) => {
+        const totalPrice = order.products.reduce((acc, p) => acc + p.price * p.quantity, 0);
+        const shippingFee = totalPrice < 69 ? 10 : 0;
+        const grandTotal = totalPrice + shippingFee;
+        set(() => ({
+          order: {
+            ...order,
+            totalPrice,
+            shippingFee,
+            grandTotal,
+          },
+        }));
+      },
       removeProduct: (productId) => set((state) => {
         if (!state.order) return { order: null };
         const updatedProducts = state.order.products.filter((p) => p.product_id !== productId);
         const updatedTotalPrice = updatedProducts.reduce((acc, p) => acc + p.price * p.quantity, 0);
+        const shippingFee = updatedTotalPrice < 69 ? 10 : 0;
         return {
           order: {
             ...state.order,
             products: updatedProducts,
             totalPrice: updatedTotalPrice,
+            shippingFee,
+            grandTotal: updatedTotalPrice + shippingFee,
           },
         };
       }),
-      updateOrder: (order: Partial<Order>) => set((state) => ({
-        order: state.order ? {
+      updateOrder: (order: Partial<Order>) => set((state) => {
+        if (!state.order) return { order: null };
+        const updatedOrder = {
           ...state.order,
           ...order,
-        } : null,
-      })),
+        };
+        const totalPrice = updatedOrder.products.reduce((acc, p) => acc + p.price * p.quantity, 0);
+        const shippingFee = totalPrice < 169 ? 10 : 0;
+        return {
+          order: {
+            ...updatedOrder,
+            totalPrice,
+            shippingFee,
+            grandTotal: totalPrice + shippingFee,
+          },
+        };
+      }),
       clearOrder: () => set(() => ({
         order: null,
       })),

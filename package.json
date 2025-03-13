@@ -7,7 +7,6 @@
     "dev:prod": "dotenv -e .env.production next dev",
     "build": "dotenv -e .env.local next build",
     "build:prod": "dotenv -e .env.production  next build ",
-    "build:prod": "dotenv -e .env.production  next build ",
     "build:p": "next build --mode production",
     "start": "next start --port 3008",
     "start:test": "NODE_ENV=test next start --port 3008",

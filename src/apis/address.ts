@@ -59,7 +59,7 @@ export const getBillingAddress = (): Promise<BillingAddressResponse>=> {
     method: 'get'
   })
 }
-export const createBillingAddress = (data: any) => {
+export const createORUpdateBillingAddress = (data: any) => {
   return request({
     url: '/myself/billingaddress',
     method: 'post',

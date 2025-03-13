@@ -80,8 +80,8 @@ export default function Signup() {
 			<section className="py-4 md:py-20">
 				<div className="font-[sans-serif] relative">
 					<div className="relative m-4">
-						<form className="bg-white max-w-xl w-full mx-auto shadow-md p-4 md:p-16 rounded-2xl" onSubmit={handleSubmit}>
-							<div className="mb-12">
+						<form className="bg-white max-w-xl w-full mx-auto border border-gray-300 p-4 md:p-16 rounded-md" onSubmit={handleSubmit}>
+							<div className="mb-8">
 								<h3 className="text-gray-800 text-3xl font-bold text-center">Create account</h3>
 							</div>
 

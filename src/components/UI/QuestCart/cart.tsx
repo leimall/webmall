@@ -317,7 +317,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               e === 'Custom' &&
               <div
                 key={index}
-                className={`w-auto px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
                 onClick={() => setOpenCustom(e)}
               >
                 {e}
@@ -325,7 +325,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               ||
               <div
                 key={index}
-                className={`w-10 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
                 onClick={() => setSelfSize(e)}
               >
                 {e}

@@ -3,6 +3,7 @@ import { validateBoolean } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/stores/useUserinfoStroe'
 import { useRouter } from 'next/navigation';
+import { message } from 'antd';
 
 export function useAuthenticated() {
   const { user, token, setReturnUrl } = useAuthStore()
@@ -15,7 +16,7 @@ export function useAuthenticated() {
         setAuthenticated(true)
       } else {
         setAuthenticated(false)
-        alert('Please log in to complete the purchase.');
+        message.error('Please log in to complete the purchase.');
         const currentUrl = window.location.href
         setReturnUrl(currentUrl)
         router.push(`/auth/signin?returnUrl=${encodeURIComponent(currentUrl)}`);

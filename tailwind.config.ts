@@ -50,7 +50,8 @@ const config: Config = {
           back9: '#1f100d',
         },
         bg: {
-          50: '#fdfaf9',
+          10: '#FDFCFBFF',
+          50: '#FFF9F7FF',
           100: '#fbeeea',
           200: '#f8e2da',
           300: '#f5d6cb',

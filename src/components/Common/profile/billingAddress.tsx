@@ -1,8 +1,9 @@
 "use client";
-import { createBillingAddress, updateBillingAddress } from "@/apis/address";
+import { updateBillingAddress } from "@/apis/address";
 import AddressForm from "@/components/Layout/Address";
+import BillingAddressForm from "@/components/Layout/Address/billing";
 import { message } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -19,30 +20,21 @@ const BillingAddressModal: React.FC<ModalProps> = ({
   mode,
   addressData,
 }) => {
+  const [subLoading, setSubLoading] = useState(false);
+
   const handleSubmit = async (data: any) => {
-    if (data.ID) {
-      try {
-        await updateBillingAddress(data);
-        message.success("Update Address Successfully");
-      } catch (error) {
-        message.error("Failed to update address");
-      }
-    } else {
-      try {
-        await createBillingAddress(data);
-        message.success("Address added successfully");
-      } catch (error) {
-        message.error("Failed to add address");
-      }
+    setSubLoading(true);
+    try {
+      await updateBillingAddress(data);
+      message.success("Update Address Successfully");
+    } catch (error) {
+      setSubLoading(false);
+      message.error("Failed to update address");
     }
     onGetData();
+    setSubLoading(false);
     onClose();
   };
-
-  useEffect(() => {
-    console.error("addressData", addressData);
-    
-  }, [addressData]);
 
   return (
     <div className={`${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
@@ -55,11 +47,12 @@ const BillingAddressModal: React.FC<ModalProps> = ({
           >
             ✕
           </button>
-          <AddressForm
+          <BillingAddressForm
             mode={mode}
             title={mode === "create" ? "Create Billing Address" : "Edit Billing Address"}
             onSubmit={handleSubmit}
             values={addressData}
+            subloading={subLoading}
           />
         </div>
       </div>

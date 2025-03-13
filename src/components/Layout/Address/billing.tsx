@@ -4,10 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from 'react-google-places-autocomplete';
-import { Button, Checkbox, Form, Spin } from "antd";
+import { Button, Form, Spin } from "antd";
 import type { AddressFormValues } from "@/types/address";
 import Input from "@/components/UI/Input";
-import { register } from "module";
 
 type AddressFormProps = {
   mode: "create" | "edit";
@@ -37,7 +36,7 @@ const schema = yup.object().shape({
     .required("Postal Code is required"),
 });
 
-const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values, subloading }) => {
+const BillingAddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values, subloading }) => {
   const [loading, setLoading] = React.useState(false);
 
   const {
@@ -60,7 +59,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
       country: "",
       countryName: "",
       postalCode: "",
-      isDefault: 0,
     },
     resolver: yupResolver(schema as any),
   });
@@ -86,8 +84,8 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
             country: "",
             countryName: "",
             postalCode: "",
-            isDefault: 0,
           };
+          console.error("object", components);
           components.forEach((component: any) => {
             const types = component.types;
 
@@ -141,7 +139,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
     setValue("country", "");
     setValue("countryName", "");
     setValue("postalCode", "");
-    setValue("isDefault", 0);
   }
 
   useEffect(() => {
@@ -158,7 +155,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
       setValue("country", values.country || "");
       setValue("countryName", values.countryName || "");
       setValue("postalCode", values.postalCode || "");
-      setValue("isDefault", values.isDefault || 0);
     }
   }, [values, setValue])
 
@@ -167,11 +163,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
       clearPreviewData()
     }
   }, [mode]);
-
-  const handleCheckboxChange = (checked: boolean) => {
-    const value = checked ? 1 : 0;
-    setValue('isDefault', value);
-  };
 
 
   return (
@@ -253,6 +244,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
             />
           </Form.Item>
 
+          {/* Form Fields */}
           <div>
             <Spin spinning={loading} delay={500}>
 
@@ -323,13 +315,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
                     render={({ field }) => <Input {...field} label="Postal Code" id="postalCode" required />}
                   />
                 </Form.Item>
-                <Form.Item>
-                  <Form.Item>
-                    <Checkbox defaultChecked={values?.isDefault === 1} onChange={(e) => handleCheckboxChange(e.target.checked)}>
-                      Set as Default Address
-                    </Checkbox>
-                  </Form.Item>
-                </Form.Item>
               </div>
 
 
@@ -352,4 +337,4 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
     </div>
 
   );
-}; export default AddressForm;
+}; export default BillingAddressForm;

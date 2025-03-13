@@ -2,7 +2,8 @@
 import { createMyselfAddress, updateMyselfAddress } from "@/apis/address";
 import AddressForm from "@/components/Layout/Address";
 import { message } from "antd";
-import { useEffect } from "react";
+import { useState } from "react";
+import { data } from "tailwindcss/defaultTheme";
 
 interface ModalProps {
   isOpen: boolean;
@@ -19,12 +20,16 @@ const AddressModal: React.FC<ModalProps> = ({
   mode,
   addressData,
 }) => {
+  const [subloading, setSubLoading] = useState(false);
   const handleSubmit = async (data: any) => {
+    console.error("123232332233222", data);
+    setSubLoading(true);
     if (data.ID) {
       try {
         await updateMyselfAddress(data);
         message.success("Update Address Successfully");
       } catch (error) {
+        setSubLoading(false);
         message.error("Failed to update address");
       }
     } else {
@@ -32,17 +37,15 @@ const AddressModal: React.FC<ModalProps> = ({
         await createMyselfAddress(data);
         message.success("Address added successfully");
       } catch (error) {
+        setSubLoading(false);
         message.error("Failed to add address");
       }
     }
     onGetData();
+    setSubLoading(false);
     onClose();
   };
 
-  useEffect(() => {
-    console.error("addressData", addressData);
-    
-  }, [addressData]);
 
   return (
     <div className={`${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
@@ -60,6 +63,7 @@ const AddressModal: React.FC<ModalProps> = ({
             title={mode === "create" ? "Create Address" : "Edit Address"}
             onSubmit={handleSubmit}
             values={addressData}
+            subloading={subloading}
           />
         </div>
       </div>
