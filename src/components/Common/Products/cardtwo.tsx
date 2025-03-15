@@ -33,7 +33,7 @@ export default function ProductCardOne({ product }: { product: Product }) {
               fill
               priority
               sizes="100vw"
-              className="h-full w-full object-cover object-top "
+              className="h-full w-full object-cover object-top hover:scale-110 transition-transform duration-300"
             />
             { show() && (
               <div className="absolute top-2 right-2 bg-red-500 text-white text-xs md:text-sm font-bold p-1 rounded md:px-2 md:py-1">

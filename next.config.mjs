@@ -14,6 +14,7 @@ const nextConfig = {
       }
     ],
   },
+  transpilePackages: ['antd']
 };
 
 export default nextConfig;

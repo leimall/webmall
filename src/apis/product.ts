@@ -1,10 +1,11 @@
-import { getCategoryList } from '@/apis/category';
+import type { CategoryProduct } from '@/types/category';
 import type { ProductComment } from '@/types/product_comment';
 import type { Product, ProductDetail } from '@/types/products';
 import type { ResponseData, ResponsePageList  } from '@/types/respones'
 import request from '@/utils/request'
+import { comment } from 'postcss';
 type ProductDetailResponse = ResponseData<ProductDetail>;
-type productResponse = ResponseData<Product[]>;
+type productResponse = ResponsePageList<Product[]>;
 type ProductCommentListResponse = ResponsePageList<ProductComment[]>;
 
 export const getProductList = () => {
@@ -35,9 +36,9 @@ export const getProductDetail = (id: string): Promise<ProductDetailResponse> => 
   })
 }
 
-export const getProductByCategory = (id: string): Promise<productResponse> => {
+export const getProductByCategory = (id: string, { offset = 1, limit = 12 } = {}): Promise<productResponse> => {
   return request({
-    url: `/product/category/${id}`,
+    url: `/product/category?categoryId=${id}&offset=${offset}&limit=${limit}`,
     method: 'get'
   })
 }

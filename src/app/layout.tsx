@@ -5,7 +5,8 @@ import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 
 import "@/styles/globals.css";
-import { Script } from "vm";
+import { AntdRegistry } from '@ant-design/nextjs-registry';
+
 import FreeShipping from "@/components/Common/free/shipping";
 
 export const metadata: Metadata = {
@@ -15,8 +16,8 @@ export const metadata: Metadata = {
 const HotjarScript = () => {
   return (
     <script
-    dangerouslySetInnerHTML={{
-      __html: `
+      dangerouslySetInnerHTML={{
+        __html: `
       (function(h,o,t,j,a,r){
           h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
           h._hjSettings={hjid:5173699,hjsv:6};
@@ -26,8 +27,8 @@ const HotjarScript = () => {
           a.appendChild(r);
       })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
       `,
-    }}
-  />
+      }}
+    />
   )
 }
 const LLpayScript = () => {
@@ -53,7 +54,7 @@ export default function RootLayout({
         <Header />
         <FreeShipping />
         <div className="flex-grow bg-white">
-          {children}
+          <AntdRegistry>{children}</AntdRegistry>
         </div>
         <Footer />
         <SpeedInsights />

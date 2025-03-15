@@ -1,28 +1,30 @@
 'use client'
-
 import { useCartStore } from '@/stores/useCartStore'; // 引入 Zustand store
 import { useNowBuyStore } from '@/stores/useNowBuyStore'; // 引入 Zustand store
 import { useAuthStore } from '@/stores/useUserinfoStroe';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CartItem } from '@/types/stores/cart';
 import type { ProductDetail } from "@/types/products";
 import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
-import SizeTable from '@/components/Layout/ProductDetail/sizeTable';
 import FingerWidthInput from './custom';
-import { Button, Drawer, Form } from 'antd';
+import { Drawer, Form } from 'antd';
 import Measure from './measure';
 import CartListItem from './cartItem';
 
 import { FaXmark, FaCircleCheck } from "react-icons/fa6";
 import { getUniqueId } from '@/utils/unique';
+import Link from 'next/link';
+import { useOrderStore } from '@/stores/useOrdersStore';
 
 
 
 export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
+  const { createOrder } = useOrderStore();
+  const [orderId, setOrderId] = useState('');
   const [form] = Form.useForm();
   const { update } = useNowBuyStore();
   const { addItem, setQuantity, setSkuValue, items, fetchCartItems, totalPrice } = useCartStore();
@@ -36,9 +38,21 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L', 'Custom']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const { Info, Tags } = product.Brand
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [showCustomInfo, setShowCustomInfo] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    if (!orderId) {
+      handleGetOrderId()
+    }
+  }, [orderId]);
+
+  useEffect(() => {
+    if (user?.userId) {
+      setUserId(user.userId)
+    }
+  }, [user?.userId]);
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -48,12 +62,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       }
     }
   }, [items]);
-
-  useEffect(() => {
-    if (user?.userId) {
-      setUserId(user.userId)
-    }
-  }, [user?.userId]);
 
   useEffect(() => {
     if (product) {
@@ -138,21 +146,11 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   }, [selfItem, selfQuantity]);
 
-  // useEffect(() => {
-  //   if (selfItem) {
-  //     if (items?.length > 0) {
-  //       const result = items.find(item => item.product_id === product.productId)
-  //       if (result) {
-  //         setSkuValue(selfItem.product_id, selfItem.size);
-  //       }
-  //     }
-  //   }
-  // }, [selfItem?.size]);
-
   const handleGetOrderId = async () => {
     try {
       const res = await getOrderId();
       if (res.code === 0 && res.data) {
+        setOrderId(res.data);
         console.log('Order ID set:', res.data); // 添加调试日志
         return res.data
       } else {
@@ -166,55 +164,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   };
 
-
-
-  const handleBuyNow = async () => {
-    setLoading(true);
-    if (selfItem) {
-      const orderId = await handleGetOrderId()
-
-
-      const orderData: Order = {
-        ID: 0,
-        orderId,
-        userId: userId,
-        totalPrice: selfItem.price * selfItem.quantity,
-        paymentMethod: '',
-        paymentStatus: 'pending',
-        orderStatus: 'pending',
-        shippingMethod: 'standard',
-        shippingPrice: 10.00,
-        shippingAddressId: 0,
-        products: [{
-          product_id: selfItem.product_id,
-          title: selfItem.title,
-          price: selfItem.price,
-          old_price: selfItem.old_price,
-          price_off: selfItem.price_off,
-          quantity: selfItem.quantity,
-          main_img: selfItem.main_img,
-          size: selfItem.size,
-          color: selfItem.color,
-          order_id: orderId,
-          user_id: userId,
-        }]
-      };
-
-      console.error("first", orderData)
-      console.error("selfItem", selfItem)
-      console.error(orderData)
-      update(orderId)
-      try {
-        const response = await createOrderForDB(orderData)
-        console.error("response: ", response)
-        router.push("/checkout/");
-      } catch (error) {
-        alert('Error creating order. Please try again later.');
-      }
-    }
-  };
-
-
   const handleAddToCart = () => {
     form
       .validateFields() // Validate all fields in the form
@@ -226,7 +175,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
           selfItem.price = selfPrice;
           selfItem.quantity = selfQuantity;
           selfItem.unique_id = getUniqueId(selfItem.product_id, selfItem.size);
-          console.error("=-------------------", selfItem);
           addItem(selfItem);
           showDrawer()
         }
@@ -239,7 +187,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       });
 
     setLoading(false);
-
     console.error("11111", selfItem);
   };
 
@@ -306,6 +253,42 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     setOpen(false);
   };
 
+  const onClickCheckout = async () => {
+    const products = items.map((item) => ({
+      ...item,
+      ID: 0,
+      order_id: orderId,
+      user_id: userId,
+    }))
+
+    const orderData: Order = {
+      ID: 0,
+      orderId,
+      userId: userId,
+      totalPrice,
+      paymentMethod: '',
+      paymentStatus: 'pending',
+      orderStatus: 'pending',
+      shippingMethod: 'standard',
+      shippingPrice: 10.00,
+      shippingAddressId: 0,
+      products,
+    };
+    console.error("aaaabb", orderData, orderId);
+    createOrder(orderData)
+    update(orderId)
+    try {
+      const response = await createOrderForDB(orderData)
+      console.error("aaaabb", response);
+      if (response.code === 0) {
+        router.push("/checkout/");
+      }
+    } catch (error) {
+      console.log("object", error);
+    }
+
+  }
+
 
   return (
     <div>
@@ -343,22 +326,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             </div>
           </div>
         }
-
         {
           size === "Custom" &&
           <div className="bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">
             <FingerWidthInput onChangeValue={handleWidthsChange} initialInputValue='' initialShape='' />
           </div>
         }
-
-
-        {/* {
-          Info.ID && Info.ID && size !== "Custom" &&
-          <div className="my-2 md:my-4">
-            <SizeTable brand={Info} tags={Tags} />
-          </div>
-        } */}
-
         <div className="bg-gray-50 p-2 md:p-4 rounded-sm border border-gray-200">
           <Measure />
         </div>
@@ -385,10 +358,9 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-semibold">Shopping cart</h3>
                     <FaXmark className="text-2xl" onClick={onClose} />
-
                   </div>
                   <div className="divide-y divide-neutral-300">
-                    <div>
+                    <div className='pt-4'>
                       {items?.map((e, index) => (
                         <CartListItem item={e} key={e.product_id} length={items.length} index={index} />
                       ))}
@@ -406,29 +378,23 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
                     <span className="text-xl font-medium">${totalPrice}</span>
                   </p>
                   <div className="mt-5 flex items-center gap-5">
-                    <Button
-                      href="/checkout"
-                      onClick={onClose}
-                      className="h-12 rounded-full bg-primary-main text-white border-2 border-primary-main w-full flex-1 text-md">
+                    <button
+                      onClick={onClickCheckout}
+                      className="h-12 rounded bg-primary-main text-white border-2 border-primary-main w-full flex-1 text-md">
                       Checkout
-                    </Button>
-                    <Button
-                      onClick={onClose}
-                      href="/cart"
-                      className="rounded-full w-full flex-1 h-12 border-2 border-primary text-primary-main border-primary-main"
+                    </button>
+                    <div
+                      className="rounded w-full flex-1 h-12 border-2 border-primary border-primary-main cursor-pointer"
                     >
-                      View cart
-                    </Button>
+                      <Link href="/cart"><span className='text-primary-main flex justify-center items-center h-10'>View cart</span></Link>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </Drawer>
-
-
     </div>
   );
-};
+}

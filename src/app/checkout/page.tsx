@@ -21,6 +21,7 @@ import type { ReqCreateOrderType } from '@/types/llpay/createOrder'
 import { useNowBuyStore } from '@/stores/useNowBuyStore';
 import { useCartStore } from '@/stores/useCartStore';
 import ShowBillingAddress from '@/components/Layout/Address/showBillingAddress';
+import address from '@/components/Common/address';
 
 const CheckoutPage = () => {
   const { clearCartItem } = useCartStore();
@@ -52,8 +53,14 @@ const CheckoutPage = () => {
     }
     setTimeout(() => {
       setLoading(false)
-    }, 1000);
+    }, 800);
   }, [orderId]);
+
+  useEffect(() => {
+    if (myselfOrder) {
+      updateAddressForOrder(num)
+    }
+  }, [myselfOrder])
 
   const clearBillingAddress = () => {
     setBillingAddress({
@@ -102,23 +109,20 @@ const CheckoutPage = () => {
     try {
       const resbillingAddress = await getBillingAddress()
       if (resbillingAddress.code === 0 && resbillingAddress.data) {
-        const {data} = resbillingAddress
-        setBillingAddress(data)
-        console.error("4444", resbillingAddress);
+        const { data } = resbillingAddress
         if (data.ID) {
           setIsShowChecked(prev => {
             const newValue = !prev;
             return newValue;
           })
           setCheckedValue(prev => {
-            const newValue =!prev;
+            const newValue = !prev;
             return newValue;
           })
-          console.error("2222222");
+          setBillingAddress(data)
         } else {
           setIsShowChecked(true)
           setCheckedValue(true)
-          console.error("33333333");
         }
       }
 
@@ -192,6 +196,7 @@ const CheckoutPage = () => {
     setAddressloading(false)
   };
 
+
   const updateAddressForOrder = async (aID: number) => {
     try {
       if (myselfOrder) {
@@ -199,7 +204,6 @@ const CheckoutPage = () => {
         const res = await updateOrderInfo(myselfOrder)
         if (res.code === 0) {
           setMyselfOrder(myselfOrder)
-          message.success('Address updated successfully')
         }
       }
     } catch (error) {
@@ -207,11 +211,11 @@ const CheckoutPage = () => {
     }
   }
 
-  const handlePaymentOrder = (method: 'llpay' | 'paypal') => {
+  const handlePaymentOrder = async (method: 'llpay' | 'paypal') => {
     try {
       if (myselfOrder) {
         myselfOrder.payment_method = method
-        updateOrderInfo(myselfOrder)
+        await updateOrderInfo(myselfOrder)
       }
     } catch (error) {
       console.log(error)
@@ -223,6 +227,10 @@ const CheckoutPage = () => {
     setModeTitle('create')
     setIsModal(true)
   };
+
+  const handleBillingAddress = () => {
+    setIsModalBilling(true)
+  }
 
   const handleEditAddress = (address: AddressItem) => {
     setFormData(address)
@@ -255,11 +263,14 @@ const CheckoutPage = () => {
           orderId: orderId, // Provide empty string as fallback
         }
 
+        console.error("33333", cardData);
         const response = await postCreatLLPayOrder(cardData)
         const { data, msg } = response;
+        console.error("33333", data, msg);
         if (data.return_code === "SUCCESS") {
           handlePaymentOrder(selectedPaymentMethod)
           const order = data.Order;
+          console.error("1111111", order);
           if (order && order["3ds_status"] === "CHALLENGE") {
             console.log("3DS challenge...");
             clearCartItem();
@@ -316,35 +327,6 @@ const CheckoutPage = () => {
     setIsModalBilling(true)
   }
 
-  const showAddress = () => {
-    if (!isShowChecked && billingAddress && billingAddress.ID !== 0) {
-      return (
-        <>
-          <div className="border relative rounded-md mt-2 p-4 border-bg-400">
-            <ShowBillingAddress address={billingAddress} />
-            <div onClick={(event) => {
-              event.stopPropagation();
-              BillingAddressonEdit();
-            }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md cursor-pointer">Edit</div>
-          </div>
-        </>
-      );
-    } else if (billingAddress) {
-      return (
-        <>
-        <Checkbox checked={checkedValue} onChange={onChange}>Same as shipping address</Checkbox>
-        <div className="border relative rounded-md mt-2 p-4 border-bg-400">
-            <ShowBillingAddress address={billingAddress} />
-            <button onClick={(event) => {
-              event.stopPropagation();
-              BillingAddressonEdit();
-            }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md cursor-pointer">Edit</button>
-          </div>
-          </>
-      );
-    }
-  }
-
   return (
     <div>
       <div className="relative mx-auto max-w-c-1024 py-5 justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
@@ -380,18 +362,33 @@ const CheckoutPage = () => {
                       isShowChecked && (
                         <Checkbox checked={checkedValue} onChange={onChange}>Same as shipping address</Checkbox>
                       )
+                      || billingAddress &&
+                      <div className="border relative rounded-md mt-2 p-4 border-bg-400">
+                        <ShowBillingAddress address={billingAddress} />
+                        <button onClick={(event) => {
+                          event.stopPropagation();
+                          BillingAddressonEdit();
+                        }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md cursor-pointer">Edit</button>
+                      </div>
                     }
                     {
                       billingAddress && checkedValue &&
                       <div className="border relative rounded-md mt-2 p-4 border-bg-400">
-                          <ShowBillingAddress address={billingAddress} />
-                          <button onClick={(event) => {
-                            event.stopPropagation();
-                            BillingAddressonEdit();
-                          }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md cursor-pointer">Edit</button>
+                        <ShowBillingAddress address={billingAddress} />
+                        <button onClick={(event) => {
+                          event.stopPropagation();
+                          BillingAddressonEdit();
+                        }} className="absolute bottom-0 z-9 right-0 bg-bg-200 text-primary-500 text-xs px-2 py-1 rounded-tl-md cursor-pointer">Edit</button>
                       </div>
                     }
-                    
+                    {
+                      isShowChecked && !checkedValue &&
+                      <div className='text-right mt-2 md:mt-4'>
+                        <button type="button" onClick={handleBillingAddress}
+                          className="px-3 py-2.5 rounded-lg text-white text-sm tracking-wider font-medium border border-current outline-none bg-orange-700 hover:bg-orange-800 active:bg-orange-700">Add Billing Address</button>
+                      </div>
+                    }
+
                   </div>
                 </ToggleContent>
                 <h3>Checkout</h3>

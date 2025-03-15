@@ -49,3 +49,11 @@ export const getMyselfOrder = (data: any): Promise<orderResponse> => {
     params: data
   })
 }
+
+export const updateStatus = (data: any): Promise<orderResponse> => {
+  return request({
+    url: '/orders/status',
+    method: 'post',
+    data
+  })
+}

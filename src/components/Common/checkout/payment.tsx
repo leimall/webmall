@@ -97,24 +97,6 @@ const PaymentForm: React.FC<ModalProps> = ({ onPaymentSubmit, onLoading }) => {
     <>
       <div className="md:p-4" >
         <div id="llpay-card-element" className="mb-0"></div>
-        {!llpayLoaded ? skeleton() : <div className="mb-4 px-4">
-          <div className="relative z-0 w-full mb-5 group">
-            <input
-              type="text"
-              name="floating_email"
-              id="floating_email"
-              className="block h-14 py-3 pt-8 px-4 w-full text-sm text-gray-900 bg-white border border-gray-200 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-300 peer hover:border-blue-300 transition-colors duration-200"
-              placeholder=" "
-              required
-            />
-            <label
-              className="absolute left-4 top-5 transition-all duration-300 transform scale-75 origin-[0] text-gray-500 peer-focus:left-4 peer-focus:top-4 peer-focus:text-gray-400 peer-focus:-translate-y-4 peer-focus:scale-75 peer-placeholder-shown:scale-100 peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400"
-            >
-              Name on Card
-            </label>
-          </div>
-        </div>
-        }
         {loading ?
           <button disabled type="button" className="merchant-button w-full h-10 bg-blue-400 text-white rounded">
             <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,7 +106,7 @@ const PaymentForm: React.FC<ModalProps> = ({ onPaymentSubmit, onLoading }) => {
             Processing payment...
           </button>
           :
-          <button onClick={handlePaymentSubmit} className="merchant-button w-full h-10 bg-blue-600 text-white rounded">
+          <button onClick={handlePaymentSubmit} className="merchant-button w-full h-10  bg-orange-700 hover:bg-orange-800 active:bg-orange-700 text-white rounded">
             Pay Now
           </button>
         }

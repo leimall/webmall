@@ -1,3 +1,5 @@
+import type { Product } from "./products";
+
 export type CategoryItem = {
     ID: number
     title: string,
@@ -25,4 +27,9 @@ export interface Category {
   createdAt: Date;
   updatedAt: Date;
   children?: Category[];
+}
+
+export type CategoryProduct = {
+  list: Product[];
+  total: number;
 }

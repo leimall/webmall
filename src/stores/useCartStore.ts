@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { CartItem } from '@/types/stores/cart';
 import { getUserCartList, updateCartItem, createCartItem, deleteCartItem, deleteCartItemOne } from '@/apis/cart';
-import type { pid } from 'process';
 import { getUniqueId } from '@/utils/unique';
 interface CartStore {
   items: CartItem[];
@@ -45,10 +44,10 @@ export const useCartStore = create<CartStore>()(
         let newItems = [...validItems];
         if (existingIndex > -1) {
           newItems[existingIndex].quantity += item.quantity;
-          setImmediate(() => get().updateCart(newItems[existingIndex]));
+          get().updateCart(newItems[existingIndex])
         } else {
           newItems.push(item);
-          setImmediate(() => get().createCart(item));
+          get().createCart(item)
         }
 
         set({ items: newItems });
@@ -80,9 +79,7 @@ export const useCartStore = create<CartStore>()(
         // 更新后端
         const upitem = validItems.find(i => i.unique_id === unid);
         if (upitem) {
-          setImmediate(async () => {
-            await get().updateCart({ ...upitem, quantity });
-          });
+          get().updateCart({ ...upitem, quantity })
         }
         set({ items: newItems });
         get().totalPriceOptions();
@@ -94,7 +91,7 @@ export const useCartStore = create<CartStore>()(
         if (index === -1) return;
         items[index].size = size;
         set({ items });
-        setImmediate(() => get().updateCart(items[index]));
+        get().updateCart(items[index])
         get().totalPriceOptions();
       },
 

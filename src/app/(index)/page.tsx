@@ -23,26 +23,6 @@ export const metadata: Metadata = {
   // }
 };
 
-
-// 缓存静态数据
-const getStaticBanners = (async () => {
-  return [
-    {
-      imageUrl: 'https://example.com/banner1.jpg',
-      title: 'Welcome to Our Store', 
-      description: 'Find the best products at the best prices!',
-    },
-    {
-      imageUrl: 'https://example.com/banner2.jpg',
-      title: 'New Collection',
-      description: 'Check out our latest arrivals.',
-    },
-    // 添加更多轮播图数据...
-  ];
-});
-
-
-// 该函数用于生成静态页面所需的参数，这里暂时没有动态参数，返回空数组
 export async function generateStaticParams() {
   return [];
 }
@@ -66,7 +46,7 @@ export default async function PageHome() {
     fetchedSale = saleResp.data;
   } catch (error) {
     console.error('Error fetching data:', error);
-    notFound(); // 如果获取数据失败，返回 404 页面
+    notFound();
   }
 
 

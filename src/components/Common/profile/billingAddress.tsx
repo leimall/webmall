@@ -1,5 +1,5 @@
 "use client";
-import { updateBillingAddress } from "@/apis/address";
+import { createORUpdateBillingAddress } from "@/apis/address";
 import AddressForm from "@/components/Layout/Address";
 import BillingAddressForm from "@/components/Layout/Address/billing";
 import { message } from "antd";
@@ -24,8 +24,10 @@ const BillingAddressModal: React.FC<ModalProps> = ({
 
   const handleSubmit = async (data: any) => {
     setSubLoading(true);
+
+    console.error("aaaaabbbbb", data);
     try {
-      await updateBillingAddress(data);
+      await createORUpdateBillingAddress(data);
       message.success("Update Address Successfully");
     } catch (error) {
       setSubLoading(false);

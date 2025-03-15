@@ -103,10 +103,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
             <CartItemComponent product={product} />
           </div>
 
-
-
           <Divider />
-
 
           <div className="bg-gray-50 p-4 rounded-sm border border-gray-200">
             <div className="flex items-center gap-2 text-sm font-bold mb-1"><FaTruck className="text-xl text-green-800" /> Free Shipping</div>
@@ -125,14 +122,11 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
               </div>
             </div>
           </div>
-
-
           <Divider />
           <div>
             <h3 className="text-md font-bold text-gray-800">Description</h3>
             <p className="text-gray-700 text-sm mt-2">{product.desction}</p>
           </div>
-
           <Divider />
           <div className="w-full lg:hidden">
             <ReviewSummary Review={product.Review} />
@@ -140,11 +134,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
             <ReviewList productID={product.productId} />
           </div>
         </div>
-
-
-
       </div>
-
     </div>
   );
 }

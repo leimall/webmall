@@ -7,6 +7,7 @@ import { CartItem } from '@/types/stores/cart';
 import Link from 'next/link';
 
 import { FaXmark, FaTrashCan } from "react-icons/fa6";
+import { Divider } from 'antd';
 
 
 export default function CartListItem({ item, index, length }: { item: CartItem, index: number, length: number }) {
@@ -33,29 +34,6 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
     }
   }
 
-  const handleDecrease = () => {
-    if (item.quantity > 1) {
-      setQuantity(item.unique_id, item.quantity - 1);
-    }
-  };
-
-  const handleIncrease = () => {
-    setQuantity(item.unique_id, item.quantity + 1);
-  };
-
-  const setSelfSize = (value: string) => {
-    setSkuValue(item.unique_id, value)
-  }
-
-  const handleWidthsChange = (shape: string | null | undefined, inputValue: string) => {
-    console.error("object", inputValue);
-    item.size_title = inputValue;
-    item.shape = shape;
-    console.error("3333", item);
-  }
-
-  console.error("44444444", item);
-
   const handleCloseMenu = () => {
     console.error("close");
   }
@@ -67,7 +45,7 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
 
   return (
     <>
-      <div key={index} className="flex py-5 last:pb-0">
+      <div key={index} className="flex last:pb-0">
         <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md bg-gray-100">
           <Image
             fill
@@ -82,47 +60,51 @@ export default function CartListItem({ item, index, length }: { item: CartItem, 
           />
         </div>
 
-        <div className="ml-4 flex flex-1 flex-col justify-between">
+        <div className="ml-2 flex flex-1 flex-col justify-between">
           <div>
             <div className="flex justify-between ">
               <div>
-                <h3 className="text-sm  text-pretty font-extrabold h-auto line-clamp-1">
+                <h1 className="text-sm  text-pretty font-extrabold h-auto line-clamp-2">
                   <Link onClick={handleCloseMenu} href={`/products/${item.product_id}`}>
-                    <span className='text-gray-900'>FTAnails</span>
+                    <span className='text-gray-900'>{item.title}</span>
                   </Link>
-                </h3>
-                <span className="my-1 text-sm text-neutral-500">
-                  size: {item.size === 'Custom' ? item.size : ''}
-                </span>
-                {
-                  item.size === 'Custom' && (
-                    <div className="flex items-center gap-1  line-clamp-1">
-                      <span className="text-sm">{item.size_title}</span>
-                    </div>
-                  ) || (
-                    <div className="flex items-center gap-1  line-clamp-1">
-                      <span className="text-sm">{item.size}</span>
-                    </div>
-                  )
-                }
+                </h1>
+
               </div>
               <div>
-              <span className=" font-medium">${item.price}</span>
-              <div onClick={() => deleteHandle(item)}><FaTrashCan className='text-xl' /></div>
+                <span className=" font-medium">${item.price}</span>
+
               </div>
             </div>
           </div>
-          <div className="flex w-full items-end justify-between text-sm">
-            <div className="flex items-center gap-3">
-              {/* <LikeButton /> */}
-              {/* <AiOutlineDelete className="text-2xl" /> */}
+          <div>
+          <div className="flex items-center gap-3">
+              <span className="my-1 text-md text-neutral-500">
+                Size: {item.size === 'Custom' ? item.size :
+                  <span className="text-md text-gray-600">{item.size}</span>
+                }
+              </span>
+              {
+                item.size === 'Custom' && (
+                  <div className="flex items-center gap-1  line-clamp-1">
+                    <span className="text-sm">{item.size_title}</span>
+                  </div>
+                )
+              }
             </div>
+          </div>
+          <div className="flex w-full items-end justify-between text-sm">
             <div>
-              {/* <InputNumber /> */}
+              <span className='text-gray-600'>Quantity: {item.quantity}</span>
+            </div>
+            
+            <div>
+              <div onClick={() => deleteHandle(item)}><FaTrashCan className='text-xl' /></div>
             </div>
           </div>
         </div>
       </div>
+      <Divider />
     </>
   );
 };

@@ -96,7 +96,7 @@ export default function ShoppingCartList() {
         router.push("/checkout/");
       }
     } catch (error) {
-      alert('Error creating order. Please try again later.');
+      console.log("error:", error);
     }
   };
 

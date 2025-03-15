@@ -2,6 +2,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import LoadingOverlay from './overlay';
+import {updateStatus} from '@/apis/orders';
 
 interface PaymentQueryParams {
   merchant_transaction_id: string;
@@ -37,11 +38,12 @@ function PaymentContent () {
     const order_amount = searchParams.get('order_amount');
     // 只在有订单 ID 的情况下更新支付信息
     if (merchant_transaction_id) {
+      updateStatusData(merchant_transaction_id, payment_status);
       setPaymentInfo({
         merchant_transaction_id: merchant_transaction_id,
         payment_currency_code: payment_currency_code || 'N/A',
         payment_amount: payment_amount || '0.00',
-        payment_status: payment_status || 'Unknown',
+        payment_status: payment_status || 'pending',
         order_amount: order_amount || '0.00',
       });
     }
@@ -50,6 +52,27 @@ function PaymentContent () {
       return () => clearTimeout(timer); // 清除定时器
     }, 300);
   }, [searchParams]);
+
+  const updateStatusData = async (id: string, ps: string|null) => {
+    setLoading(true);
+    try {
+      const res = {
+        orderId: id,
+        orderStatus: ps,
+      }
+      const response = await updateStatus(res);
+      if (response.code === 0) {
+        console.log('Payment status updated successfully');
+      } else {
+        console.error('Failed to update payment status');
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error('Error updating payment status:', error);
+    }
+  };
+    
 
   const updatePaymentStatus = (payment_status: string) => {
     setPaymentInfo({...paymentInfo, payment_status });
@@ -89,7 +112,7 @@ function PaymentContent () {
         )}
 
         <div className="mt-6 flex justify-center space-x-4">
-          <a href="/" className="bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300">return to home</a>
+          <a href="/" className="bg-primary-main text-white px-6 py-2 rounded hover:bg-primary-light transition duration-300">Return to home</a>
         </div>
       </div>
     </div>
