@@ -10,7 +10,7 @@ import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
 import FingerWidthInput from './custom';
-import { Drawer, Form } from 'antd';
+import { Drawer, Form, message } from 'antd';
 import Measure from './measure';
 import CartListItem from './cartItem';
 
@@ -18,6 +18,8 @@ import { FaXmark, FaCircleCheck } from "react-icons/fa6";
 import { getUniqueId } from '@/utils/unique';
 import Link from 'next/link';
 import { useOrderStore } from '@/stores/useOrdersStore';
+import AuthModal from '@/components/Common/Auth/authmodal';
+import { useAuthCheck } from '@/hooks/useAuthentication';
 
 
 
@@ -38,21 +40,9 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L', 'Custom']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [showCustomInfo, setShowCustomInfo] = useState<boolean>(false);
 
-
-  useEffect(() => {
-    if (!orderId) {
-      handleGetOrderId()
-    }
-  }, [orderId]);
-
-  useEffect(() => {
-    if (user?.userId) {
-      setUserId(user.userId)
-    }
-  }, [user?.userId]);
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -151,44 +141,56 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       const res = await getOrderId();
       if (res.code === 0 && res.data) {
         setOrderId(res.data);
-        console.log('Order ID set:', res.data); // 添加调试日志
         return res.data
       } else {
-        alert('Error getting order id. Please try again later.');
         return '';
       }
     } catch (error) {
       console.error('Error getting order id:', error);
-      alert('Error getting order id. Please try again later.');
       return '';
     }
   };
 
-  const handleAddToCart = () => {
-    form
-      .validateFields() // Validate all fields in the form
-      .then((values) => {
-        console.log('Form values:', values);
-        if (selfItem) {
-          selfItem.user_id = userId;
-          selfItem.size = size;
-          selfItem.price = selfPrice;
-          selfItem.quantity = selfQuantity;
-          selfItem.unique_id = getUniqueId(selfItem.product_id, selfItem.size);
+  const getUserId = async () => {
+    if (user) {
+      await setUserId(user.userId);
+    }
+  };
+
+  const handleAddToCart = async (): Promise<void> => {
+    getUserId()
+    form.validateFields().then((values) => {
+      setLoading(true);
+      console.log('Form values:', values);
+      if (selfItem) {
+        selfItem.user_id = userId;
+        selfItem.size = size;
+        selfItem.price = selfPrice;
+        selfItem.quantity = selfQuantity;
+        selfItem.unique_id = getUniqueId(selfItem.product_id, selfItem.size);
+        if (selfItem.user_id) {
           addItem(selfItem);
           showDrawer()
         }
-        setLoading(false)
-      })
-      .catch((errorInfo) => {
-        console.log('Validation failed:', errorInfo);
-        // Handle form validation errors here if needed
+      }
+    }).catch((errorInfo) => {
+        console.error("Error:", errorInfo);
+      }).finally(() => {
         setLoading(false);
       });
-
-    setLoading(false);
-    console.error("11111", selfItem);
   };
+
+  const {
+    checkLogin,
+    isModalOpen,
+    isLoading,
+    handleLogin,
+    setIsModalOpen,
+    setIsLoading
+  } = useAuthCheck(handleAddToCart, {
+    onNeedLogin: () => message.info('请先登录再添加到购物车')
+  });
+
 
   const handleDecrease = () => {
     if (selfQuantity > 1) {
@@ -254,10 +256,11 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   };
 
   const onClickCheckout = async () => {
+    const oid = await handleGetOrderId();
     const products = items.map((item) => ({
       ...item,
       ID: 0,
-      order_id: orderId,
+      order_id: oid,
       user_id: userId,
     }))
 
@@ -340,7 +343,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
           <button
             type="button"
             onLoad={() => setLoading(true)}
-            onClick={handleAddToCart}
+            onClick={checkLogin}
             className="w-full h-12 py-1 px-2 md:px-4 md:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded"
           >
             Add to cart
@@ -349,6 +352,13 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         </div>
       </Form>
 
+      <AuthModal
+        open={isModalOpen}
+        onCancel={() => setIsLoading(false)}
+        onClose={() => setIsModalOpen(false)}
+        onLogin={handleLogin}
+        loading={isLoading}
+      />
       <Drawer open={open} width={440}>
         <div className="z-max fixed inset-y-0 right-0 w-full outline-none focus:outline-none md:w-[440px]">
           <div className="relative z-20">

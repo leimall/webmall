@@ -44,8 +44,8 @@ export default async function Page({ params }: { params: { id: string } }) {
                 clipRule="evenodd" data-original="#000000"></path>
             </svg>
           </li>
-          <li className="text-gray-500 text-base font-bold">
-            Product Detail
+          <li className="text-gray-500 text-base">
+            {product.title}
           </li>
         </ul>
       </div>

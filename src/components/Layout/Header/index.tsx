@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, use, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, Drawer, Dropdown, type MenuProps } from 'antd';
@@ -21,19 +21,18 @@ export default function Header() {
   const [list, setList] = useState<Category[]>([]);
   const { fetchCategories, categories } = useMenuStore();
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
+  
   useEffect(() => {
     if (categories.length > 0) {
       setList(categories);
+    } else {
+      fetchCategories();
     }
+    console.error("1111122233445678987654");
   }, [categories]);
 
   const router = useRouter();
-  // const pathname = usePathname();
-  // const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { token, user, clearAuth } = useAuthStore();
@@ -57,7 +56,6 @@ export default function Header() {
   const signout = () => {
     clearAuth()
     clearCart()
-    router.push("/");
   }
 
   const handleCartClick = () => {

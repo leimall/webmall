@@ -1,30 +1,47 @@
-'use client'
-import { validateBoolean } from '@/lib/utils'
-import { useEffect, useState } from 'react'
-import { useAuthStore } from '@/stores/useUserinfoStroe'
-import { useRouter } from 'next/navigation';
-import { message } from 'antd';
+// hooks/useAuthCheck.ts
+'use client';
+import { useState } from 'react';
+import { useAuthStore } from '@/stores/useUserinfoStroe';
 
-export function useAuthenticated() {
-  const { user, token, setReturnUrl } = useAuthStore()
-  const router = useRouter()
-  const [authenticated, setAuthenticated] = useState(Boolean)
 
-  useEffect(() => {
-    try {
-      if (user && token) {
-        setAuthenticated(true)
-      } else {
-        setAuthenticated(false)
-        message.error('Please log in to complete the purchase.');
-        const currentUrl = window.location.href
-        setReturnUrl(currentUrl)
-        router.push(`/auth/signin?returnUrl=${encodeURIComponent(currentUrl)}`);
-      }
-    } catch (error) {
-      console.error({ error })
-    }
-  }, [user, token])
 
-  return { authenticated: validateBoolean(authenticated, true) }
+interface AuthCheckOptions {
+  onNeedLogin?: () => void;
+  onLoginSuccess?: () => void;
 }
+
+export const useAuthCheck = (callback: () => Promise<void>, options: AuthCheckOptions = {}) => {
+  const { token, setAuth } = useAuthStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const checkLogin = async () => {
+    if (!token) {
+      options.onNeedLogin?.();
+      setIsModalOpen(true);
+      return false;
+    }
+    await callback();
+    return true;
+  };
+
+  const handleLogin = async (token: string, user: any) => {
+    setIsLoading(true);
+    try {
+      setAuth(token, user);
+      options.onLoginSuccess?.();
+      setIsModalOpen(false);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  return {
+    checkLogin,
+    isModalOpen,
+    isLoading,
+    handleLogin,
+    setIsModalOpen,
+    setIsLoading,
+  };
+};

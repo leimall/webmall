@@ -4,13 +4,14 @@ import { message } from 'antd'; // 使用 Ant Design 的 message 组件来显示
 import { getCountry, getMyselfAddress, setDefaultAddress, deleteAddress } from '@/apis/address';
 import type { CountryItem } from '@/types/category';
 import type { AddressItem } from '@/types/address';
-import { useAuthenticated } from '@/hooks/useAuthentication';
 import AddressModal from '@/components/Common/profile/address';
 import ShowAddress from '@/components/Layout/Address/showAddress';
+import AuthModal from '@/components/Common/Auth/authmodal';
+import { useAuthCheck } from '@/hooks/useAuthentication';
+
 // import address from '@/components/Common/address';
 
 export default function AddressPage() {
-  const { authenticated } = useAuthenticated();
   const [countries, setCountries] = useState<CountryItem[]>([]);
   const [address, setAddress] = useState<AddressItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -18,14 +19,6 @@ export default function AddressPage() {
 
   const [formData, setFormData] = useState<AddressItem | null>(null);
   const [modeTitle, setModeTitle] = useState<"create" | "edit">("create");
-
-  // useEffect(() => {
-  //   if (authenticated) {
-
-  //   } else{
-
-  //   }
-  // }, [authenticated])
 
   useEffect(() => {
     fetchMyselfAddress();

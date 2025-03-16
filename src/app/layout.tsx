@@ -8,6 +8,8 @@ import "@/styles/globals.css";
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 import FreeShipping from "@/components/Common/free/shipping";
+import { ConfigProvider } from "antd";
+import { ecomTheme } from "@/themes";
 
 export const metadata: Metadata = {
   title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
@@ -54,7 +56,9 @@ export default function RootLayout({
         <Header />
         <FreeShipping />
         <div className="flex-grow bg-white">
-          <AntdRegistry>{children}</AntdRegistry>
+          <ConfigProvider theme={ecomTheme}>
+            <AntdRegistry>{children}</AntdRegistry>
+          </ConfigProvider>
         </div>
         <Footer />
         <SpeedInsights />

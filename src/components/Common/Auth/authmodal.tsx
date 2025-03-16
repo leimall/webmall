@@ -1,0 +1,393 @@
+// components/AuthModal.tsx
+'use client';
+import { Modal, Tabs, Spin, Divider, message, Button } from 'antd';
+import type { UserInfo } from '@/types/userinfo';
+import Image from "next/image";
+import Link from 'next/link';
+import { getCaptcha, signIn, signUp } from '@/apis/auth';
+import { useCartStore } from '@/stores/useCartStore';
+import { useAuthStore } from '@/stores/useUserinfoStroe';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
+interface AuthModalProps {
+  open: boolean;
+  onCancel: () => void;
+  onClose: () => void;
+  onLogin: (token: string, user: UserInfo) => Promise<void>;
+  loading: boolean;
+}
+
+const AuthModal: React.FC<AuthModalProps> = ({ open, onCancel, onClose, onLogin, loading }) => {
+  const { fetchCartItems } = useCartStore();
+  const [data, setData] = useState<{ picPath?: string; captchaId: string } | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [captcha, setCaptcha] = useState("");
+  const router = useRouter();
+  const { user, setAuth, returnUrl, clearReturnUrl } = useAuthStore();
+  const [userName, setUsername] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [captchaId, setCaptchaId] = useState("");
+  const [signInLoading, setSignInLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const [activeKey, setActiveKey] = useState('login');
+
+
+  const fetchCaptcha = async (): Promise<void> => {
+    try {
+      const response = await getCaptcha();
+      setData(response.data);
+    } catch (error) {
+      message.error("Failed to fetch captcha");
+    }
+  };
+
+  useEffect(() => {
+    fetchCaptcha();
+  }, []);
+
+  const validateFields = () => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      message.error("Email is required");
+      return false;
+    }
+    if (!emailPattern.test(email)) {
+      message.error("Invalid email format");
+      return false;
+    }
+    if (!password) {
+      message.error("Password is required");
+      return false;
+    }
+    if (!captcha) {
+      message.error("Captcha is required");
+      return false;
+    }
+    return true;
+  };
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateFields()) {
+      setSignInLoading(true);
+      try {
+        const response = await signIn({ email, password, captcha, captchaId: data?.captchaId || "" });
+        const { token, user } = response.data;
+        fetchCartItems();
+        await onLogin(token, user);
+        message.success("Signed in successfully");
+      } catch (error) {
+        message.error("Please check your email or password and enter the correct captcha!");
+        setCaptcha(""); // Reset captcha on failed login
+        fetchCaptcha(); // Refresh captcha on failed login
+        onCancel();
+        setSignInLoading(false);
+      } finally {
+        if(loading) {
+          setSignInLoading(false);
+        }
+      }
+    }
+  };
+
+  const validateFieldsSignUp = () => {
+    if (!userName) {
+      message.error("User name is required");
+      return false;
+    }
+    if (!email) {
+      message.error("Email is required");
+      return false;
+    }
+    if (!password) {
+      message.error("Password is required");
+      return false;
+    }
+    if (!captcha) {
+      message.error("Captcha is required");
+      return false;
+    }
+    if (!rememberMe) {
+      message.error("I agree to the terms and conditions is required");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmitSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateFieldsSignUp() && rememberMe) {
+      setSignInLoading(true);
+      try {
+        const response = await signUp({ userName, email, password, captcha, captchaId });
+        if (response.data?.code === 0) {
+          message.success("Signed up successfully");
+        }
+      } catch (error) {
+        message.error("Please check your email or password and enter the correct captcha!");
+        setCaptcha(""); // Reset captcha on failed login
+        fetchCaptcha(); // Refresh captcha on failed login
+        onCancel();
+        setSignInLoading(false);
+      } finally {
+        setSignInLoading(false);
+        changeTab()
+      }
+    }
+  };
+  const changeTab = () => {
+    setActiveKey(activeKey === 'login' ? 'register' : 'login');
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
+
+  return (
+    <Modal
+      title={
+        <div className="flex items-center gap-2">
+          {loading && <Spin size="small" />}
+        </div>
+      }
+      open={open}
+      onCancel={onClose}
+      footer={null}
+      width={400}
+      maskClosable={!loading}
+    >
+      <Tabs activeKey={activeKey} onChange={setActiveKey} defaultActiveKey="login" size="large">
+        <Tabs.TabPane key="login">
+          <Spin tip="Loading..." spinning={signInLoading}>
+            <form className="bg-white max-w-xl w-full border-gray-300  mx-auto px-4 pb-4 rounded" onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <h3 className="text-gray-800 text-3xl font-bold text-center">Sign In</h3>
+              </div>
+              <div>
+                <label className="text-gray-800 text-xs block mb-2">Email</label>
+                <div className="relative flex items-center">
+                  <input
+                    name="email"
+                    type="text"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
+                    placeholder="Enter email"
+                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 682.667 682.667">
+                    <defs>
+                      <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                        <path d="M0 512h512V0H0Z" data-original="#000000"></path>
+                      </clipPath>
+                    </defs>
+                    <g clipPath="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
+                      <path fill="none" strokeMiterlimit="10" strokeWidth="40" d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z" data-original="#000000"></path>
+                      <path d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z" data-original="#000000"></path>
+                    </g>
+                  </svg>
+
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <label className="text-gray-800 text-xs block mb-2">Password</label>
+                <div className="relative flex items-center">
+                  <input
+                    name="password"
+                    type={isPasswordVisible ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
+                    placeholder="Enter password"
+                  />
+
+                  {isPasswordVisible ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2 cursor-pointer" onClick={togglePasswordVisibility} viewBox="0 0 128 128">
+                      <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" data-original="#000000"></path>
+                    </svg>) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2 cursor-pointer" onClick={togglePasswordVisibility} viewBox="0 0 128 128">
+                      <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" />
+                      <path d="M118 10 L10 118" strokeWidth="12" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <div className="mt-8">
+                <label className="text-gray-800 text-xs block mb-2">Captcham (Only enter six lowercase letters.)</label>
+                <div className="flex items-center justify-between">
+                  <input
+                    name="captcha"
+                    type="text"
+                    required
+                    value={captcha}
+                    onChange={(e) => setCaptcha(e.target.value)}
+                    className="w-2/3 bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
+                    placeholder="Enter captcha"
+                  />
+                  <div className="pl-1 md:pl-4">
+                    {data?.picPath ? (
+                      <Image
+                        src={data.picPath}
+                        alt="Captcha"
+                        width={140}
+                        height={60}
+                        className="object-cover cursor-pointer"
+                        onClick={fetchCaptcha}
+                      />
+                    ) : (
+                      <button className="text-primary-500 border p-2 border-primary-400" onClick={fetchCaptcha}>Refresh Captcha</button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <Button type="primary" htmlType="submit" className='w-full'> Sign In</Button>
+              </div>
+
+              <div className="pt-4">
+                <Divider><span className="text-gray-800 text-sm mt-8 text-center"> New to FTAnails? </span></Divider>
+                <div className="cursor-pointer" onClick={changeTab}>
+                  <p className="border-2 border-bg-200 p-1 rounded-md text-primary-400 text-center font-semibold hover:underline ml-1">Create your FTAnails account</p>
+                </div>
+              </div>
+            </form>
+          </Spin>
+        </Tabs.TabPane>
+
+        <Tabs.TabPane key="register">
+          <Spin tip="Loading..." spinning={signInLoading}>
+            <form className="bg-white max-w-xl w-full mx-auto border-gray-300 p-1" onSubmit={handleSubmitSignUp}>
+              <div className="mb-4">
+                <h3 className="text-gray-800 text-3xl font-bold text-center">Create account</h3>
+              </div>
+
+              <div>
+                <label className="text-gray-800 text-xs block mb-2">Your Name</label>
+                <div className="relative flex items-center">
+                  <input
+                    name="userName"
+                    type="text"
+                    required
+                    value={userName}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
+                    placeholder="Enter your name"
+                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 24 24">
+                    <circle cx="10" cy="7" r="6" data-original="#000000"></circle>
+                    <path d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z" data-original="#000000"></path>
+                  </svg>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <label className="text-gray-800 text-xs block mb-2">Email</label>
+                <div className="relative flex items-center">
+                  <input
+                    name="email"
+                    type="text"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
+                    placeholder="Enter email"
+                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2" viewBox="0 0 682.667 682.667">
+                    <defs>
+                      <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                        <path d="M0 512h512V0H0Z" data-original="#000000"></path>
+                      </clipPath>
+                    </defs>
+                    <g clipPath="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
+                      <path fill="none" strokeMiterlimit="10" strokeWidth="40" d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z" data-original="#000000"></path>
+                      <path d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z" data-original="#000000"></path>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <label className="text-gray-800 text-xs block mb-2">Password</label>
+                <div className="relative flex items-center">
+                  <input
+                    name="password"
+                    type={isPasswordVisible ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
+                    placeholder="Enter password"
+                  />
+                  {isPasswordVisible ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2 cursor-pointer" onClick={togglePasswordVisibility} viewBox="0 0 128 128">
+                      <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" data-original="#000000"></path>
+                    </svg>) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" className="w-[18px] h-[18px] absolute right-2 cursor-pointer" onClick={togglePasswordVisibility} viewBox="0 0 128 128">
+                      <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" />
+                      <path d="M118 10 L10 118" strokeWidth="12" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <label className="text-gray-800 text-xs block mb-2">Captcha</label>
+                <div className="flex justify-between items-center">
+                  <div className="w-2/3 relative flex items-center">
+                    <input
+                      name="captcha"
+                      type="text"
+                      required
+                      value={captcha}
+                      onChange={(e) => setCaptcha(e.target.value)}
+                      className="w-full bg-transparent text-sm text-gray-800 border-b border-gray-300 focus:border-primary-400 px-2 py-3 outline-none"
+                      placeholder="Enter captcha"
+                    />
+                  </div>
+                  <div className="pl-4" onClick={fetchCaptcha} style={{ cursor: 'pointer' }}>
+                    {data?.picPath && <Image src={data.picPath} alt="Captcha" width={140} height={60} />}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center mt-8">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-4 w-4 shrink-0 rounded bg-primary-500"
+                />
+                <label className="ml-3 block text-sm">
+                  I accept the  <Link className="text-primary-400 hover:text-primary-500" href={"/document/terms"}>Terms of Service</Link> and <Link className="text-primary-400 hover:text-primary-500" href={"/document/privacy"}>Privacy Policy</Link>.
+                </label>
+              </div>
+
+              <div className="mt-8">
+                <button type="submit" className={`w-full shadow-xl py-2.5 px-5 text-sm font-semibold tracking-wider rounded-md text-white bg-primary-500 hover:bg-primary-400 focus:outline-none transition-all ${loading ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={loading}>
+                  {loading ? 'Loading...' : 'Register'}
+                </button>
+                <p className="text-gray-800 text-sm mt-8 text-center">Already have an account?
+                  <div className="cursor-pointer" onClick={changeTab}>
+                    <span className="text-primary-400 font-semibold hover:underline ml-1">Sign in here</span>
+                  </div>
+                </p>
+              </div>
+            </form>
+          </Spin>
+        </Tabs.TabPane>
+      </Tabs>
+    </Modal>
+  );
+};
+
+export default AuthModal;
