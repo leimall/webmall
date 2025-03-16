@@ -10,7 +10,7 @@ import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
 import FingerWidthInput from './custom';
-import { Drawer, Form, message } from 'antd';
+import { Drawer, Form, message, Spin } from 'antd';
 import Measure from './measure';
 import CartListItem from './cartItem';
 
@@ -29,7 +29,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [orderId, setOrderId] = useState('');
   const [form] = Form.useForm();
   const { update } = useNowBuyStore();
-  const { addItem, setQuantity, setSkuValue, items, fetchCartItems, totalPrice } = useCartStore();
+  const { addItem, setQuantity, setSkuValue, items, fetchCartItems, totalPrice, clearCart } = useCartStore();
   const { user } = useAuthStore();
   const [userId, setUserId] = useState('');
   const [selfItem, setSelfItem] = useState<CartItem | null>(null);
@@ -40,9 +40,13 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L', 'Custom']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [showCustomInfo, setShowCustomInfo] = useState<boolean>(false);
-
+  useEffect(() => {
+    if (user) {
+      setUserId(user.userId);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (items?.length > 0) {
@@ -153,8 +157,11 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
   const getUserId = async () => {
     if (user) {
-      await setUserId(user.userId);
+      setUserId(user.userId);
     }
+    setTimeout(() => {
+      console.error("object", userId);
+    }, 800);
   };
 
   const handleAddToCart = async (): Promise<void> => {
@@ -174,10 +181,10 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         }
       }
     }).catch((errorInfo) => {
-        console.error("Error:", errorInfo);
-      }).finally(() => {
-        setLoading(false);
-      });
+      console.error("Error:", errorInfo);
+    }).finally(() => {
+      setLoading(false);
+    });
   };
 
   const {
@@ -256,40 +263,46 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   };
 
   const onClickCheckout = async () => {
+    setLoading(true);
     const oid = await handleGetOrderId();
-    const products = items.map((item) => ({
-      ...item,
-      ID: 0,
-      order_id: oid,
-      user_id: userId,
-    }))
+    if (oid) {
+      const products = items.map((item) => ({
+        ...item,
+        ID: 0,
+        order_id: oid,
+        user_id: userId,
+      }))
 
-    const orderData: Order = {
-      ID: 0,
-      orderId,
-      userId: userId,
-      totalPrice,
-      paymentMethod: '',
-      paymentStatus: 'pending',
-      orderStatus: 'pending',
-      shippingMethod: 'standard',
-      shippingPrice: 10.00,
-      shippingAddressId: 0,
-      products,
-    };
-    console.error("aaaabb", orderData, orderId);
-    createOrder(orderData)
-    update(orderId)
-    try {
-      const response = await createOrderForDB(orderData)
-      console.error("aaaabb", response);
-      if (response.code === 0) {
-        router.push("/checkout/");
+      const orderData: Order = {
+        ID: 0,
+        orderId,
+        userId: userId,
+        totalPrice,
+        paymentMethod: '',
+        paymentStatus: 'pending',
+        orderStatus: 'pending',
+        shippingMethod: 'standard',
+        shippingPrice: 10.00,
+        shippingAddressId: 0,
+        products,
+      };
+      console.error("aaaabb", orderData, orderId);
+      await createOrder(orderData)
+      await update(orderId)
+      try {
+        const response = await createOrderForDB(orderData)
+        console.error("aaaabb", response);
+        if (response.code === 0) {
+          clearCart()
+          router.push("/checkout/");
+        }
+      } catch (error) {
+        console.log("object", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.log("object", error);
     }
-
+    setLoading(false);
   }
 
 
@@ -364,42 +377,44 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
           <div className="relative z-20">
             <div className="overflow-hidden shadow-lg ring-1 ring-black/5">
               <div className="relative h-screen bg-white">
-                <div className="hiddenScrollbar h-screen overflow-y-auto py-5 px-3 md:py-5 md:px-5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-semibold">Shopping cart</h3>
-                    <FaXmark className="text-2xl" onClick={onClose} />
-                  </div>
-                  <div className="divide-y divide-neutral-300">
-                    <div className='pt-4'>
-                      {items?.map((e, index) => (
-                        <CartListItem item={e} key={e.product_id} length={items.length} index={index} />
-                      ))}
+                <Spin spinning={loading} tip="Loading...">
+                  <div className="hiddenScrollbar h-screen overflow-y-auto py-5 px-3 md:py-5 md:px-5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xl font-semibold">Shopping cart</h3>
+                      <FaXmark className="text-2xl" onClick={onClose} />
+                    </div>
+                    <div className="divide-y divide-neutral-300">
+                      <div className='pt-4'>
+                        {items?.map((e, index) => (
+                          <CartListItem item={e} key={e.product_id} length={items.length} index={index} />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full bg-neutral-50 p-5">
-                  <p className="flex justify-between">
-                    <span>
-                      <span className="font-medium">Subtotal</span>
-                      <span className="block text-sm text-neutral-500">
-                        Shipping and taxes calculated at checkout.
+                  <div className="absolute bottom-0 left-0 w-full bg-neutral-50 p-5">
+                    <p className="flex justify-between">
+                      <span>
+                        <span className="font-medium">Subtotal</span>
+                        <span className="block text-sm text-neutral-500">
+                          Shipping and taxes calculated at checkout.
+                        </span>
                       </span>
-                    </span>
-                    <span className="text-xl font-medium">${totalPrice}</span>
-                  </p>
-                  <div className="mt-5 flex items-center gap-5">
-                    <button
-                      onClick={onClickCheckout}
-                      className="h-12 rounded bg-primary-main text-white border-2 border-primary-main w-full flex-1 text-md">
-                      Checkout
-                    </button>
-                    <div
-                      className="rounded w-full flex-1 h-12 border-2 border-primary border-primary-main cursor-pointer"
-                    >
-                      <Link href="/cart"><span className='text-primary-main flex justify-center items-center h-10'>View cart</span></Link>
+                      <span className="text-xl font-medium">${totalPrice}</span>
+                    </p>
+                    <div className="mt-5 flex items-center gap-5">
+                      <button
+                        onClick={onClickCheckout}
+                        className="h-12 rounded bg-primary-main text-white border-2 border-primary-main w-full flex-1 text-md">
+                        Checkout
+                      </button>
+                      <div
+                        className="rounded w-full flex-1 h-12 border-2 border-primary border-primary-main cursor-pointer"
+                      >
+                        <Link href="/cart"><span className='text-primary-main flex justify-center items-center h-10'>View cart</span></Link>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Spin>
               </div>
             </div>
           </div>

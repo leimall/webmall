@@ -6,13 +6,6 @@ type addressResponse = ResponseLists<{ list: AddressItem[], total: number }>;
 type BillingAddressResponse = ResponseLists< BillingAddressItem >;
 
 
-export const getCountry = () => {
-  return request({
-    url: '/common/constry',
-    method: 'get'
-  })
-}
-
 export const getMyselfAddress = (): Promise<addressResponse>=> {
   return request({
     url: '/myself/address',

@@ -22,7 +22,6 @@ const AddressModal: React.FC<ModalProps> = ({
 }) => {
   const [subloading, setSubLoading] = useState(false);
   const handleSubmit = async (data: any) => {
-    console.error("123232332233222", data);
     setSubLoading(true);
     if (data.ID) {
       try {

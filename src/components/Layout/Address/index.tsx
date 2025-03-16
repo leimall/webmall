@@ -39,6 +39,12 @@ const schema = yup.object().shape({
 
 const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values, subloading }) => {
   const [loading, setLoading] = React.useState(false);
+  const [status, setStatus] = React.useState(false
+
+  );
+  useEffect(() => {
+    clearPreviewData()
+  }, []);
 
   const {
     control,
@@ -86,7 +92,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
             country: "",
             countryName: "",
             postalCode: "",
-            isDefault: 0,
           };
           components.forEach((component: any) => {
             const types = component.types;
@@ -159,18 +164,18 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
       setValue("countryName", values.countryName || "");
       setValue("postalCode", values.postalCode || "");
       setValue("isDefault", values.isDefault || 0);
+      setStatus(values.isDefault === 1);
     }
-  }, [values, setValue])
 
-  useEffect(() => {
-    if (mode === "create") {
-      clearPreviewData()
-    }
-  }, [mode]);
+    console.error(values);
+  }, [values])
+
+
 
   const handleCheckboxChange = (checked: boolean) => {
     const value = checked ? 1 : 0;
     setValue('isDefault', value);
+    setStatus(checked);
   };
 
 
@@ -325,7 +330,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ mode, title, onSubmit, values
                 </Form.Item>
                 <Form.Item>
                   <Form.Item>
-                    <Checkbox defaultChecked={values?.isDefault === 1} onChange={(e) => handleCheckboxChange(e.target.checked)}>
+                    <Checkbox checked={status} onChange={(e) => handleCheckboxChange(e.target.checked)}>
                       Set as Default Address
                     </Checkbox>
                   </Form.Item>

@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { message, Select } from 'antd'; // 使用 Ant Design 的 message 组件来显示反馈信息
-import { getCountry, createMyselfAddress, getMyselfAddress } from '@/apis/address';
+import { createMyselfAddress, getMyselfAddress } from '@/apis/address';
 import type { CountryItem } from '@/types/category';
 import type { AddressItem } from '@/types/address';
 
@@ -39,18 +39,8 @@ export default function Address() {
     }
   };
 
-  const fetchCountry = async () => {
-    try {
-      const response = await getCountry();
-      setCountries(response.data.list);
-    } catch (error) {
-      message.error("Failed to fetch countries");
-    }
-  };
-
   useEffect(() => {
     fetchMyselfAddress();
-    fetchCountry();
   }, []);
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

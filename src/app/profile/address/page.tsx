@@ -1,68 +1,67 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { message } from 'antd'; // 使用 Ant Design 的 message 组件来显示反馈信息
-import { getCountry, getMyselfAddress, setDefaultAddress, deleteAddress } from '@/apis/address';
+import { message, Spin } from 'antd'; // 使用 Ant Design 的 message 组件来显示反馈信息
+import { getMyselfAddress, setDefaultAddress, deleteAddress } from '@/apis/address';
 import type { CountryItem } from '@/types/category';
 import type { AddressItem } from '@/types/address';
 import AddressModal from '@/components/Common/profile/address';
 import ShowAddress from '@/components/Layout/Address/showAddress';
 import AuthModal from '@/components/Common/Auth/authmodal';
 import { useAuthCheck } from '@/hooks/useAuthentication';
+import { set } from 'react-hook-form';
 
 // import address from '@/components/Common/address';
 
 export default function AddressPage() {
-  const [countries, setCountries] = useState<CountryItem[]>([]);
   const [address, setAddress] = useState<AddressItem[]>([]);
   const [total, setTotal] = useState(0);
   const [isModal, setIsModal] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const [formData, setFormData] = useState<AddressItem | null>(null);
   const [modeTitle, setModeTitle] = useState<"create" | "edit">("create");
 
   useEffect(() => {
     fetchMyselfAddress();
-    fetchCountry();
   }, []);
 
   const fetchMyselfAddress = async () => {
     try {
+      setLoading(true)
       const response = await getMyselfAddress();
       setAddress(response.data?.list ?? []);
       setTotal(response.data?.total ?? 0);
     } catch (error) {
       message.error("Failed to fetch address");
+    } finally {
+      setLoading(false)
     }
   };
-
-  const fetchCountry = async () => {
-    try {
-      const response = await getCountry();
-      setCountries(response.data.list);
-    } catch (error) {
-      message.error("Failed to fetch countries");
-    }
-  };
-
 
 
   const handleSetDefaultAddress = async (id: number) => {
     try {
-      const response = await setDefaultAddress({id});
+      setLoading(true)
+      const response = await setDefaultAddress({ id });
       message.success("Address set as default successfully");
       fetchMyselfAddress();
     } catch (error) {
       message.error("Failed to set address as default");
+    } finally {
+      setLoading(false)
     }
   };
 
   const handleDeleteAddress = async (id: number) => {
     try {
-      const response = await deleteAddress({id});
+      setLoading(true)
+      const response = await deleteAddress({ id });
       message.success("Address deleted successfully");
       fetchMyselfAddress();
     } catch (error) {
       message.error("Failed to delete address");
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -72,7 +71,7 @@ export default function AddressPage() {
     setIsModal(true)
   };
 
-  const handleSNewAddress =  () => {
+  const handleSNewAddress = () => {
     setFormData(null)
     setModeTitle("create")
     setIsModal(true)
@@ -103,29 +102,24 @@ export default function AddressPage() {
         </div>
         <div className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
           <div className="p-2 md:p-4">
-            {total > 0 ? (
-              <div className="w-full px-0 md:px-6 pb-8 sm:max-w-xl sm:rounded-lg">
-                <div className='flex justify-between'>
-                <h3 className="text-lg font-semibold">Your Addresses</h3>
+            <div className="w-full px-0 md:px-6 pb-8 sm:max-w-xl sm:rounded-lg">
+              <div className='flex justify-between'>
+                <h3 className="text-lg font-semibold">Shipping Addresses</h3>
                 <button
-                className="bg-yellow-700 hover:bg-yellow-900 text-xs text-white  py-1 px-2 rounded"
-                onClick={handleSNewAddress}
-              >
-                New Address
-              </button>
+                  className="bg-yellow-700 hover:bg-yellow-900 text-xs text-white  py-1 px-2 rounded"
+                  onClick={handleSNewAddress}
+                >
+                  New Address
+                </button>
 
-                </div>
-                <ul className="mt-4 space-y-4">
-                  {address.map((item: AddressItem) => (
-                    <li key={item.ID} className={`${item.isDefault ? "border-bg-400": ""} p-4 border rounded-md relative`}>
-                      {item.isDefault ? <div className="absolute top-0 right-0 bg-orange-600 text-white text-xs px-2 py-1 rounded-bl-md">Default</div> : ''}
-                      <ShowAddress address={item} />
-
-
-
-                      
-
-                     
+              </div>
+              <Spin spinning={loading} tip="Loading...">
+                {total > 0 ? (
+                  <ul className="mt-4 space-y-4">
+                    {address.map((item: AddressItem) => (
+                      <li key={item.ID} className={`${item.isDefault ? "border-bg-400" : ""} p-4 border rounded-md relative`}>
+                        {item.isDefault ? <div className="absolute top-0 right-0 bg-orange-600 text-white text-xs px-2 py-1 rounded-bl-md">Default</div> : ''}
+                        <ShowAddress address={item} />
                         <div className="text-right space-x-2">
                           <button
                             className="bg-blue-600 hover:bg-blue-800 text-xs text-white py-1 px-2 rounded"
@@ -140,22 +134,23 @@ export default function AddressPage() {
                             Delete
                           </button>
                           {!item.isDefault && (
-                          <button
-                            className="bg-yellow-700 hover:bg-yellow-900 text-xs text-white py-1 px-2 rounded"
-                            onClick={() => handleSetDefaultAddress(item.ID)}
-                          >
-                            Set Default
-                          </button>
+                            <button
+                              className="bg-yellow-700 hover:bg-yellow-900 text-xs text-white py-1 px-2 rounded"
+                              onClick={() => handleSetDefaultAddress(item.ID)}
+                            >
+                              Set Default
+                            </button>
                           )}
                         </div>
-                      
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <p className="mt-8">No addresses available.</p>
-            )}
+
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-8">No addresses available.</p>
+                )}
+              </Spin>
+            </div>
             <div>
               <AddressModal isOpen={isModal} addressData={formData} onClose={handleCloseModal} onGetData={fetchMyselfAddress} mode={modeTitle} />
             </div>

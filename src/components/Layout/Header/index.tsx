@@ -29,7 +29,6 @@ export default function Header() {
     } else {
       fetchCategories();
     }
-    console.error("1111122233445678987654");
   }, [categories]);
 
   const router = useRouter();
