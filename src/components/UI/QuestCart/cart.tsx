@@ -40,7 +40,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L', 'Custom']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [showCustomInfo, setShowCustomInfo] = useState<boolean>(false);
   useEffect(() => {
     if (user) {
@@ -68,13 +68,16 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       setSkuTitle(product.Sku.title)
     }
     if (product.Sku.List && product.Sku.List.length > 0) {
-      const titles = product.Sku.List.map(item => item.title);
-
+      const titles = product.Sku.List.map(item => item.title_en);
       // 设置尺寸列表
       setSizeList(titles);
 
+      if (product.Sku.List.length === 1) {
+        setSize(product.Sku.List[0].title_en);
+      }
+
       // 判断是否存在 Custom 标题
-      if (titles.some(title => title === 'Custom')) {
+      if (titles.length > 4 && titles.includes('Custom')) {
         setShowCustomInfo(true)
       }
     }
@@ -244,7 +247,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   }
 
-  const handleWidthsChange = (shape: string | null | undefined, inputValue: string) => {
+  const handleWidthsChange = (shape: string, inputValue: string) => {
     if (selfItem) {
       setSelfItem({
         ...selfItem,
@@ -286,12 +289,10 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         shippingAddressId: 0,
         products,
       };
-      console.error("aaaabb", orderData, orderId);
       await createOrder(orderData)
       await update(orderId)
       try {
         const response = await createOrderForDB(orderData)
-        console.error("aaaabb", response);
         if (response.code === 0) {
           clearCart()
           router.push("/checkout/");
@@ -308,7 +309,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
   return (
     <div>
-      <h2 className="text-md md:text-md font-bold text-gray-800">{skuTitle}</h2>
+      <h2 className="text-md md:text-md font-bold text-gray-800">Size</h2>
       <Form form={form} layout="vertical">
         <div className="flex flex-wrap gap-4 my-4">
           {
@@ -348,10 +349,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             <FingerWidthInput onChangeValue={handleWidthsChange} initialInputValue='' initialShape='' />
           </div>
         }
-        <div className="bg-gray-50 p-2 md:p-4 rounded-sm border border-gray-200">
-          <Measure />
-        </div>
-
         <div className="pt-4">
           <button
             type="button"
@@ -359,7 +356,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             onClick={checkLogin}
             className="w-full h-12 py-1 px-2 md:px-4 md:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded"
           >
-            Add to cart
+            Add To Cart
           </button>
 
         </div>

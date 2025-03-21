@@ -3,9 +3,9 @@
 import { getMyselfOrder } from "@/apis/orders";
 import { useState, useEffect } from "react";
 import Pagination from "@/components/UI/Pagination";
-import ProductList from '@/components/Common/checkout/productItem';
 import type { OrderType } from "@/types/orders";
 import { formatDate } from "@/utils/formatDate";
+import OrderProductLists from "@/components/Common/commnet/productItem";
 
 export default function OrderPage() {
   const [orders, setOrders] = useState<OrderType[]>();
@@ -32,6 +32,7 @@ export default function OrderPage() {
         const {list, total} = response.data;
         setOrders(list);
         setTotalPages(total)
+        console.error("object", list, total);
       }
     } catch (error) {
       console.log(error);
@@ -70,12 +71,12 @@ export default function OrderPage() {
                 <div key={index} className="flex flex-col gap-2 p-4 my-4 bg-background-back1 border rounded-md">
                   <div className="flex justify-between items-center">
                     <h3 className="text-sm md:text-lg font-semibold">Order #{order.order_id}</h3>
-                    <p className="text-sm font-semibold">{order.order_status==='PS'?"Payment Succes":order.order_status}</p>
+                    <p className="text-sm font-semibold">{order.order_status}</p>
                   </div>
   
                   <div className="flex flex-col gap-1">
                     <p className="text-sm text-gray-500">Order Date: {formatDate(order.UpdatedAt)}</p>
-                    <p className="text-sm text-gray-500">payment status: {order.payment_status}</p>
+                    <p className="text-sm text-gray-500">payment status: <span>{order.payment_status==='PS'?"Payment Succes":order.payment_status}</span></p>
                     <p className="text-sm text-gray-500">Total Amount: {order.total_price}</p>
                   </div>
 
@@ -89,7 +90,7 @@ export default function OrderPage() {
                   <div className="text-md font-semibold">Products:</div>
                   <div className="flex flex-col gap-2">
                     {order.Products?.map((item) => (
-                      <ProductList item={item} key={item.product_id} />
+                      <OrderProductLists item={item} key={item.product_id} />
                     ))}
                     <p className="text-sm font-semibold text-right">Total Amount: {order.total_price}</p>
                   </div>

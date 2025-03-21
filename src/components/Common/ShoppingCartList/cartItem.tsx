@@ -50,7 +50,7 @@ export default function CartListItem({ item, index, length, form }: { item: Cart
     setSkuValue(item.unique_id, newVal);
   }
 
-  const handleWidthsChange = (shape: string | null | undefined, inputValue: string) => {
+  const handleWidthsChange = (shape: string | undefined, inputValue: string) => {
     item.size_title = inputValue;
     item.shape = shape;
   }
@@ -140,10 +140,7 @@ export default function CartListItem({ item, index, length, form }: { item: Cart
             item.size === 'Custom' &&
             <div className='flex flex-col md:flex-row justify-between items-center'>
               <div className="p-2 md:p-4">
-                <FingerWidthInput onChangeValue={handleWidthsChange} initialInputValue={item.size_title} initialShape={item.shape} />
-              </div>
-              <div className="p-2 md:p-4">
-                <Measure />
+                <FingerWidthInput onChangeValue={handleWidthsChange} initialInputValue={item.size_title} initialShape={item.shape||''} />
               </div>
             </div>
           }

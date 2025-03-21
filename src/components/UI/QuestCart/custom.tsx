@@ -7,14 +7,14 @@ import useMenuStore from '@/stores/useMenuStore';
 const { Option } = Select;
 
 interface ShapeInputProps {
-  initialShape?: string | null | undefined;
+  initialShape?: string;
   initialInputValue?: string;
-  onChangeValue: (shape: string | null | undefined , inputValue: string) => void;
+  onChangeValue: (shape: string , inputValue: string) => void;
 }
 
 const ShapeInput: React.FC<ShapeInputProps> = ({ initialShape, initialInputValue, onChangeValue }) => {
   const [shape, setShape] = useState<string | null | undefined >(initialShape);
-  const [inputValue, setInputValue] = useState<string>(initialInputValue || '');
+  const [inputValue, setInputValue] = useState<string| null | undefined>(initialInputValue);
   const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
   const { shapeOptions } = useMenuStore();
 
@@ -35,19 +35,15 @@ const ShapeInput: React.FC<ShapeInputProps> = ({ initialShape, initialInputValue
 
   const handleShapeChange = (value: string) => {
     setShape(value);
-    onChangeValue(value, inputValue);
+    onChangeValue(value, inputValue || '');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
-    onChangeValue(shape, value);
+    onChangeValue(shape || '', value);
+    setShape(value);
   };
-
-  if (shape === undefined) {
-    return null;
-  }
-
   return (
     <>
     <div className="py-2">
@@ -58,7 +54,7 @@ const ShapeInput: React.FC<ShapeInputProps> = ({ initialShape, initialInputValue
         rules={[{ required: true, message: 'Please select a shape!' }]}
       >
         <Select
-          value={shape}
+          value={shape|| ''}
           onChange={handleShapeChange}
           showSearch
           placeholder="Select a shape"
@@ -87,7 +83,7 @@ const ShapeInput: React.FC<ShapeInputProps> = ({ initialShape, initialInputValue
           rules={[{ required: true, message: 'Please enter the size!' }]}
         >
           <Input
-            value={inputValue}
+            value={inputValue|| ''}
             type="text"
             onChange={handleInputChange}
             placeholder="L:15,12,13,11,9 R:15,13,13,11,9"

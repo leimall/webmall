@@ -10,6 +10,12 @@ type ProductCommentListResponse = ResponsePageList<ProductComment[]>;
 
 export const getProductList = () => {
   return request({
+    url: '/product/list',
+    method: 'get'
+  })
+}
+export const getLasterProductList = () => {
+  return request({
     url: '/product/lastest',
     method: 'get'
   })
@@ -46,6 +52,14 @@ export const getProductByCategory = (id: string, { offset = 1, limit = 12 } = {}
 export const getProductByComment = (data: any): Promise<ProductCommentListResponse> => {
   return request({
     url: `/product/comment`,
+    method: 'get',
+    params: data
+  })
+}
+
+export const searchProducts = (data: any): Promise<productResponse> => {
+  return request({
+    url: `/product/search`,
     method: 'get',
     params: data
   })

@@ -15,11 +15,13 @@ import CustomRate from "@/components/Common/Rate";
 import { FaTruck, FaShieldHalved, FaCheck, FaCopy } from "react-icons/fa6";
 import ReviewList from "@/components/Common/ReviewList";
 import ReviewSummary from "@/components/Common/ReviewList/ReviewSummary";
+import { title } from "process";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
   const carouselRef = useRef<CarouselRef>(null);
   const [rate, setRate] = React.useState<number>(5.0);
+  const [images, setImages] = React.useState<any[]>([]);
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -37,6 +39,13 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
     }
   }, [product.Review.average]);
 
+  useEffect(() => {
+    if (product.ImageList) {
+      const res = [...product.ImageList, { img_url: "/images/product/measure.jpg", title: "measure" }]
+      setImages(res)
+    }
+  }, [product])
+
   return (
     <div className="font-sans tracking-wide mx-auto ">
       <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-8">
@@ -44,7 +53,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
         <div className="lg:col-span-7 text-center">
           <div className="md:p-4 relative before:absolute before:inset-0 befo before:rounded">
             <Carousel ref={carouselRef} afterChange={setSelectedImageIndex}>
-              {product.ImageList.map((image, index) => (
+              {images && images.map((image, index) => (
                 <div key={index} className="relative w-full h-0 pb-[100%] overflow-hidden rounded-t mx-auto">
                   <Image
                     src={image.img_url}
@@ -61,7 +70,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           </div>
 
           <div className="flex flex-wrap gap-4 mx-auto mt-4 md:pl-4">
-            {product.ImageList.map((image, index) => (
+            {images && images.map((image, index) => (
               <img
                 key={index}
                 src={image.img_url}
@@ -104,7 +113,11 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           </div>
 
           <Divider />
-
+          <div>
+            <h3 className="text-md font-bold text-gray-800">Description</h3>
+            <p className="text-gray-700 text-sm mt-2">{product.desction}</p>
+          </div>
+          <Divider />
           <div className="bg-gray-50 p-4 rounded-sm border border-gray-200">
             <div className="flex items-center gap-2 text-sm font-bold mb-1"><FaTruck className="text-xl text-green-800" /> Free Shipping</div>
             <div className="text-sm text-gray-500 ml-7">
@@ -121,11 +134,6 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
                 <div className="flex items-center gap-1"><FaCheck className="text-sm text-green-800" /> Secure Logistics </div>
               </div>
             </div>
-          </div>
-          <Divider />
-          <div>
-            <h3 className="text-md font-bold text-gray-800">Description</h3>
-            <p className="text-gray-700 text-sm mt-2">{product.desction}</p>
           </div>
           <Divider />
           <div className="w-full lg:hidden">

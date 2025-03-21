@@ -3,7 +3,7 @@ import Adpage from "@/components/Layout/Adpage";
 import NewsLists from "@/components/Layout/index/lastest";
 import Informatin from "@/template/indexInfo";
 import type { Product } from "@/types/products";
-import { getProductList, getBestProductList, getSaleProductList } from "@/apis/product";
+import { getBestProductList, getSaleProductList, getLasterProductList } from "@/apis/product";
 import { notFound } from 'next/navigation';
 
 
@@ -35,7 +35,7 @@ export default async function PageHome() {
   let fetchedSale: Product[] = [];
   try {
     const [laserResponse, bestResp, saleResp] = await Promise.all([
-      getProductList(),
+      getLasterProductList(),
       getBestProductList(),
       getSaleProductList()
     ]);

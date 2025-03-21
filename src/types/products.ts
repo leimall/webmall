@@ -80,6 +80,7 @@ export type TagItem = {
 
 export type Sku = {
   title: string;
+  title_en: string;
   price: number;
   priceOff: number;
   productId: string;
