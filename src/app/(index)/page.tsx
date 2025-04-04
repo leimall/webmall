@@ -10,17 +10,26 @@ import { notFound } from 'next/navigation';
 export const metadata: Metadata = {
   title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
   description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
-  // openGraph: {
-  //   title: 'ftanails | Paint Your Life, Design Your World',
-  //   description: 'ftanails相关的描述，体现‘Paint Your Life, Design Your World’的理念',
-  //   images: 'https://example.com/ftanails-og-image.jpg'
-  // },
-  // twitter: {
-  //   card: 'summary_large_image',
-  //   title: 'ftanails | Paint Your Life, Design Your World',
-  //   description: 'ftanails相关的描述，体现‘Paint Your Life, Design Your World’的理念',
-  //   images: 'https://example.com/ftanails-twitter-image.jpg'
-  // }
+  openGraph: {
+    title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
+    description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+    type: 'website',
+    url: 'https://ftanails.com',
+    images: [
+      {
+        url: 'https://ftanails.com/images/logo/logo.png',
+        width: 1920,
+        height: 1920,
+        alt: 'FTAnails press - on nails'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
+    description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+    images: ['https://ftanails.com/images/logo/logo.png']
+  } 
 };
 
 export async function generateStaticParams() {

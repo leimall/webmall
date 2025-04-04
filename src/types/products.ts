@@ -1,9 +1,11 @@
+import { Tag } from 'antd';
 export type ProductItem = {
 	ID: number;
 	title: string;
 	desction: string;
   price: number;
   priceOff: number;
+  sales: number;
   stock: number;
 	mainImg: string;
   productId: string;
@@ -13,6 +15,12 @@ export type ProductItem = {
 
 export type Product = ProductItem & {
   Review: ReviewItem;
+}
+
+export type ProductSearch =   ProductItem & {
+  Review: ReviewItem;
+  Tags: TagItem[];
+  Category: Category[];
 }
 
 export type ReviewItem = {

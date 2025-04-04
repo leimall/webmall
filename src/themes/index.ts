@@ -47,7 +47,13 @@ export const ecomTheme: ThemeConfig = {
       controlHeight: 36,                  // 中等高度
       paddingInline: 20,                  // 水平内边距
     },
-    // 可继续配置其他组件...
+    Select: {
+      controlHeight: 36,                  // 中等高度
+      optionSelectedBg: '#F6F1F0FF',
+    },
+    FloatButton: {
+      colorBgContainer: '#603813',
+    }
   }
 
 };

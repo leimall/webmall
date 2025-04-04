@@ -3,10 +3,9 @@ import { Skeleton } from 'antd';
 
 export default function ProductCardSkeleton() {
   return (
-    <div className="bg-white hover:shadow-md transition-all relative cursor-pointer">
+    <div className="bg-white border border-gray-200 rounded-md transition-all relative">
       {/* 模拟图片区域 */}
       <div className="relative w-full h-0 pb-[100%] overflow-hidden mx-auto bg-gray-200 rounded-md">
-        {/* 图标代替图片，带闪烁动画效果 */}
         <div className="absolute inset-0 flex justify-center items-center animate-pulse">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -25,19 +24,10 @@ export default function ProductCardSkeleton() {
         </div>
       </div>
 
-      <div className="p-3">
-        {/* 模拟标题 */}
-        <Skeleton.Input active size="small" className="w-full mb-2" style={{ height: '20px' }} />
-        {/* 模拟评分 */}
-        <div className="flex items-center mt-2.5 mb-3">
-          <Skeleton.Avatar active size="small" className="mr-2" />
-          <Skeleton.Input active size="small" className="w-1/4" style={{ height: '16px' }} />
-        </div>
-
-        {/* 模拟价格和按钮 */}
-        <div className="flex items-center justify-between">
-          <Skeleton.Input active size="default" className="w-1/4" style={{ height: '24px' }} />
-          <Skeleton.Button active style={{ width: '40%', height: '32px' }} />
+      <div className="p-1 pl-2">
+        <Skeleton.Input active className="w-full" style={{ height: '20px' }} />
+        <div className="my-1">
+          <Skeleton.Input active size="small" className="min-w-full" style={{ height: '16px' }} />
         </div>
       </div>
     </div>

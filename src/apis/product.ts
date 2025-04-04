@@ -1,12 +1,13 @@
 import type { CategoryProduct } from '@/types/category';
 import type { ProductComment } from '@/types/product_comment';
-import type { Product, ProductDetail } from '@/types/products';
+import type { Product, ProductDetail, ProductSearch } from '@/types/products';
 import type { ResponseData, ResponsePageList  } from '@/types/respones'
 import request from '@/utils/request'
 import { comment } from 'postcss';
 type ProductDetailResponse = ResponseData<ProductDetail>;
 type productResponse = ResponsePageList<Product[]>;
 type ProductCommentListResponse = ResponsePageList<ProductComment[]>;
+type ResponseLists = ResponseData<ProductSearch[]>;
 
 export const getProductList = () => {
   return request({
@@ -62,5 +63,12 @@ export const searchProducts = (data: any): Promise<productResponse> => {
     url: `/product/search`,
     method: 'get',
     params: data
+  })
+}
+
+export const getAllProductList = (): Promise<ResponseLists>  => {
+  return request({
+    url: '/product/lists',
+    method: 'get'
   })
 }
