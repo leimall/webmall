@@ -53,8 +53,8 @@ export default function RootLayout({
       </head>
 
       <body suppressHydrationWarning={true} className="min-h-screen flex flex-col">
-        <Header />
         <FreeShipping />
+        <Header />
         <div className="flex-grow bg-white">
           <ConfigProvider theme={ecomTheme}>
             <AntdRegistry>{children}</AntdRegistry>

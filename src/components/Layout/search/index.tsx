@@ -14,9 +14,6 @@ import { getAllProductList } from "@/apis/product";
 import type { ProductSearch } from "@/types/products";
 import ProductCardOne from "@/components/Common/Products/cardtwo";
 import ProductCardSkeleton from "@/components/Common/Products/skeleton";
-import { data } from "tailwindcss/defaultTheme";
-import tag from "antd/es/tag";
-import { string } from "yup";
 const PAGE_SIZE = 12;
 const Min_Price = 0;
 const Max_price = 500
@@ -74,14 +71,15 @@ const SearchLayout = () => {
 
   useEffect(() => {
     setLoading(true)
-    getallproductlist(searchParams.get("query"), searchParams.get("tag") );
+    getallproductlist(searchParams.get("query"), searchParams.get("tag"));
   }, [searchParams.toString()])
 
-  const getallproductlist = async (query: string|null, tag: string|null) => {
+  const getallproductlist = async (query: string | null, tag: string | null) => {
     try {
       const res = await getAllProductList()
       if (res.code === 0) {
         setSaveAlllist(res?.data)
+        filterProducts(res?.data)
         initProcess(res?.data, query, tag)
       }
     } catch (error) {
@@ -91,21 +89,22 @@ const SearchLayout = () => {
     }
   }
 
-  const initProcess = (data: ProductSearch[], query: string|null, tag: string|null) => {
-    filterProducts(data)
+  const initProcess = (data: ProductSearch[], query: string | null, tag: string | null) => {
+    console.error("1111", query, tag);
+    let productList = data
     if (query) {
-      const reuslt = filterProductsBySearch(data, query)
-      filterProducts(reuslt)
+      productList = filterProductsBySearch(productList, query)
     }
-    if(tag) {
-      filterProducts(filterProductsByTagTitle(filteredProducts, tag));
+    if (tag) {
+      productList = filterProductsByTagTitle(productList, tag)
     }
     if (selectedBrands.length > 0) {
-      handleCategorydChange(selectedBrands);
+      productList = filterObjectsByCategoryTitle(selectedBrands, productList)
     }
-    if(priceRange[0]> Min_Price || priceRange[1] > Max_price) {
-      handlePriceChange();
+    if (priceRange[0] > Min_Price || priceRange[1] > Max_price) {
+      productList = filterObjectsByPriceOfPruduct(productList)
     }
+    filterProducts(productList)
   }
 
   const showproduct = (data: ProductSearch[]) => {
@@ -128,9 +127,8 @@ const SearchLayout = () => {
 
   const handleCategorydChange = (value: string[]) => {
     showproduct(filterObjectsByCategoryTitle(value, filteredProducts));
-    
-  };
 
+  };
 
   const filterObjectsByCategoryTitle = (values: string[], product: ProductSearch[]): ProductSearch[] => {
     return product.filter(item => {
@@ -200,7 +198,7 @@ const SearchLayout = () => {
     });
   }
   const filterProductsBySearch = (products: ProductSearch[], searchTerm: string): ProductSearch[] => {
-    
+
     if (typeof searchTerm !== 'string' || searchTerm === '') {
       return products;
     }
