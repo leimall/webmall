@@ -12,7 +12,7 @@ import List from './list'
 
 export default function comment({ products, title }: { products: Product[], title: string }) {
   return (
-    <div>
+    <section className='mt-10'>
       <div className="mt-7 flex items-center justify-between"><div>
         <span className="flex items-center gap-2.5 font-medium text-dark">
           <FiUsers className="text-xl text-primary-400" />
@@ -30,11 +30,11 @@ export default function comment({ products, title }: { products: Product[], titl
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 py-4 gap-2 sm:gap-3 md:gap-4">
-        {Array.from({ length: 4 }).map((_, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 py-4 gap-6 md:gap-8">
+        {Array.from({ length: 3 }).map((_, i) => (
           <List key={i} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }

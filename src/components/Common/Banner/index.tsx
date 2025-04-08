@@ -1,6 +1,10 @@
+'use client'
 import Image from "next/image";
-import { Carousel } from 'antd';
+import { Carousel, type ButtonProps } from 'antd';
 import Link from "next/link";
+import { useProductStore } from "@/stores/useProductStore";
+import { useEffect, useRef } from "react";
+import type { CarouselRef } from "antd/es/carousel";
 type Banner = {
   imageUrl: string,
   title: string,
@@ -8,69 +12,127 @@ type Banner = {
 }
 
 
-export default function BannerInIndex({ banners }: { banners: Banner[] }) {
+
+export default function BannerInIndex() {
+  const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
+  const carouselRef = useRef<CarouselRef>(null);
+  const banners: Banner[] = [
+    {
+      imageUrl: '/images/z/1.jpg',
+      title: 'Aquarius',
+      description: 'Aquarius'
+    },
+    {
+      imageUrl: '/images/z/2.jpg',
+      title: 'Pisces',
+      description: 'Pisces'
+    },
+    {
+      imageUrl: '/images/z/3.jpg',
+      title: 'Aries',
+      description: 'Aries'
+    },
+    {
+      imageUrl: '/images/z/4.jpg',
+      title: 'Taurus',
+      description: 'Taurus'
+    },
+    {
+      imageUrl: '/images/z/5.jpg',
+      title: 'Gemini',
+      description: 'Gemini'
+    },
+    {
+      imageUrl: '/images/z/6.jpg',
+      title: 'Cancer',
+      description: 'Cancer'
+    },
+    {
+      imageUrl: '/images/z/7.jpg',
+      title: 'Leo',
+      description: 'Leo'
+    },
+    {
+      imageUrl: '/images/z/8.jpg',
+      title: 'Virgo',
+      description: 'Virgo'
+    },
+    {
+      imageUrl: '/images/z/9.jpg',
+      title: 'Libra',
+      description: 'Libra'
+    },
+    {
+      imageUrl: '/images/z/10.jpg',
+      title: 'Scorpio',
+      description: 'Scorpio'
+    },
+    {
+      imageUrl: '/images/z/11.jpg',
+      title: 'Sagittarius',
+      description: 'Sagittarius'
+    },
+    {
+      imageUrl: '/images/z/12.jpg',
+      title: 'Capricorn',
+      description: 'Capricorn'
+    }
+  ]
+
+
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.goTo(selectedImageIndex, false);
+    }
+  }, [selectedImageIndex]);
 
   return (
-    <Carousel autoplay dotPosition="bottom" className="w-full">
-      <div>
-        <div className="relative w-full h-auto bg-primary-50 flex flex-col md:flex-row">
-          <div className="w-full font-[sans-serif]">
-            <div className="grid md:grid-cols-2 items-center md:max-h-[475px] overflow-hidden">
-              <div className="p-8">
-                <h1 className="sm:text-4xl text-2xl font-bold text-fta-blake">Readymadeui <span className="text-primary-300">Jumbotron Design</span></h1>
-                <p className="mt-4 text-sm text-fta-blake1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nuncet
-                  tempus blandit, metus mi consectetur nibh, a pharetra felis turpis vitae ligula. Etiam laoreet velit nec neque
-                  ultrices, non consequat mauris tincidunt.</p>
-                <p className="mt-2 text-sm text-fta-blake1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis accumsan, nuncet
-                  tempus blandit, metus mi consectetur nibh.</p>
-                <Link href="/auth/signup">
-                  <button type="button"
-                    className="px-6 py-3 mt-8 rounded-md text-white text-sm tracking-wider border-none outline-none bg-primary-300 hover:bg-primary-500">Sign Up</button>
-                </Link>
+    <div className={`bg-bg-200 rounded mt-10`}>
+      <div className="flex flex-col md:flex-row items-center justify-center">
+        <div className="w-full md:min-w-96 md:m-8">
+          <Carousel autoplay dotPosition="bottom" ref={carouselRef} afterChange={setSelectedImageIndex} className="w-full">
+            {banners.map((banner, index) => (
+              <div key={index} className="relative h-auto">
+                <img
+                  src={banner.imageUrl}
+                  alt={banner.title}
+                  className="object-cover"
+                />
               </div>
+            ))}
+          </Carousel >
+          <div className="flex flex-wrap gap-1 mx-auto mt-4 justify-center">
+            {banners.map((image, index) => (
               <img
-                src="/images/banner/banner2.webp"
-                alt="banner"
-                width={1920}
-                height={947}
-                className="w-full h-full object-cover shrink-0"
+                key={index}
+                src={image.imageUrl}
+                alt={image.title}
+                className={`w-6 h-6 border-2 rounded cursor-pointer ${selectedImageIndex === index ? 'border-gray-800 bg-slate-100' : 'border-primary-50'} `}
+                onClick={() => setSelectedImageIndex(index)}
               />
-            </div>
+            ))}
           </div>
         </div>
-      </div>
-      <div>
-        <div className="relative w-full h-auto bg-background-back flex flex-col md:flex-row">
-          <div className="w-full font-[sans-serif]">
-            <div className="grid md:grid-cols-2 items-center md:max-h-[475px] overflow-hidden">
-              <div>
-                <img src="https://images.dms.pub/product/uploads/662626495256072192/BgSub_IMG_1560.png" className="w-full h-full object-cover shrink-0" alt={"banner"} />
-              </div>
-              <div className="p-16">
-                <div className="slider-inner equal-element">
-                  <div className="slider-infor">
-                    <h5 className="text-2xl font-bold text-background-back5 px-8">
-                      New Arrivals!
-                    </h5>
-                    <h3 className="text-4xl font-bold text-black px-8 py-4">
-                      leaves plant <br />
-                      In Water
-                    </h3>
-                    <div className="text-lg text-black px-8 pb-12">
-                      Price from:
-                      <span className="text-3xl pl-4 font-bold text-primary-300">
-                        $75.00
-                      </span>
-                    </div>
-                    <a href="#" className="mx-8 px-8 py-2 rounded-md text-white text-sm tracking-wider border-none outline-none bg-primary-300 hover:bg-primary-500 hover:text-white">Shop now</a>
-                  </div>
-                </div>
-              </div>
+        <div className="">
+          <div className="p-4 md:p-24">
+            <h1 className="p-2 md:p-4 text-xl font-bold md:text-2xl ">🌌 ZODIAC MUSE COLLECTION</h1>
+            <h5 className="pl-8 md:pl-16 text-sm font-bold md:text-xl">Twelve signs. Twelve muses. One cosmic masterpiece.</h5>
+            <p className="p-2">Step into the stars with our Zodiac Muse Collection — a hand-painted journey through the soul of each zodiac sign. Every design is a miniature work of art, blending symbolism, character, and celestial elements into a collectible form of wearable beauty.</p>
+            <p className="p-2 pb-4">Each set channels the energy, myth, and magic of its sign — from constellations and cosmic symbols to dreamy portraits and storytelling details.</p>
 
+            <p className="p-1 font-bold">🔹 100% hand-painted</p>
+            <p className="p-1 font-bold">🔹 Collector’s edition</p>
+            <p className="p-1 font-bold">🔹 One-of-a-kind</p>
+            <div className="itemms-center justify-center flex">
+              <Link rel="stylesheet" href="/category/zodiac_collections">
+              <div className="inline-flex font-medium text-custom-sm py-1.5 px-4 md:py-2.5 md:px-7 rounded border-gray-3 border bg-primary-main text-white ease-out duration-200 hover:text-white hover:bg-primary-400">Shop Now</div>
+              </Link>
             </div>
           </div>
+
+
         </div>
       </div>
-    </Carousel>
+    </div>
   )
 }

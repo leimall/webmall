@@ -21,10 +21,10 @@ const FreeShipping = () => {
 
     return (
       <div className="bg-bg-100 p-2 w-full">
-        <div className="relative mx-auto max-w-c-1280 items-center justify-between align-items:flex-end">
-          <div className="flex  items-center gap-2 mb-1">
-            <FaTruck className="text-xl text-green-800" />
-            <span className="text-md font-bold">
+        <div className="relative mx-auto max-w-c-1440 items-center align-items:flex-center flex flex-col">
+          <div className="flex items-center gap-2 mb-1">
+            <FaTruck className="text-xl text-primary-500" />
+            <span className="text-md text-text-three font-bold">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={words[index]}
@@ -37,7 +37,6 @@ const FreeShipping = () => {
                 </motion.p>
               </AnimatePresence>
             </span>
-
           </div>
         </div>
       </div>

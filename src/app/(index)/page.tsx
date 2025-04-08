@@ -9,8 +9,9 @@ import Informatin from "@/template/indexInfo";
 import type { Product } from "@/types/products";
 import { getBestProductList, getSaleProductList, getLasterProductList } from "@/apis/product";
 import { notFound } from 'next/navigation';
-
 import FirstAdPage from '@/components/Layout/index/ad/first';
+
+import BannerInIndex from '@/components/Common/Banner';
 
 
 export const metadata: Metadata = {
@@ -67,16 +68,13 @@ export default async function PageHome() {
 
   return (
     <main >
-      {/* <BannerInIndex banners={banners} /> */}
       <FirstAdPage />
       <div className="relative mx-auto max-w-c-1440 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
         <NewsLists title="New Release" products={fetchedLasers} />
-        <Adpage />
+        <BannerInIndex />
         <BestLists title="Best Seller" products={fetchedBast} />
-        <Adpage />
-        <SaleLists title="Sale" products={fetchedSale} />
-        {/* <FaqPage /> */}
-
+        {/* <Adpage />
+        <SaleLists title="Sale" products={fetchedSale} /> */}
         <Comment title="User Feedbacks" products={fetchedSale}  />
         <Informatin />
       </div>

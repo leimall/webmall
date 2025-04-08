@@ -110,7 +110,8 @@ export default function Header() {
 
 
   return (
-    <header className="py-4 px-4 sm:px-10 bg-background-back1 font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
+    <header>
+      <div className="py-4 px-4 sm:px-10 bg-background-back1 font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
       <div className="mx-auto max-w-c-1440">
         <div className='flex justify-between align-middle items-center gap-2 w-full'>
 
@@ -258,8 +259,10 @@ export default function Header() {
 
       </div>
 
-      <div className="hidden md:block">
-        <div className='mx-auto max-w-c-1280 flex flex-wrap gap-12 items-center justify-center mt-4 text-sm font-bold'>
+      </div>
+
+      <div className="hidden bg-bg-10 md:block p-4">
+        <div className='mx-auto max-w-c-1280 flex flex-wrap gap-12 items-center justify-center text-sm font-bold'>
           <Link href="/">
             <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
               Home

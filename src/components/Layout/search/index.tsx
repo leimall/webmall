@@ -7,6 +7,7 @@ import {
   Checkbox,
   Pagination,
   FloatButton,
+  Drawer,
 } from "antd";
 import useMenuStore from "@/stores/useMenuStore";
 import { useSearchParams } from "next/navigation";
@@ -14,12 +15,14 @@ import { getAllProductList } from "@/apis/product";
 import type { ProductSearch } from "@/types/products";
 import ProductCardOne from "@/components/Common/Products/cardtwo";
 import ProductCardSkeleton from "@/components/Common/Products/skeleton";
+import { FaListUl, FaXmark } from "react-icons/fa6";
 const PAGE_SIZE = 12;
 const Min_Price = 0;
 const Max_price = 500
 
 function useDebounceEffect(callback: () => void, delay: number, dependencies: any[]) {
   const savedCallback = useRef<() => void>();
+
 
   // 保存最新的回调函数
   useEffect(() => {
@@ -56,6 +59,8 @@ const SearchLayout = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("default");
   const [showBackTop, setShowBackTop] = useState(false);
+  const [open, setOpen] = useState(false);
+
 
   useEffect(() => {
     if (selectedBrands.length > 0) {
@@ -225,6 +230,13 @@ const SearchLayout = () => {
     });
   };
 
+  const onClose = () => {
+    setOpen(false);
+  };
+  const onOpen = () => {
+    setOpen(true);
+  };
+
 
 
   React.useEffect(() => {
@@ -238,12 +250,41 @@ const SearchLayout = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
-    <div className="min-h-screen pt-8 bg-gradient-to-b to-white">
+    <div className="min-h-screen pt-8 bg-white">
       <div className="max-w-7xl mx-auto px-4 mb-12 flex gap-6">
         {/* 左侧筛选区域 */}
-        <div className="w-64  flex-shrink-0">
-          <div className="bg-background-back1 rounded p-4 space-y-6">
-            <div>
+        <div className="hidden md:block md:w-64 flex-shrink-0">
+          <div className="">
+            <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
+              <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
+              <Slider
+                range
+                min={Min_Price}
+                max={Max_price}
+                value={priceRange}
+                onChange={setPriceRange}
+                className="mb-4"
+              />
+              <div className="flex items-center space-x-2">
+                <Input
+                  value={priceRange[0]}
+                  onChange={(e) =>
+                    setPriceRange([Number(e.target.value), priceRange[1]])
+                  }
+                  className="w-20"
+                />
+                <span>-</span>
+                <Input
+                  value={priceRange[1]}
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], Number(e.target.value)])
+                  }
+                  className="w-20"
+                />
+              </div>
+            </div>
+
+            <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
               <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
               <Slider
                 range
@@ -275,7 +316,7 @@ const SearchLayout = () => {
             <div>
               {categories && categories.length > 0 ? (
                 categories.map((mainCategory) => (
-                  <div key={mainCategory.ID}>
+                  <div key={mainCategory.ID} className="bg-background-back1 border border-bg-200 rounded p-4 mb-4">
                     <h3 className="text-gray-700 font-medium mt-2` my-2">{mainCategory.title_en}</h3>
                     {mainCategory.children && mainCategory.children.map((subCategory) => (
                       <div key={subCategory.ID} className="flex items-center pt-1">
@@ -307,7 +348,7 @@ const SearchLayout = () => {
         {/* 右侧商品区域 */}
         <div className="flex-1">
           {/* 排序工具栏 */}
-          <div className="bg-background-back1 rounded p-4 mb-6">
+          <div className="border border-bg-200 bg-bg-50 rounded p-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="w-40 min-w-40">
@@ -325,10 +366,13 @@ const SearchLayout = () => {
                   />
                 </div>
               </div>
-              <div className="text-gray-500">Total of <span className="font-bold text-pink-500">{total}</span> items</div>
+              <div className="text-gray-500 hidden md:block">Total of <span className="font-bold text-primary-600">{total}</span> items</div>
+              <div className="lg:hidden" onClick={onOpen}>
+                <FaListUl className="text-3xl cursor-pointer text-primary-400" />
+              </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-3 md:gap-8">
             {loading ? (
               // 显示 8 个骨架屏
               Array.from({ length: 12 }).map((_, index) => (
@@ -356,6 +400,104 @@ const SearchLayout = () => {
           <FloatButton.BackTop visibilityHeight={0} />
         </FloatButton.Group>
       }
+
+
+      <Drawer title="Filters"  placement={"right"} onClose={onClose} open={open}>
+        <div className="w-full p-2">
+          <div className="">
+            <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
+              <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
+              <Slider
+                range
+                min={Min_Price}
+                max={Max_price}
+                value={priceRange}
+                onChange={setPriceRange}
+                className="mb-4"
+              />
+              <div className="flex items-center space-x-2">
+                <Input
+                  value={priceRange[0]}
+                  onChange={(e) =>
+                    setPriceRange([Number(e.target.value), priceRange[1]])
+                  }
+                  className="w-20"
+                />
+                <span>-</span>
+                <Input
+                  value={priceRange[1]}
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], Number(e.target.value)])
+                  }
+                  className="w-20"
+                />
+              </div>
+            </div>
+
+            <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
+              <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
+              <Slider
+                range
+                min={Min_Price}
+                max={Max_price}
+                value={priceRange}
+                onChange={setPriceRange}
+                className="mb-4"
+              />
+              <div className="flex items-center space-x-2">
+                <Input
+                  value={priceRange[0]}
+                  onChange={(e) =>
+                    setPriceRange([Number(e.target.value), priceRange[1]])
+                  }
+                  className="w-20"
+                />
+                <span>-</span>
+                <Input
+                  value={priceRange[1]}
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], Number(e.target.value)])
+                  }
+                  className="w-20"
+                />
+              </div>
+            </div>
+
+            <div>
+              {categories && categories.length > 0 ? (
+                categories.map((mainCategory) => (
+                  <div key={mainCategory.ID} className="bg-background-back1 border border-bg-200 rounded p-4 mb-4">
+                    <h3 className="text-gray-700 font-medium mt-2` my-2">{mainCategory.title_en}</h3>
+                    {mainCategory.children && mainCategory.children.map((subCategory) => (
+                      <div key={subCategory.ID} className="flex items-center pt-1">
+                        <Checkbox
+                          checked={selectedBrands.includes(subCategory.title_en)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedBrands([...selectedBrands, subCategory.title_en]);
+                            } else {
+                              setSelectedBrands(
+                                selectedBrands.filter((b) => b !== subCategory.title_en),
+                              );
+                            }
+                          }}
+                        >
+                          <span className="text-gray-600">{subCategory.title_en}</span>
+                        </Checkbox>
+                      </div>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <div>No categories available</div>
+              )}
+
+            </div>
+          </div>
+        </div>
+      </Drawer>
+
+
     </div>
   );
 }; export default SearchLayout;

@@ -34,45 +34,45 @@ const defaultMetadata = {
 // 生成产品元数据的辅助函数
 const generateProductMetadata = (product: ProductDetail, id: string): Metadata => {
   return {
+    title: product.title,
+    description: product.desction,
+    openGraph: {
       title: product.title,
       description: product.desction,
-      openGraph: {
-          title: product.title,
-          description: product.desction,
-          type: 'website',
-          url: `https://ftanails.com/product/${id}`,
-          images: [
-              {
-                  url: product.mainImg,
-                  width: 1920,
-                  height: 1920,
-                  alt: `${product.title} product image`
-              }
-          ]
-      },
-      twitter: {
-          card: 'summary_large_image',
-          title: product.title,
-          description: product.desction,
-          images: [product.mainImg]
-      }
+      type: 'website',
+      url: `https://ftanails.com/product/${id}`,
+      images: [
+        {
+          url: product.mainImg,
+          width: 1920,
+          height: 1920,
+          alt: `${product.title} product image`
+        }
+      ]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.title,
+      description: product.desction,
+      images: [product.mainImg]
+    }
   };
 };
 // 动态生成元数据
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const { id } = params;
   try {
-      const response = await getProductDetail(id);
-      const product: ProductDetail | undefined = response?.data ?? undefined;
+    const response = await getProductDetail(id);
+    const product: ProductDetail | undefined = response?.data ?? undefined;
 
-      if (!product) {
-          return defaultMetadata;
-      }
-
-      return generateProductMetadata(product, id);
-  } catch (error) {
-      console.error('Error fetching product data for metadata:', error);
+    if (!product) {
       return defaultMetadata;
+    }
+
+    return generateProductMetadata(product, id);
+  } catch (error) {
+    console.error('Error fetching product data for metadata:', error);
+    return defaultMetadata;
   }
 }
 export async function generateStaticParams() {
@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   // 返回客户端组件，服务器端不处理客户端逻辑
   return (
     <div className="relative mx-auto max-w-c-1280 py-5 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
-            <div>
+      <div>
         <ul className="flex items-center font-[sans-serif] space-x-4">
           <Link href={'/'} passHref>
             <li className="text-gray-800 text-base cursor-pointer">

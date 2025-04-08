@@ -41,7 +41,7 @@ const ProductPagination: React.FC<{ id: string; initialData: Product[]; initialT
 
   return (
     <div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 py-8 gap-4 sm:gap-6 md:gap-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 pt-2 pb-10 gap-4 sm:gap-6 md:gap-8">
         {loading ? (
           // 显示 12 个商品的骨架
           Array.from({ length: 12 }).map((_, index) => (
@@ -53,7 +53,7 @@ const ProductPagination: React.FC<{ id: string; initialData: Product[]; initialT
           ))
         )}
       </div>
-      <div className='flex justify-center mt-8'>
+      <div className='flex justify-center pb-10'>
         <Pagination
           current={currentPage}
           onChange={onChange}
