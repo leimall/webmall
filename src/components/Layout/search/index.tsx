@@ -255,7 +255,7 @@ const SearchLayout = () => {
         {/* 左侧筛选区域 */}
         <div className="hidden md:block md:w-64 flex-shrink-0">
           <div className="">
-            <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
+            <div className="bg-bg-50 border border-bg-200 rounded p-4 space-y-6 mb-4">
               <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
               <Slider
                 range
@@ -284,7 +284,7 @@ const SearchLayout = () => {
               </div>
             </div>
 
-            <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
+            <div className="bg-bg-50 border border-bg-200 rounded p-4 space-y-6 mb-4">
               <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
               <Slider
                 range
@@ -316,7 +316,7 @@ const SearchLayout = () => {
             <div>
               {categories && categories.length > 0 ? (
                 categories.map((mainCategory) => (
-                  <div key={mainCategory.ID} className="bg-background-back1 border border-bg-200 rounded p-4 mb-4">
+                  <div key={mainCategory.ID} className="bg-bg-50 border border-bg-200 rounded p-4 mb-4">
                     <h3 className="text-gray-700 font-medium mt-2` my-2">{mainCategory.title_en}</h3>
                     {mainCategory.children && mainCategory.children.map((subCategory) => (
                       <div key={subCategory.ID} className="flex items-center pt-1">

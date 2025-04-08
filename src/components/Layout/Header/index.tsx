@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, Drawer, Dropdown, type MenuProps } from 'antd';
-import { BarsOutlined, CommentOutlined, FallOutlined,IdcardOutlined, LogoutOutlined, TeamOutlined, TruckOutlined } from '@ant-design/icons';
+import { BarsOutlined, CommentOutlined, FallOutlined, IdcardOutlined, LogoutOutlined, TeamOutlined, TruckOutlined } from '@ant-design/icons';
 import CartIcon from "@/components/Common/CartIcon";
 import { usePathStore } from '@/stores/usePathStore';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
@@ -16,6 +16,7 @@ import useMenuStore from '@/stores/useMenuStore';
 
 import { FaXmark, FaIndent, FaAngleDown, FaUsers, FaGenderless, FaAngleRight } from "react-icons/fa6";
 import { FaHome, FaSignOutAlt } from "react-icons/fa";
+import { AiFillProduct, AiOutlineMenuUnfold } from "react-icons/ai";
 
 export default function Header() {
   const [list, setList] = useState<Category[]>([]);
@@ -108,160 +109,156 @@ export default function Header() {
     icon: <LogoutOutlined />
   }]
 
+  const gotoUrl = (e: React.MouseEvent, url: string) => {
+    e.preventDefault()
+    router.push(url)
+    onClose()
+  }
+
 
   return (
     <header>
-      <div className="py-4 px-4 sm:px-10 bg-background-back1 font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
-      <div className="mx-auto max-w-c-1440">
-        <div className='flex justify-between align-middle items-center gap-2 w-full'>
+      <div className="py-4 px-4 sm:px-10 bg-bg-50 font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
+        <div className="mx-auto max-w-c-1440">
+          <div className='flex justify-between align-middle items-center gap-2 w-full'>
 
-          <div className='flex justify-start align-middle items-center gap-4'>
-            <FaIndent onClick={showDrawer} className="lg:hidden text-3xl font-bold" />
-            <Link href="/">
-              <div className='flex justify-center text-primary-500 items-end'>
-                <Image src="/images/logo/hlogo.png" alt="logo" width={48} height={48} />
-                <span className='text-md md:text-xl'>F</span>inger
-                <span className='text-md md:text-xl'>T</span>ip
-                <span className='text-md md:text-xl'>A</span>rtistry
-              </div>
-            </Link>
+            <div className='flex justify-start align-middle items-center gap-4'>
+              <AiOutlineMenuUnfold onClick={showDrawer} className="lg:hidden text-4xl" />
+              <Link href="/">
+                <div className='flex justify-center text-primary-500 items-end'>
+                  <Image src="/images/logo/hlogo.png" alt="logo" width={48} height={48} />
+                  <span className='text-md md:text-xl'>F</span>inger
+                  <span className='text-md md:text-xl'>T</span>ip
+                  <span className='text-md md:text-xl'>A</span>rtistry
+                </div>
+              </Link>
+            </div>
+            <div className="hidden transition-transform duration-300 transform lg:flex lg:gap-x-5">
+              <form onSubmit={handleSearch}>
+                <div className="flex bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-primary-500 focus-within:bg-transparent w-96">
+                  <input type="text" placeholder="Search something..." value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)} className="text-sm bg-transparent rounded outline-none pr-2 w-full" />
+                  <svg onClick={handleSvgClick} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" className="cursor-pointer fill-gray-400">
+                    <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
+                  </svg>
+
+                </div>
+              </form>
+            </div>
+
+            <div className="flex justify-end items-center">
+              <Suspense fallback={<div>Loading...</div>}>
+                <div onClick={handleCartClick} className="text-2xl font-bold text-primary-400">
+                  <CartIcon />
+                </div>
+              </Suspense>
+              <div className='px-2 md:px-4'>|</div>
+              {user ? (
+                <Dropdown className='cursor-pointer' menu={{ items }} placement="bottomRight" trigger={['click']} arrow>
+                  <div className='mr-4 md:mr-2'>
+                    {user.headerImg ? (
+                      <Avatar src={user.headerImg} size={32} />) : (
+                      <Avatar size={32} style={{ backgroundColor: '#8d1a25' }}>
+                        {user.userName.charAt(0).toUpperCase()}
+                      </Avatar>
+                    )}
+                  </div>
+                </Dropdown>
+              ) : (
+                <Link href="/auth/signin">
+                  <div className="text-sm md:text-md font-bold text-primary-400">
+                    Sign in
+                  </div>
+                </Link>
+              )}
+            </div>
 
           </div>
-          <div className="hidden transition-transform duration-300 transform lg:flex lg:gap-x-5">
+
+
+          <div className="lg:hidden lg:w-96 w-full lg:pt-0 pt-2">
             <form onSubmit={handleSearch}>
-              <div className="flex bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-primary-500 focus-within:bg-transparent w-96">
-                <input type="text" placeholder="Search something..." value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)} className="text-sm bg-transparent rounded outline-none pr-2 w-full" />
+              <div className="flex w-full max-xl:w-full bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-primary-500 focus-within:bg-transparent">
+                <input type="text" value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search something..." className="w-full text-sm bg-transparent rounded outline-none pr-2" />
                 <svg onClick={handleSvgClick} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" className="cursor-pointer fill-gray-400">
                   <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
                 </svg>
-
               </div>
             </form>
           </div>
 
-          <div className="flex justify-end items-center">
-            <Suspense fallback={<div>Loading...</div>}>
-              <div onClick={handleCartClick} className="text-2xl font-bold text-primary-400">
-                <CartIcon />
-              </div>
-            </Suspense>
-            <div className='px-2 md:px-4'>|</div>
+          <Drawer title="FingerTipArtistry" placement={"left"} closable={false} onClose={onClose} open={open} footer="https://ftanails.com">
+            <div id="toggleClose" onClick={onClose} className="fixed w-8 h-8 top-4 right-4 cursor-pointer z-[2222]">
+              <FaXmark className='text-2xl text-gray-500' />
+            </div>
+            <div onClick={(e) => gotoUrl(e, '/')} className='text-primary-500 flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
+              <FaHome className='text-primary-500 text-md mr-2' /> Home
+            </div>
+            <div onClick={(e) => gotoUrl(e, '/search')} className='text-primary-500 flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
+              <AiFillProduct className='text-primary-500 text-md mr-2' /> All Products
+            </div>
+            {list && list.length > 0 ? (
+              list.map((mainCategory) => (
+                <div key={mainCategory.ID}>
+                  <div className='flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
+                    <FaAngleDown className='text-primary-500 text-sm mr-2' /> {mainCategory.title_en}
+                  </div>
+                  {mainCategory.children && mainCategory.children.map((subCategory) => (
+                    <div onClick={(e) => gotoUrl(e, `/category/${subCategory.url}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
+                      <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
+                    </div>
+                  ))}
+                </div>
+              ))
+            ) : (
+              <div>No categories available</div>
+            )}
+            {/* <Link href="/sales">
+            <div className='text-primary-500 border-b text-md border-gray-200 pb-4 mb-4'>
+              <FallOutlined className='mr-2' /> Sale
+            </div>
+          </Link> */}
+            <div onClick={(e) => gotoUrl(e, '/document/faq')} className='text-primary-500 border-b text-md border-bg-200 pb-4 mb-4'>
+              <CommentOutlined className='mr-2' /> FAQ
+            </div>
+            <div onClick={(e) => gotoUrl(e, '/document/about')} className='flex items-center text-primary-500 border-b border-bg-200 pb-4 mb-4'>
+              <TeamOutlined className='mr-2 text-md' /> About Us
+            </div>
+
+
             {user ? (
-              <Dropdown className='cursor-pointer' menu={{ items }} placement="bottomRight" trigger={['click']} arrow>
-                <div className='mr-4 md:mr-2'>
+              <>
+                <div className='fixed top-0 right-14 z-[1001] p-3'>
                   {user.headerImg ? (
                     <Avatar src={user.headerImg} size={32} />) : (
                     <Avatar size={32} style={{ backgroundColor: '#8d1a25' }}>
                       {user.userName.charAt(0).toUpperCase()}
                     </Avatar>
+
                   )}
                 </div>
-              </Dropdown>
+                <div className='text-primary-500 flex items-center' onClick={signout}>
+                  <LogoutOutlined className='mr-2' /> Sign Out</div>
+              </>
             ) : (
-              <Link href="/auth/signin">
-                <div className="text-sm md:text-md font-bold text-primary-400">
+              <>
+                <div onClick={(e) => gotoUrl(e, '/auth/signin')} className='border-b text-md font-b border-bg-200 pb-4 mb-4'>
                   Sign in
                 </div>
-              </Link>
-            )}
-          </div>
-
-        </div>
-
-
-        <div className="lg:hidden lg:w-96 w-full lg:pt-0 pt-2">
-          <form onSubmit={handleSearch}>
-            <div className="flex w-full max-xl:w-full bg-gray-100 px-3 py-2 rounded outline outline-transparent focus-within:outline-primary-500 focus-within:bg-transparent">
-              <input type="text" value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search something..." className="w-full text-sm bg-transparent rounded outline-none pr-2" />
-              <svg onClick={handleSvgClick} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" className="cursor-pointer fill-gray-400">
-                <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
-              </svg>
-            </div>
-          </form>
-        </div>
-
-        <Drawer title="FingerTipArtistry" placement={"left"} closable={false} onClose={onClose} open={open} footer="https://ftanails.com">
-          <div id="toggleClose" onClick={onClose} className="fixed w-8 h-8 top-4 right-4 cursor-pointer z-[2222]">
-            <FaXmark className='text-2xl text-gray-500' />
-          </div>
-          <Link href="/">
-            <div className='text-primary-500 flex items-center border-b text-md border-gray-200 pb-4 mb-4'>
-              <FaHome className='text-primary-500 text-sm mr-2' /> Home
-            </div>
-          </Link>
-          {list && list.length > 0 ? (
-            list.map((mainCategory) => (
-              <div key={mainCategory.ID}>
-                <div className='flex items-center border-b text-md border-gray-200 pb-4 mb-4'>
-                  <FaAngleDown className='text-primary-500 text-sm mr-2' /> {mainCategory.title_en}
-                </div>
-                {mainCategory.children && mainCategory.children.map((subCategory) => (
-                  <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
-                    <div className='text-primary-500 flex items-center border-b text-sm border-gray-200 pb-2 mb-2 pl-4'>
-                      <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ))
-          ) : (
-            <div>No categories available</div>
-          )}
-          {/* <Link href="/sales">
-            <div className='text-primary-500 border-b text-md border-gray-200 pb-4 mb-4'>
-              <FallOutlined className='mr-2' /> Sale
-            </div>
-          </Link> */}
-          <Link href="/faq">
-            <div className='text-primary-500 border-b text-md border-gray-200 pb-4 mb-4'>
-              <CommentOutlined className='mr-2' /> FAQ
-            </div>
-          </Link>
-          <Link href="/about">
-            <div className='flex items-center text-primary-500 border-b text-md border-gray-200 pb-4 mb-4'>
-              <TeamOutlined className='mr-2' /> About Us
-            </div>
-          </Link>
-
-
-          {user ? (
-            <>
-              <div className='fixed top-0 right-14 z-[1001] p-3'>
-                {user.headerImg ? (
-                  <Avatar src={user.headerImg} size={32} />) : (
-                  <Avatar size={32} style={{ backgroundColor: '#8d1a25' }}>
-                    {user.userName.charAt(0).toUpperCase()}
-                  </Avatar>
-
-                )}
-              </div>
-              <div className='text-primary-500 flex items-center' onClick={signout}>
-                <LogoutOutlined className='mr-2' /> Sign Out</div>
-            </>
-          ) : (
-            <>
-              <Link href="/auth/signin">
-                <div className='border-b text-md border-gray-200 pb-4 mb-4'>
-                  Sign in
-                </div>
-              </Link>
-              <Link href="/auth/signup">
-                <div className='border-b text-md border-gray-200 pb-4 mb-4'>
+                <div onClick={(e) => gotoUrl(e, '/auth/signup')} className='border-b text-md border-bg-200 pb-4 mb-4'>
                   Sign up
                 </div>
-              </Link>
-            </>
-          )}
+              </>
+            )}
 
-        </Drawer>
+          </Drawer>
+
+        </div>
 
       </div>
 
-      </div>
-
-      <div className="hidden bg-bg-10 md:block p-4">
+      <div className="hidden bg-bg-50 md:block p-4">
         <div className='mx-auto max-w-c-1280 flex flex-wrap gap-12 items-center justify-center text-sm font-bold'>
           <Link href="/">
             <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>

@@ -2,15 +2,17 @@
 
 import { getMyselfOrder } from "@/apis/orders";
 import { useState, useEffect } from "react";
-import Pagination from "@/components/UI/Pagination";
 import type { OrderType } from "@/types/orders";
 import { formatDate } from "@/utils/formatDate";
 import OrderProductLists from "@/components/Common/commnet/productItem";
+import { IoBagHandle } from "react-icons/io5";
+import { Pagination, Tag, type PaginationProps } from 'antd';
+import { FaArrowRight } from "react-icons/fa6";
 
 export default function OrderPage() {
   const [orders, setOrders] = useState<OrderType[]>();
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const pageSize = 10;
 
@@ -18,18 +20,18 @@ export default function OrderPage() {
     setCurrentPage(page);
     fetchOrders();
   };
-  
+
   useEffect(() => {
     fetchOrders();
   }, []);
 
   const fetchOrders = async () => {
     setLoading(true);
-    const data = {page: currentPage, pageSize: pageSize, word: ''}
+    const data = { page: currentPage, pageSize: pageSize, word: '' }
     try {
       const response = await getMyselfOrder(data);
-      if (response.code===0) {
-        const {list, total} = response.data;
+      if (response.code === 0) {
+        const { list, total } = response.data;
         setOrders(list);
         setTotalPages(total)
         console.error("object", list, total);
@@ -42,66 +44,65 @@ export default function OrderPage() {
   }
 
   return (
-    <div className="relative mx-auto max-w-c-1280 mb-8 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
-      <div className="bg-white w-full flex flex-col gap-5 px-2 md:px-16 lg:px-28 md:flex-row text-[#161931]">
-        <div className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
-          <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
-            <h2 className="pl-3 mb-4 text-center text-2xl font-semibold">Settings</h2>
-            <a href="/profile/myself" className="flex justify-center items-center px-3 py-2.5 font-semibold hover:text-primary-500 hover:border hover:rounded-full border-primary-500">
-              Profile
-            </a>
-            <div className="flex text-bold items-center justify-center px-3 py-2.5 font-bold bg-white text-primary-500 border rounded-full border-primary-500">
-            Order
+    <div className="md:w-2/3">
+      <div className="">
+        <div className="w-full md:px-6 pb-8 rounded">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-bg-50">
+              <IoBagHandle className="text-2xl text-red-700" />
             </div>
-            <a href="/profile/address" className="flex justify-center items-center px-3 py-2.5 font-semibold hover:text-primary-500 hover:border hover:rounded-full border-primary-500">
-             Address 
-            </a>
+            <h2 className="text-3xl font-bold sm:text-xl">My Orders</h2>
           </div>
-        </div>
-        <div className="w-full min-h-screen py-1">
-          <div className="md:p-4">
-            <div className="w-full md:px-6 pb-8 rounded">
-              <h2 className="text-2xl font-bold sm:text-xl">Order Profile</h2>
-              {loading && (
-                <div className="flex justify-center items-center h-40">
-                  <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-500"> </div>
-                  <p className="pl-2 text-sm text-gray-500">Loading...</p>
-                </div>
-              ) || (orders?.map((order, index) => (
-                <div key={index} className="flex flex-col gap-2 p-4 my-4 bg-background-back1 border rounded-md">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-sm md:text-lg font-semibold">Order #{order.order_id}</h3>
-                    <p className="text-sm font-semibold">{order.order_status}</p>
-                  </div>
-  
-                  <div className="flex flex-col gap-1">
-                    <p className="text-sm text-gray-500">Order Date: {formatDate(order.UpdatedAt)}</p>
-                    <p className="text-sm text-gray-500">payment status: <span>{order.payment_status==='PS'?"Payment Succes":order.payment_status}</span></p>
-                    <p className="text-sm text-gray-500">Total Amount: {order.total_price}</p>
-                  </div>
+          {(orders?.map((order, index) => (
+            <div key={index} className="flex flex-row justify-between items-center gap-2 p-4 my-6 bg-bg-50 border-bg-200 border rounded">
+              <div className="flex justify-between items-center">
+                <h3 className="text-sm md:text-lg">#{order.order_id}</h3>
+              </div>
 
-                  <div className="flex flex-col gap-1">
-                    <p className="text-md font-semibold">Shipping Address:</p>
-                    <p className="text-sm text-gray-500">
-                      {order.Address?.line1}, {order.Address?.line2}<br />
-                      {order.Address?.city}, {order.Address?.state}, {order.Address?.country}, {order.Address?.postalCode}</p>
-                  </div>
+              <div className="flex flex-col gap-1">
+               {status(order.order_status)} 
+              </div>
 
-                  <div className="text-md font-semibold">Products:</div>
-                  <div className="flex flex-col gap-2">
-                    {order.Products?.map((item) => (
-                      <OrderProductLists item={item} key={item.product_id} />
-                    ))}
-                    <p className="text-sm font-semibold text-right">Total Amount: {order.total_price}</p>
-                  </div>
-                </div>
-              ))
-              )}
+
+              <div className="text-md ">{formatDate(order.UpdatedAt)}</div>
+              <div className="flex flex-col gap-2">
+                <p className="text-sm text-right">$ {order.total_price}</p>
+              </div>
+              <div className="text-gray-500">
+              <FaArrowRight />
+              </div>
             </div>
-          </div>
-          <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+          ))
+          )}
         </div>
+      </div>
+      <div className='flex justify-center pb-10'>
+        <Pagination
+          current={currentPage}
+          onChange={handlePageChange}
+          pageSize={pageSize}
+          total={totalPages}
+        />
       </div>
     </div>
   );
+}
+
+const status =  (status: string) => {
+
+  console.error("object", status);
+  if (status === 'pending') {
+    return (
+      <div className="flex flex-col gap-2">
+        <Tag color="#2db7f5" className="text-xl" >Pending</Tag>
+      </div>
+    )
+  }
+  if (status === 'PS') {
+    return (
+      <div className="flex flex-col gap-2">
+        <Tag color="#87d068" className="text-xl" >Sueccse</Tag>
+      </div>
+    )
+  }
 }
