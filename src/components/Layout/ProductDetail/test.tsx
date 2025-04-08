@@ -15,7 +15,6 @@ import CustomRate from "@/components/Common/Rate";
 import { FaTruck, FaShieldHalved, FaCheck, FaCopy } from "react-icons/fa6";
 import ReviewList from "@/components/Common/ReviewList";
 import ReviewSummary from "@/components/Common/ReviewList/ReviewSummary";
-import { title } from "process";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const { selectedImageIndex, setSelectedImageIndex } = useProductStore();

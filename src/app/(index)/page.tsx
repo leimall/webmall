@@ -75,7 +75,7 @@ export default async function PageHome() {
         <BestLists title="Best Seller" products={fetchedBast} />
         {/* <Adpage />
         <SaleLists title="Sale" products={fetchedSale} /> */}
-        <Comment title="User Feedbacks" products={fetchedSale}  />
+        <Comment title="User Feedbacks" products={fetchedSale} />
         <Informatin />
       </div>
     </main>

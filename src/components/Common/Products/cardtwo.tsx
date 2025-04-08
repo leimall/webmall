@@ -11,7 +11,7 @@ export default function ProductCardOne({ product }: { product: Product }) {
   };
   const show = () => {
     if (product.priceOff > 0) {
-      if(product.priceOff === 100) {
+      if (product.priceOff === 100) {
         return false
       } else {
         return true
@@ -25,22 +25,24 @@ export default function ProductCardOne({ product }: { product: Product }) {
   return (
     <>
       <Link href={`/product/${product.productId}`}>
-        <div className="bg-white border border-bg-200 cursor-pointer  shadow shadow-orange-100 rounded hover:scale-[1.02] transition-all relative">
-          <div className="relative w-full h-0 pb-[100%] rounded-t overflow-hidden mx-auto">
-            <Image
-              src={product.mainImg}
-              alt={product.title}
-              fill
-              priority
-              sizes="100vw"
-              className="h-full w-full object-cover object-top hover:scale-110 transition-transform duration-300"
-            />
-            { show() && (
-              <div className="absolute top-2 right-2 bg-red-500 text-white text-xs md:text-sm font-bold p-1 rounded md:px-2 md:py-1">
-                {calculateDiscountPercentage(product.priceOff)} OFF
-              </div>
-            )}
-            <div className="absolute inset-0"></div>
+        <div className="bg-white border border-bg-200 cursor-pointer rounded hover:scale-[1.01] transition-all relative">
+          <div className="md:m-8 m-2 hover:m-4 transition-all">
+            <div className="relative h-0 pb-[100%] rounded-t overflow-hidden mx-auto">
+              <Image
+                src={product.mainImg}
+                alt={product.title}
+                fill
+                priority
+                sizes="100vw"
+                className="h-full w-full object-cover object-top"
+              />
+            </div>
+              {show() && (
+                <div className="absolute top-2 right-2 bg-red-500 text-white text-xs md:text-sm font-bold p-1 rounded md:px-2 md:py-1">
+                  {calculateDiscountPercentage(product.priceOff)} OFF
+                </div>
+              )}
+
           </div>
 
           <div className="p-1 md:p-3 bg-bg-10">

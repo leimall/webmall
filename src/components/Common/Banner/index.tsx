@@ -1,6 +1,5 @@
 'use client'
-import Image from "next/image";
-import { Carousel, type ButtonProps } from 'antd';
+import { Carousel } from 'antd';
 import Link from "next/link";
 import { useProductStore } from "@/stores/useProductStore";
 import { useEffect, useRef } from "react";
@@ -14,7 +13,7 @@ type Banner = {
 
 
 export default function BannerInIndex() {
-  const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
+  const { adImageIndex, setAdImageIndex } = useProductStore();
   const carouselRef = useRef<CarouselRef>(null);
   const banners: Banner[] = [
     {
@@ -82,15 +81,15 @@ export default function BannerInIndex() {
 
   useEffect(() => {
     if (carouselRef.current) {
-      carouselRef.current.goTo(selectedImageIndex, false);
+      carouselRef.current.goTo(adImageIndex, false);
     }
-  }, [selectedImageIndex]);
+  }, [adImageIndex]);
 
   return (
     <div className={`bg-bg-200 rounded mt-10`}>
       <div className="flex flex-col md:flex-row items-center justify-center">
         <div className="w-full md:min-w-96 md:m-8">
-          <Carousel autoplay dotPosition="bottom" ref={carouselRef} afterChange={setSelectedImageIndex} className="w-full">
+          <Carousel autoplay dotPosition="bottom" ref={carouselRef} afterChange={setAdImageIndex} className="w-full">
             {banners.map((banner, index) => (
               <div key={index} className="relative h-auto">
                 <img
@@ -107,8 +106,8 @@ export default function BannerInIndex() {
                 key={index}
                 src={image.imageUrl}
                 alt={image.title}
-                className={`w-6 h-6 border-2 rounded cursor-pointer ${selectedImageIndex === index ? 'border-gray-800 bg-slate-100' : 'border-primary-50'} `}
-                onClick={() => setSelectedImageIndex(index)}
+                className={`w-6 h-6 border-2 rounded cursor-pointer ${adImageIndex === index ? 'border-gray-800 bg-slate-100' : 'border-primary-50'} `}
+                onClick={() => setAdImageIndex(index)}
               />
             ))}
           </div>

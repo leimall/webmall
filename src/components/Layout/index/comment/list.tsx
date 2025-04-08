@@ -7,7 +7,7 @@ export const SimpleCard_V2 = () => {
   return (
     <div>
       <div>
-        <div className="border border-zinc-400 dark:border-zinc-700 relative shadow-[0px_5px_0px_0px_rgba(0,0,0,0.7)] dark:shadow-[0px_4px_0px_0px_rgba(255,255,255,0.5)] rounded-xl bg-bg-10">
+        <div className="border border-bg-200 relative shadow-md shadow-orange-950 rounded-xl bg-bg-10">
           <div className="text-start p-6">
             <div className="pb-4">
               <Rate style={{ color: '#FFB553FF' }} disabled defaultValue={5} />

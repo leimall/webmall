@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Avatar, Drawer, Dropdown, type MenuProps } from 'antd';
-import { BarsOutlined, CommentOutlined, FallOutlined, IdcardOutlined, LogoutOutlined, TeamOutlined, TruckOutlined } from '@ant-design/icons';
+import { BarsOutlined, CommentOutlined, IdcardOutlined, LogoutOutlined, TeamOutlined, TruckOutlined } from '@ant-design/icons';
 import CartIcon from "@/components/Common/CartIcon";
 import { usePathStore } from '@/stores/usePathStore';
 import { useAuthStore } from '@/stores/useUserinfoStroe';
@@ -14,8 +14,8 @@ import React from 'react';
 import { Category } from '@/types/category';
 import useMenuStore from '@/stores/useMenuStore';
 
-import { FaXmark, FaIndent, FaAngleDown, FaUsers, FaGenderless, FaAngleRight } from "react-icons/fa6";
-import { FaHome, FaSignOutAlt } from "react-icons/fa";
+import { FaXmark, FaAngleDown, FaGenderless, FaAngleRight } from "react-icons/fa6";
+import { FaHome } from "react-icons/fa";
 import { AiFillProduct, AiOutlineMenuUnfold } from "react-icons/ai";
 
 export default function Header() {
@@ -200,12 +200,13 @@ export default function Header() {
             </div>
             {list && list.length > 0 ? (
               list.map((mainCategory) => (
-                <div key={mainCategory.ID}>
+                <div key={"Drawer" + mainCategory.ID}>
+                  <h1>{"Drawer" + mainCategory.ID}</h1>
                   <div className='flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
                     <FaAngleDown className='text-primary-500 text-sm mr-2' /> {mainCategory.title_en}
                   </div>
                   {mainCategory.children && mainCategory.children.map((subCategory) => (
-                    <div onClick={(e) => gotoUrl(e, `/category/${subCategory.url}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
+                    <div key={"sub" + subCategory.ID} onClick={(e) => gotoUrl(e, `/category/${subCategory.url}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
                       <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
                     </div>
                   ))}
