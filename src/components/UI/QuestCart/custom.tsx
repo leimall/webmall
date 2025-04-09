@@ -56,7 +56,6 @@ const ShapeInput: React.FC<ShapeInputProps> = ({ initialShape, initialInputValue
         <Select
           value={shape|| ''}
           onChange={handleShapeChange}
-          showSearch
           placeholder="Select a shape"
           filterOption={(input, option) =>
             (option?.label?.toString() ?? '').toLowerCase().includes(input.toLowerCase())
