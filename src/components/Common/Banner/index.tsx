@@ -17,62 +17,62 @@ export default function BannerInIndex() {
   const carouselRef = useRef<CarouselRef>(null);
   const banners: Banner[] = [
     {
-      imageUrl: '/images/z/1.jpg',
+      imageUrl: '/images/z/1.png',
       title: 'Aquarius',
       description: 'Aquarius'
     },
     {
-      imageUrl: '/images/z/2.jpg',
+      imageUrl: '/images/z/2.png',
       title: 'Pisces',
       description: 'Pisces'
     },
     {
-      imageUrl: '/images/z/3.jpg',
+      imageUrl: '/images/z/3.png',
       title: 'Aries',
       description: 'Aries'
     },
     {
-      imageUrl: '/images/z/4.jpg',
+      imageUrl: '/images/z/4.png',
       title: 'Taurus',
       description: 'Taurus'
     },
     {
-      imageUrl: '/images/z/5.jpg',
+      imageUrl: '/images/z/5.png',
       title: 'Gemini',
       description: 'Gemini'
     },
     {
-      imageUrl: '/images/z/6.jpg',
+      imageUrl: '/images/z/6.png',
       title: 'Cancer',
       description: 'Cancer'
     },
     {
-      imageUrl: '/images/z/7.jpg',
+      imageUrl: '/images/z/7.png',
       title: 'Leo',
       description: 'Leo'
     },
     {
-      imageUrl: '/images/z/8.jpg',
+      imageUrl: '/images/z/8.png',
       title: 'Virgo',
       description: 'Virgo'
     },
     {
-      imageUrl: '/images/z/9.jpg',
+      imageUrl: '/images/z/9.png',
       title: 'Libra',
       description: 'Libra'
     },
     {
-      imageUrl: '/images/z/10.jpg',
+      imageUrl: '/images/z/10.png',
       title: 'Scorpio',
       description: 'Scorpio'
     },
     {
-      imageUrl: '/images/z/11.jpg',
+      imageUrl: '/images/z/11.png',
       title: 'Sagittarius',
       description: 'Sagittarius'
     },
     {
-      imageUrl: '/images/z/12.jpg',
+      imageUrl: '/images/z/12.png',
       title: 'Capricorn',
       description: 'Capricorn'
     }
@@ -86,9 +86,9 @@ export default function BannerInIndex() {
   }, [adImageIndex]);
 
   return (
-    <div className={`bg-bg-200 rounded mt-10`}>
+    <div className="bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 mt-10">
       <div className="flex flex-col md:flex-row items-center justify-center">
-        <div className="w-full md:min-w-96 md:m-8">
+        <div className="w-full md:min-w-80 md:m-4">
           <Carousel autoplay dotPosition="bottom" ref={carouselRef} afterChange={setAdImageIndex} className="w-full">
             {banners.map((banner, index) => (
               <div key={index} className="relative h-auto">
@@ -106,14 +106,14 @@ export default function BannerInIndex() {
                 key={index}
                 src={image.imageUrl}
                 alt={image.title}
-                className={`w-6 h-6 border-2 rounded cursor-pointer ${adImageIndex === index ? 'border-gray-800 bg-slate-100' : 'border-primary-50'} `}
+                className={`w-6 h-6 border rounded cursor-pointer ${adImageIndex === index ? 'border-bg-200 bg-bg-100 border-2' : 'border-gray-600 bg-gray-400'} `}
                 onClick={() => setAdImageIndex(index)}
               />
             ))}
           </div>
         </div>
-        <div className="">
-          <div className="p-4 md:p-24">
+        <div className="text-gray-200">
+          <div className="p-4 md:p-20">
             <h1 className="p-2 md:p-4 text-xl font-bold md:text-2xl ">🌌 ZODIAC MUSE COLLECTION</h1>
             <h5 className="pl-8 md:pl-16 text-sm font-bold md:text-xl">Twelve signs. Twelve muses. One cosmic masterpiece.</h5>
             <p className="p-2">Step into the stars with our Zodiac Muse Collection — a hand-painted journey through the soul of each zodiac sign. Every design is a miniature work of art, blending symbolism, character, and celestial elements into a collectible form of wearable beauty.</p>
@@ -122,9 +122,9 @@ export default function BannerInIndex() {
             <p className="p-1 font-bold">🔹 100% hand-painted</p>
             <p className="p-1 font-bold">🔹 Collector’s edition</p>
             <p className="p-1 font-bold">🔹 One-of-a-kind</p>
-            <div className="itemms-center justify-center flex">
+            <div className="itemms-center justify-center flex pt-2 md:pt-10">
               <Link rel="stylesheet" href="/category/zodiac_collections">
-              <div className="inline-flex font-medium text-custom-sm py-1.5 px-4 md:py-2.5 md:px-7 rounded border-gray-3 border bg-primary-main text-white ease-out duration-200 hover:text-white hover:bg-primary-400">Shop Now</div>
+              <div className="inline-flex font-medium text-custom-sm py-1.5 px-4 md:py-2.5 md:px-7 rounded border-bg-700 border  bg-primary-400 text-bg-300 ease-out duration-200 hover:text-primary-400 hover:bg-bg-300">Shop Now</div>
               </Link>
             </div>
           </div>
