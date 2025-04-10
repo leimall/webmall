@@ -113,9 +113,9 @@ export default function BannerInIndex() {
           </div>
         </div>
         <div className="text-gray-200">
-          <div className="p-4 md:p-20">
-            <h1 className="p-2 md:p-4 text-xl font-bold md:text-2xl ">🌌 ZODIAC MUSE COLLECTION</h1>
-            <h5 className="pl-8 md:pl-16 text-sm font-bold md:text-xl">Twelve signs. Twelve muses. One cosmic masterpiece.</h5>
+          <div className="p-4 md:p-20 md:text-xl">
+            <h1 className="p-2 md:p-4 text-xl font-bold md:text-3xl ">🌌 ZODIAC MUSE COLLECTION</h1>
+            <h5 className="pl-8 md:pl-16 text-sm font-bold md:text-2xl">Twelve signs. Twelve muses. One cosmic masterpiece.</h5>
             <p className="p-2">Step into the stars with our Zodiac Muse Collection — a hand-painted journey through the soul of each zodiac sign. Every design is a miniature work of art, blending symbolism, character, and celestial elements into a collectible form of wearable beauty.</p>
             <p className="p-2 pb-4">Each set channels the energy, myth, and magic of its sign — from constellations and cosmic symbols to dreamy portraits and storytelling details.</p>
 
