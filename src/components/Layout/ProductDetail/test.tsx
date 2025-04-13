@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import parse from 'html-react-parser';
 import { Carousel, Divider, Rate, Tag } from "antd";
 import { useProductStore } from "@/stores/useProductStore";
 import type { CarouselRef } from "antd/es/carousel";
@@ -44,6 +45,20 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
       setImages(res)
     }
   }, [product])
+
+  const processNewlines = (text: string): React.ReactNode => {
+    const parts = text.split('\n');
+    return parts.map((part, index) => {
+      return (
+        <React.Fragment key={index}>
+          <div className="pb-2">
+            {part}
+          </div>
+        </React.Fragment>
+      );
+    });
+  };
+
 
   return (
     <div className="font-sans tracking-wide mx-auto ">
@@ -114,7 +129,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           <Divider />
           <div>
             <h3 className="text-md font-bold text-gray-800">Description</h3>
-            <p className="text-gray-700 text-sm mt-2">{product.desction}</p>
+            <p className="text-gray-700 text-sm mt-2">{processNewlines(product.desction)}</p>
           </div>
           <Divider />
           <div className="bg-gray-50 p-4 rounded-sm border border-gray-200">

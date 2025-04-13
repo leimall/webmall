@@ -9,14 +9,15 @@ const { Option } = Select;
 interface ShapeInputProps {
   initialShape?: string;
   initialInputValue?: string;
+  shapeOptions: { label: string; value: string }[];
   onChangeValue: (shape: string , inputValue: string) => void;
 }
 
-const ShapeInput: React.FC<ShapeInputProps> = ({ initialShape, initialInputValue, onChangeValue }) => {
+const ShapeInput: React.FC<ShapeInputProps> = ({ initialShape, initialInputValue, shapeOptions, onChangeValue }) => {
   const [shape, setShape] = useState<string | null | undefined >(initialShape);
   const [inputValue, setInputValue] = useState<string| null | undefined>(initialInputValue);
   const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
-  const { shapeOptions } = useMenuStore();
+  // const { shapeOptions } = useMenuStore();
 
   useEffect(() => {
     if (shapeOptions.length > 0) {

@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/useUserinfoStroe';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CartItem } from '@/types/stores/cart';
-import type { ProductDetail } from "@/types/products";
+import type { ProductDetail, Sku, SkuItem } from "@/types/products";
 import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
@@ -21,8 +21,6 @@ import { useOrderStore } from '@/stores/useOrdersStore';
 import AuthModal from '@/components/Common/Auth/authmodal';
 import { useAuthCheck } from '@/hooks/useAuthentication';
 
-
-
 export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
   const { createOrder } = useOrderStore();
@@ -35,13 +33,17 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [selfItem, setSelfItem] = useState<CartItem | null>(null);
   const [selfQuantity, setSelfQuantity] = useState<number>(1);
   const [selfPrice, setSelfPrice] = useState<number>(0);
-  const [skuTitle, setSkuTitle] = useState<string>('');
+  const [skuTitle, setSkuTitle] = useState<SkuItem[]>();
+  const [airrtiute, setAirrRoute] = useState<string>('XS');
+  const [airrtiuteList, setAirrRouteList] = useState<Sku[]>([]);
+  const [shapeOptions, setShapeOptions] = useState<any[]>([]);
   const [size, setSize] = useState<string>('M');
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L', 'Custom']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [showCustomInfo, setShowCustomInfo] = useState<boolean>(false);
+  const Custom = "Custom"
   useEffect(() => {
     if (user) {
       setUserId(user.userId);
@@ -64,22 +66,8 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   }, [product]);
 
   const initData = () => {
-    if (product.Sku.title) {
-      setSkuTitle(product.Sku.title)
-    }
-    if (product.Sku.List && product.Sku.List.length > 0) {
-      const titles = product.Sku.List.map(item => item.title_en);
-      // 设置尺寸列表
-      setSizeList(titles);
-
-      if (product.Sku.List.length === 1) {
-        setSize(product.Sku.List[0].title_en);
-      }
-
-      // 判断是否存在 Custom 标题
-      if (titles.length > 4 && titles.includes('Custom')) {
-        setShowCustomInfo(true)
-      }
+    if (product.Sku) {
+      setSkuTitle(product.Sku);
     }
     setSelfPrice(parseFloat((product.price * (product.priceOff / 100)).toFixed(0) + '.99'))
     if (items?.length > 0) {
@@ -130,9 +118,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         status: 1,
       });
     }
-  };
-
-  useEffect(() => {
+  };  useEffect(() => {
     if (selfItem) {
       if (items?.length > 0) {
         const result = items.find(item => item.product_id === product.productId)
@@ -237,14 +223,22 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   }
 
-  const setOpenCustom = (e: string) => {
-    setSize(e)
-    if (selfItem) {
-      setSelfItem({
-        ...selfItem,
-        size: e,
-      });
-    }
+  const setchoicheSize = (e: SkuItem, ) => {
+    setAirrRoute(e.title);
+    setAirrRouteList(e.List)
+    setShowCustomInfo(false);
+  }
+  
+  const setOpenCustom = (e: SkuItem) => {
+    setAirrRoute(e.title);
+    setShowCustomInfo(true);
+    setAirrRouteList(e.List)
+    setShapeOptions(e.List.map((item) => {
+      return {
+        label: item.title,
+        value: item.title,
+      }
+    }))
   }
 
   const handleWidthsChange = (shape: string, inputValue: string) => {
@@ -309,32 +303,44 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
   return (
     <div>
-      <h2 className="text-md md:text-md font-bold text-gray-800">Size</h2>
       <Form form={form} layout="vertical">
         <div className="flex flex-wrap gap-4 my-4">
           {
-            sizeList.map((e, index) => (
-              e === 'Custom' &&
+            skuTitle?.map((e, index) => (
+              e.title === 'Custom' &&
               <div
                 key={index}
-                className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === airrtiute ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
                 onClick={() => setOpenCustom(e)}
               >
-                {e}
+                {e.title}
               </div>
               ||
               <div
                 key={index}
-                className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
-                onClick={() => setSelfSize(e)}
+                className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === airrtiute ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                onClick={() => setchoicheSize(e)}
               >
-                {e}
+                {e.title}
+              </div>
+            ))
+          }
+        </div>
+        <div className="flex flex-wrap gap-4 my-2">
+          {
+            airrtiute != 'Custom' && airrtiuteList.map((e, index) => (
+              <div
+                key={index}
+                className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                onClick={() => setSelfSize(e.title)}
+              >
+                {e.title}
               </div>
             ))}
         </div>
         {
           showCustomInfo &&
-          <div className=" bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">
+          <div className="bg-gray-50 md:my-2 p-2 md:p-4 rounded-sm border border-gray-200">
             <div className='flex items-start'>
               <FaCircleCheck className="md:text-md text-2xl mr-2" />
               <span className="text-text-secondary font-bold">
@@ -344,12 +350,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
           </div>
         }
         {
-          size === "Custom" &&
+          airrtiute === Custom &&
           <div className="bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">
-            <FingerWidthInput onChangeValue={handleWidthsChange} initialInputValue='' initialShape='' />
+            <FingerWidthInput onChangeValue={handleWidthsChange} shapeOptions={shapeOptions} initialInputValue='' initialShape='' />
           </div>
         }
-        <div className="pt-4">
+        <div className="pt-2">
           <button
             type="button"
             onLoad={() => setLoading(true)}
