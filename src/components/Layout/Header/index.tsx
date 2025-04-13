@@ -17,6 +17,7 @@ import useMenuStore from '@/stores/useMenuStore';
 import { FaXmark, FaAngleDown, FaGenderless, FaAngleRight } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
 import { AiFillProduct, AiOutlineMenuUnfold } from "react-icons/ai";
+import { TbTax } from 'react-icons/tb';
 
 export default function Header() {
   const [list, setList] = useState<Category[]>([]);
@@ -122,10 +123,10 @@ export default function Header() {
         <div className="mx-auto max-w-c-1440">
           <div className='flex justify-between align-middle items-center gap-2 w-full'>
 
-            <div className='flex justify-start align-middle items-center gap-4'>
+            <div className='flex justify-start align-middle items-center gap-2'>
               <AiOutlineMenuUnfold onClick={showDrawer} className="lg:hidden text-4xl" />
               <Link href="/">
-                <div className='flex justify-center text-primary-500 items-end text-xl font-bold'>
+                <div className='flex justify-center text-primary-500 items-end md:text-xl font-bold'>
                   <Image src="/images/logo/hlogo.png" alt="logo" width={48} height={48} />
                   <span className='text-md md:text-2xl'>F</span><span>inger</span>
                   <span className='text-md md:text-2xl'>T</span><span>ip</span>
@@ -134,14 +135,13 @@ export default function Header() {
               </Link>
             </div>
             <div className="hidden transition-transform duration-300 transform lg:flex lg:gap-x-5">
-              <form onSubmit={handleSearch}>
+              <form className='w-96 min-w-96' onSubmit={handleSearch}>
                 <div className="flex bg-white px-3 py-2 rounded outline outline-white focus-within:outline-primary-500 focus-within:bg-white w-96">
                   <input type="text" placeholder="Search something..." value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)} className="text-sm bg-white rounded outline-none pr-2 w-full" />
                   <svg onClick={handleSvgClick} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px" className="cursor-pointer fill-text-secondary">
                     <path d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z"></path>
                   </svg>
-
                 </div>
               </form>
             </div>
@@ -155,7 +155,7 @@ export default function Header() {
               <div className='px-2 md:px-4'>|</div>
               {user ? (
                 <Dropdown className='cursor-pointer' menu={{ items }} placement="bottomRight" trigger={['click']} arrow>
-                  <div className='mr-4 md:mr-2'>
+                  <div>
                     {user.headerImg ? (
                       <Avatar src={user.headerImg} size={32} />) : (
                       <Avatar size={32} style={{ backgroundColor: '#8d1a25' }}>
@@ -198,8 +198,13 @@ export default function Header() {
             <div onClick={(e) => gotoUrl(e, '/search')} className='text-primary-500 flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
               <AiFillProduct className='text-primary-500 text-md mr-2' /> All Products
             </div>
+            <div onClick={(e) => gotoUrl(e, '/usanotax')} className='text-primary-500 flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
+              <TbTax className='text-primary-500 text-md mr-2' /> Usa No Tax
+            </div>
+            
             {list && list.length > 0 ? (
-              list.map((mainCategory) => (
+              list.map((mainCategory, index) => (
+                index === 0 && (
                 <div key={"Drawer" + mainCategory.ID}>
                   <h1>{"Drawer" + mainCategory.ID}</h1>
                   <div className='flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
@@ -211,15 +216,11 @@ export default function Header() {
                     </div>
                   ))}
                 </div>
+                )
               ))
             ) : (
               <div>No categories available</div>
             )}
-            {/* <Link href="/sales">
-            <div className='text-primary-500 border-b text-md border-gray-200 pb-4 mb-4'>
-              <FallOutlined className='mr-2' /> Sale
-            </div>
-          </Link> */}
             <div onClick={(e) => gotoUrl(e, '/document/faq')} className='text-primary-500 border-b text-md border-bg-200 pb-4 mb-4'>
               <CommentOutlined className='mr-2' /> FAQ
             </div>
@@ -272,7 +273,8 @@ export default function Header() {
             </div>
           </Link>
           {list && list.length > 0 ? (
-            list.map((mainCategory) => (
+            list.map((mainCategory, index) => (
+              index === 1 && (
               <div key={mainCategory.ID} className="relative group">
                 <div className='text-primary-500 cursor-pointer'>
                   <div className='flex items-center'>
@@ -291,16 +293,12 @@ export default function Header() {
                   </div>
                 )}
               </div>
+              )
             ))
           ) : (
             <div className='text-sm text-primary-500'>No categories available</div>
           )}
 
-          {/* <Link href="/sales">
-            <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
-              Sale
-            </div>
-          </Link> */}
           <Link href="/document/faq">
             <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
               FAQ

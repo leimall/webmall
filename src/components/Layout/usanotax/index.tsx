@@ -408,39 +408,10 @@ const SearchLayout = () => {
                 />
               </div>
             </div>
-
-            <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
-              <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
-              <Slider
-                range
-                min={Min_Price}
-                max={Max_price}
-                value={priceRange}
-                onChange={setPriceRange}
-                className="mb-4"
-              />
-              <div className="flex items-center space-x-2">
-                <Input
-                  value={priceRange[0]}
-                  onChange={(e) =>
-                    setPriceRange([Number(e.target.value), priceRange[1]])
-                  }
-                  className="w-20"
-                />
-                <span>-</span>
-                <Input
-                  value={priceRange[1]}
-                  onChange={(e) =>
-                    setPriceRange([priceRange[0], Number(e.target.value)])
-                  }
-                  className="w-20"
-                />
-              </div>
-            </div>
-
             <div>
               {categories && categories.length > 0 ? (
-                categories.map((mainCategory) => (
+                categories.map((mainCategory, index) => (
+                  index === 1 && (
                   <div key={mainCategory.ID} className="bg-background-back1 border border-bg-200 rounded p-4 mb-4">
                     <h3 className="text-gray-700 font-medium mt-2` my-2">{mainCategory.title_en}</h3>
                     {mainCategory.children && mainCategory.children.map((subCategory) => (
@@ -462,6 +433,7 @@ const SearchLayout = () => {
                       </div>
                     ))}
                   </div>
+                  )
                 ))
               ) : (
                 <div>No categories available</div>
