@@ -10,6 +10,7 @@ interface CartStore {
   price: number;       // 新增：原总价
   discount: number;    // 新增：优惠券折扣
   couponCode: string | null; // 当前优惠券代码
+  isFreeShipping: boolean;
   addItem: (item: CartItem) => void;
   removeItem: (unique_id: string) => void;
   clearCart: () => void;
@@ -25,6 +26,7 @@ interface CartStore {
   deleteCartOne: (item: CartItem) => Promise<void>;
   createCart: (item: CartItem) => Promise<void>;
 }
+const FreeShipping = 69
 
 export const useCartStore = create<CartStore>()(
   persist(
@@ -35,11 +37,12 @@ export const useCartStore = create<CartStore>()(
       price: 0,        // 初始化原总价
       discount: 0,     // 初始化折扣
       couponCode: null, // 没有优惠券时为null
+      isFreeShipping: false,
 
       // 添加商品
       addItem: (item) => {
         const validItems = get().items.filter(Boolean);
-        const existingIndex = validItems.findIndex(i => i.unique_id === item.unique_id );
+        const existingIndex = validItems.findIndex(i => i.unique_id === item.unique_id);
 
         let newItems = [...validItems];
         if (existingIndex > -1) {
@@ -53,10 +56,9 @@ export const useCartStore = create<CartStore>()(
         set({ items: newItems });
         get().totalPriceOptions();
       },
- 
       // 移除商品
       removeItem: (unid) => {
-        const newItems = get().items.filter(item => !(item.unique_id === unid ));
+        const newItems = get().items.filter(item => !(item.unique_id === unid));
         set({ items: newItems });
         get().totalPriceOptions();
       },
@@ -86,7 +88,7 @@ export const useCartStore = create<CartStore>()(
       },
 
       setSkuValue: (unid, size) => {
-        const items = get().items.map(i => ({...i})); // 深拷贝
+        const items = get().items.map(i => ({ ...i })); // 深拷贝
         const index = items.findIndex(i => i.unique_id === unid);
         if (index === -1) return;
         items[index].size = size;
@@ -113,10 +115,17 @@ export const useCartStore = create<CartStore>()(
         get().totalPriceOptions()
       },
       totalPriceOptions: () => {
-        const { items, discount } = get();
+        const { items, discount, isFreeShipping } = get();
         const baseTotal = items.reduce((t, i) => t + i.price * i.quantity, 0);
+        let finalTotal = baseTotal * (1 - discount);
+        if (finalTotal < FreeShipping) {
+          finalTotal += 10;
+          set({ isFreeShipping: false });
+        } else {
+          set({ isFreeShipping: true });
+        }
         set({
-          totalPrice: parseFloat((baseTotal * (1 - discount)).toFixed(2)),
+          totalPrice: parseFloat(finalTotal.toFixed(2)),
           price: parseFloat(baseTotal.toFixed(2)),
           totalQuantity: items.reduce((t, i) => t + i.quantity, 0)
         });
@@ -137,8 +146,8 @@ export const useCartStore = create<CartStore>()(
         if (data?.length) {
           const itemsValid = data.map(item => ({
             ...item,
-            unique_id: getUniqueId(item.product_id, item.size)
-          })); 
+            unique_id: getUniqueId(item.product_id, item.size, item.size_title)
+          }));
           set({ items: itemsValid });
           get().totalPriceOptions()
         } else {
@@ -146,7 +155,7 @@ export const useCartStore = create<CartStore>()(
         }
       },
       updateCart: async (item: CartItem) => {
-         await updateCartItem(item);
+        await updateCartItem(item);
       },
       deleteCart: async () => {
         await deleteCartItem();

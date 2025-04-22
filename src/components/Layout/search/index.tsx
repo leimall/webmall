@@ -95,7 +95,6 @@ const SearchLayout = () => {
   }
 
   const initProcess = (data: ProductSearch[], query: string | null, tag: string | null) => {
-    console.error("1111", query, tag);
     let productList = data
     if (query) {
       productList = filterProductsBySearch(productList, query)
@@ -386,6 +385,7 @@ const SearchLayout = () => {
           </div>
           <div className='flex justify-center mt-8'>
             <Pagination
+              hideOnSinglePage={true}
               current={currentPage}
               onChange={onChange}
               pageSize={PAGE_SIZE}

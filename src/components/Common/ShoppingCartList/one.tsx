@@ -14,12 +14,12 @@ export default function ShoppingCartList() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { createOrder } = useOrderStore();
-  const { items, totalPrice, price } = useCartStore();
+  const { items, totalPrice, price, isFreeShipping } = useCartStore();
   const [orderId, setOrderId] = useState('');
   const router = useRouter();
   const { user } = useAuthStore();
   const [userId, setUserId] = useState("");
-  const {update} = useNowBuyStore(); // 引入 Zustand store}
+  const { update } = useNowBuyStore();
 
   useEffect(() => {
     if (!orderId) {
@@ -39,7 +39,7 @@ export default function ShoppingCartList() {
       const res = await getOrderId();
       if (res.code === 0 && res.data) {
         setOrderId(res.data);
-        console.log('Order ID set:', res.data); // 添加调试日志
+        console.log('Order ID set:', res.data);
       } else {
         alert('Error getting order id. Please try again later.');
         return;
@@ -57,15 +57,14 @@ export default function ShoppingCartList() {
     setLoading(true);
 
     form
-    .validateFields() // Validate all fields in the form
-    .then((values) => {
-      console.log('Form values:', values);
-      // Handle the form submission logic here
-    })
-    .catch((errorInfo) => {
-      console.log('Validation failed:', errorInfo);
-      setLoading(false);
-    });
+      .validateFields()
+      .then((values) => {
+        console.log('Form values:', values);
+      })
+      .catch((errorInfo) => {
+        console.log('Validation failed:', errorInfo);
+        setLoading(false);
+      });
 
     const products = items.map((item) => ({
       ...item,
@@ -83,7 +82,7 @@ export default function ShoppingCartList() {
       paymentStatus: 'pending',
       orderStatus: 'pending',
       shippingMethod: 'standard',
-      shippingPrice: 10.00,
+      shippingPrice: totalPrice < 69 ? 10 : 0,
       shippingAddressId: 0,
       products,
     };
@@ -104,74 +103,80 @@ export default function ShoppingCartList() {
     <>
       <Flex gap="middle" vertical>
         <Spin spinning={loading} size="large" tip="Loading...">
-            <Form form={form} layout="vertical">
-          <div className="flex flex-col  md:flex-row ">
-            <div className='w-full md:w-3/4'>
-              <div className="flex-1 bg-background-back0 border rounded-md p-2 md:p-4">
-              
-                <div className='p-0 md:p-4'>
-                  {items?.map((e, index) => (
-                    <CartListItem form={form} item={e} key={e.product_id} length={items.length} index={index} />
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className='w-full md:w-1/4 md:ml-8 sx:ml-0 '>
-              <div className="border rounded-md md:mt-0 mt-4 sm:ml-0 p-4 bg-background-back1">
-                <div className="px-4">
-                  <h2 className="text-2xl font-bold">Cart total</h2>
-                  {/* <p className="text-gray-500">No products selected</p> */}
-                </div>
-                <Divider />
-                <div className="px-4 text-gray-800 space-y-2">
-                  <p className="flex justify-between py-1">
-                    <span className='text-base'>Now Total</span>
-                    <span className='ml-auto text-red-500 font-bold'>${totalPrice}</span>
-                  </p>
-                  <p className="flex justify-between py-1">
-                    <span className='text-base'>Total</span>
-                    <span className='ml-auto line-through'>${price.toFixed(2)}</span>
-                  </p>
-                  <p className="flex justify-between py-1">
-                    <span className='text-base'>Save</span>
-                    <span className='ml-auto'>${(price - totalPrice).toFixed(2)}</span>
-                  </p>
+          <Form form={form} layout="vertical">
+            <div className="flex flex-col  md:flex-row ">
+              <div className='w-full md:w-3/4'>
+                <div className="flex-1 bg-background-back0 border rounded-md p-2 md:p-4">
 
-                  <p className="flex justify-between py-1">
-                    <span className='text-base'>Discount</span>
-                    <span className='ml-auto font-bold'>$0.00</span>
-                  </p>
-                  <p className="flex justify-between py-1">
-                    <span className='text-base'>Tax</span>
-                    <span className='ml-auto font-bold'>$0.00</span>
-                  </p>
-                  <p className="flex justify-between py-1">
-                    <span className='text-base'>Fee</span>
-                    <span className='ml-auto font-bold'>$0.00</span>
-                  </p>
-                </div>
-                <Divider />
-                <div className="px-4">
-                  <div className="flex justify-between font-bold text-lg mt-4">
-                    <span>Total</span>
-                    <span className='text-red-500'>${totalPrice}</span>
+                  <div className='p-0 md:p-4'>
+                    {items?.map((e, index) => (
+                      <CartListItem form={form} item={e} key={e.product_id} length={items.length} index={index} />
+                    ))}
                   </div>
                 </div>
-                <div className="mt-8 space-y-4">
-                  <button onClick={BuyNowHandle} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-primary-500 hover:bg-primary-600 text-white rounded-md">
-                    Buy Now
-                  </button>
-                  <div className='w-4'></div>
-                  <Link href="/">
-                    <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-bg-100 hover:bg-bg-100 border text-primary-500 rounded-md">
-                      Continue Shopping
+              </div>
+              <div className='w-full md:w-1/4 md:ml-8 sx:ml-0 '>
+                <div className="border rounded-md md:mt-0 mt-4 sm:ml-0 p-4 bg-background-back1">
+                  <div className="px-4">
+                    <h2 className="text-2xl font-bold">Cart total</h2>
+                  </div>
+                  <Divider />
+                  <div className="px-4 text-gray-800 space-y-2">
+                    <p className="flex justify-between py-1">
+                      <span className='text-base'>Now Total</span>
+                      <span className='ml-auto text-red-500 font-bold'>${totalPrice}</span>
+                    </p>
+                    {
+                      Number(price - totalPrice) > 0 &&
+                      <p className="flex justify-between py-1">
+                        <span className='text-base'>Total</span>
+                        <span className='ml-auto line-through'>${price.toFixed(2)}</span>
+                      </p>
+
+                    }
+                    {
+                      Number((price - totalPrice).toFixed(2)) > 0 &&
+                      <p className="flex justify-between py-1">
+                        <span className='text-base'>Save</span>
+                        <span className='ml-auto'>${(price - totalPrice).toFixed(2)}</span>
+                      </p>
+                    }
+
+                    {
+                      isFreeShipping &&
+                      <p className="flex justify-between py-1">
+                        <span className='text-base'>Shipping</span>
+                        <span className='ml-auto font-bold'>Free!</span>
+                      </p>
+                      ||
+                      <p className="flex justify-between py-1">
+                        <span className='text-base'>Shipping</span>
+                        <span className='ml-auto font-bold'>$10.00</span>
+                      </p>
+                    }
+                  </div>
+                  <Divider />
+                  <div className="px-4">
+                    <div className="flex justify-between font-bold text-lg mt-4">
+                      <span>Total</span>
+                      <span className='text-red-500'>${totalPrice}</span>
+                    </div>
+                  </div>
+                  <div className="mt-8 space-y-4">
+                    <button onClick={BuyNowHandle} className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-primary-500 hover:bg-primary-600 text-white rounded-md">
+                      Buy Now
                     </button>
-                  </Link>
+                    <div className='w-4'></div>
+                    <Link href="/">
+                      <button className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-bg-100 hover:bg-bg-100 border text-primary-500 rounded-md">
+                        Continue Shopping
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-            </Form>
+          </Form>
         </Spin>
       </Flex>
     </>

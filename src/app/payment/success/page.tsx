@@ -58,7 +58,7 @@ const Success = () => {
           <Spin spinning={loading}>
             <Result
               status="success"
-              title="Payment was Successful!"
+              title="Payment Successful!"
               subTitle={`Your order ID is: ${orderId}`}
               extra={[
                 <Button type="primary" key="button" href="/">

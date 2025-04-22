@@ -10,7 +10,7 @@ import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
 import FingerWidthInput from './custom';
-import { Drawer, Form, message, Spin } from 'antd';
+import { Drawer, Form, message, Modal, Spin } from 'antd';
 import Measure from './measure';
 import CartListItem from './cartItem';
 
@@ -20,6 +20,7 @@ import Link from 'next/link';
 import { useOrderStore } from '@/stores/useOrdersStore';
 import AuthModal from '@/components/Common/Auth/authmodal';
 import { useAuthCheck } from '@/hooks/useAuthentication';
+import { error } from 'console';
 
 export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
@@ -34,11 +35,11 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [selfQuantity, setSelfQuantity] = useState<number>(1);
   const [selfPrice, setSelfPrice] = useState<number>(0);
   const [skuTitle, setSkuTitle] = useState<SkuItem[]>();
-  const [airrtiute, setAirrRoute] = useState<string>('XS');
+  const [airrtiute, setAirrRoute] = useState<string>('');
   const [airrtiuteList, setAirrRouteList] = useState<Sku[]>([]);
   const [shapeOptions, setShapeOptions] = useState<any[]>([]);
   const [size, setSize] = useState<string>('M');
-  const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L', 'Custom']);
+  const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L']);
   const [show, setShow] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
@@ -118,7 +119,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         status: 1,
       });
     }
-  };  useEffect(() => {
+  }; useEffect(() => {
     if (selfItem) {
       if (items?.length > 0) {
         const result = items.find(item => item.product_id === product.productId)
@@ -155,17 +156,22 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
   const handleAddToCart = async (): Promise<void> => {
     getUserId()
-    form.validateFields().then((values) => {
+    form.validateFields().then(async (values) => {
       setLoading(true);
       console.log('Form values:', values);
       if (selfItem) {
         selfItem.user_id = userId;
-        selfItem.size = size;
         selfItem.price = selfPrice;
         selfItem.quantity = selfQuantity;
-        selfItem.unique_id = getUniqueId(selfItem.product_id, selfItem.size);
+        if (selfItem.size === Custom) {
+          selfItem.unique_id = getUniqueId(selfItem.product_id, selfItem.size, selfItem.shape || "")
+        } else {
+          selfItem.unique_id = getUniqueId(selfItem.product_id, selfItem.size, selfItem.size_title)
+        }
+
         if (selfItem.user_id) {
           addItem(selfItem);
+          await handleGetOrderId()
           showDrawer()
         }
       }
@@ -217,18 +223,18 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     if (selfItem) {
       setSelfItem({
         ...selfItem,
-        size_title: 'Size',
+        size_title: airrtiute,
         size: e,
       });
     }
   }
 
-  const setchoicheSize = (e: SkuItem, ) => {
+  const setchoicheSize = (e: SkuItem,) => {
     setAirrRoute(e.title);
     setAirrRouteList(e.List)
     setShowCustomInfo(false);
   }
-  
+
   const setOpenCustom = (e: SkuItem) => {
     setAirrRoute(e.title);
     setShowCustomInfo(true);
@@ -247,6 +253,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         ...selfItem,
         size_title: inputValue,
         shape: shape,
+        size: Custom,
       });
     }
   };
@@ -260,44 +267,49 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   };
 
   const onClickCheckout = async () => {
-    setLoading(true);
-    const oid = await handleGetOrderId();
-    if (oid) {
-      const products = items.map((item) => ({
-        ...item,
-        ID: 0,
-        order_id: oid,
-        user_id: userId,
-      }))
+    try {
+      setLoading(true);
+      if (orderId) {
+        const products = items.map((item) => ({
+          ...item,
+          ID: 0,
+          order_id: orderId,
+          user_id: userId,
+        }))
+        const orderData: Order = {
+          ID: 0,
+          orderId: orderId,
+          userId: userId,
+          totalPrice: totalPrice,
+          paymentMethod: '',
+          paymentStatus: 'pending',
+          orderStatus: 'pending',
+          shippingMethod: 'standard',
+          shippingPrice: totalPrice < 69 ? 10 : 0,
+          shippingAddressId: 0,
+          products,
+        };
+        console.error("object", orderData);
+        createOrder(orderData)
+        update(orderId)
 
-      const orderData: Order = {
-        ID: 0,
-        orderId,
-        userId: userId,
-        totalPrice,
-        paymentMethod: '',
-        paymentStatus: 'pending',
-        orderStatus: 'pending',
-        shippingMethod: 'standard',
-        shippingPrice: 10.00,
-        shippingAddressId: 0,
-        products,
-      };
-      await createOrder(orderData)
-      await update(orderId)
-      try {
-        const response = await createOrderForDB(orderData)
-        if (response.code === 0) {
-          clearCart()
-          router.push("/checkout/");
+        try {
+          const response = await createOrderForDB(orderData)
+          if (response.code === 0) {
+            clearCart()
+            router.push("/checkout/");
+          }
+        } catch (error) {
+          console.log("object", error);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.log("object", error);
-      } finally {
-        setLoading(false);
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
 
@@ -332,7 +344,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               <div
                 key={index}
                 className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
-                onClick={() => setSelfSize(e.title)}
+                onClick={() => setSize(e.title)}
               >
                 {e.title}
               </div>

@@ -43,7 +43,6 @@ const ShapeInput: React.FC<ShapeInputProps> = ({ initialShape, initialInputValue
     const value = e.target.value;
     setInputValue(value);
     onChangeValue(shape || '', value);
-    setShape(value);
   };
   return (
     <>

@@ -55,6 +55,7 @@ const ProductPagination: React.FC<{ id: string; initialData: Product[]; initialT
       </div>
       <div className='flex justify-center pb-10'>
         <Pagination
+          hideOnSinglePage={true}
           current={currentPage}
           onChange={onChange}
           pageSize={PAGE_SIZE}

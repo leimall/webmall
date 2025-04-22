@@ -6,7 +6,7 @@ const sqids = new Sqids({
   minLength: 6
 });
 
-export const getUniqueId = (pid: string, size: string) => {
+export const getUniqueId = (pid: string, size: string, name:string) => {
   const id = sqids.encode([Date.now()]); 
-  return `${pid}_${size}_${id}_${version}`
+  return `${pid}_${size}_${name}_${version}`
 }

@@ -72,3 +72,10 @@ export const getAllProductList = (): Promise<ResponseLists>  => {
     method: 'get'
   })
 }
+
+export const getProductSku = (id: string) => {
+  return request({
+    url: `/product/sku/${id}`,
+    method: 'get'
+  })
+}

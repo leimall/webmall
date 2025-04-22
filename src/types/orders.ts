@@ -1,3 +1,4 @@
+import { create } from 'zustand';
 export type OrderProduct = {
   order_id: string;
   user_id: string;
@@ -38,6 +39,7 @@ export type OrderType = {
   shipping_price: number;
   shipping_address_id: number;
   UpdatedAt: string;
+  CreatedAt: string;
   Products: OrderProduct[];
   Address: AddressItem;
 };

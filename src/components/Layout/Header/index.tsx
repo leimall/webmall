@@ -199,7 +199,7 @@ export default function Header() {
               <AiFillProduct className='text-primary-500 text-md mr-2' /> All Products
             </div>
             <div onClick={(e) => gotoUrl(e, '/usanotax')} className='text-primary-500 flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
-              <TbTax className='text-primary-500 text-md mr-2' /> Usa No Tax
+              <TbTax className='text-primary-500 text-md mr-2' /> Ready to Ship
             </div>
             
             {list && list.length > 0 ? (
@@ -269,12 +269,12 @@ export default function Header() {
           </Link>
           <Link href="/usanotax">
             <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
-            USA No Tax Special Offers
+            Ready to Ship
             </div>
           </Link>
           {list && list.length > 0 ? (
             list.map((mainCategory, index) => (
-              index === 1 && (
+              index === 0 && (
               <div key={mainCategory.ID} className="relative group">
                 <div className='text-primary-500 cursor-pointer'>
                   <div className='flex items-center'>
