@@ -65,7 +65,6 @@ export default function ReviewList({ productID }: { productID: string }) {
               </List.Item>
             )}
           />
-
         </div>
       </div>
     </div>

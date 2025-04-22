@@ -1,7 +1,7 @@
 // pages/product/[id].tsx
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import Image from "next/image";
 import parse from 'html-react-parser';
 import { Carousel, Divider, Rate, Tag } from "antd";
@@ -122,9 +122,9 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
             <Price product={product} />
           </div>
           <Divider />
-          <div>
+          <Suspense fallback={<div>Loading...</div>}>
             <CartItemComponent product={product} />
-          </div>
+          </Suspense>
           <Divider />
           <div>
             <h3 className="text-md font-bold text-gray-800">Description</h3>
