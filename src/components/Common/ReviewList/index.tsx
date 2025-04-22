@@ -47,7 +47,7 @@ export default function ReviewList({ productID }: { productID: string }) {
                   </div>
                   <div className="flex items-center">
                     <div className="flex items-center ml-1">
-                      <p className="text-gray-300">{review.date}</p>
+                      <span className="text-gray-300">{review.date}</span>
                     </div>
                   </div>
                 </div>

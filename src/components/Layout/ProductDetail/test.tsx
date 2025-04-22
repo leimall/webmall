@@ -3,8 +3,7 @@
 
 import React, { Suspense, useEffect, useRef } from "react";
 import Image from "next/image";
-import parse from 'html-react-parser';
-import { Carousel, Divider, Rate, Tag } from "antd";
+import { Carousel, Divider } from "antd";
 import { useProductStore } from "@/stores/useProductStore";
 import type { CarouselRef } from "antd/es/carousel";
 import type { ProductDetail } from "@/types/products";
@@ -122,9 +121,9 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
             <Price product={product} />
           </div>
           <Divider />
-          <Suspense fallback={<div>Loading...</div>}>
+          <div>
             <CartItemComponent product={product} />
-          </Suspense>
+          </div>
           <Divider />
           <div>
             <h3 className="text-md font-bold text-gray-800">Description</h3>
