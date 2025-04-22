@@ -125,11 +125,10 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           <div>
             <CartItemComponent product={product} />
           </div>
-
           <Divider />
           <div>
             <h3 className="text-md font-bold text-gray-800">Description</h3>
-            <p className="text-gray-700 text-sm mt-2">{processNewlines(product.desction)}</p>
+            <div className="text-gray-700 text-sm mt-2">{processNewlines(product.desction)}</div>
           </div>
           <Divider />
           <div className="bg-gray-50 p-4 rounded-sm border border-gray-200">
