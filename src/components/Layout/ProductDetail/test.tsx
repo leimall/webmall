@@ -151,9 +151,9 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           </div>
           <Divider />
           <div className="w-full lg:hidden">
-            {/* <ReviewSummary Review={product.Review} /> */}
+            <ReviewSummary Review={product.Review} />
             <Divider />
-            {/* <ReviewList productID={product.productId} /> */}
+            <ReviewList productID={product.productId} />
           </div>
         </div>
       </div>

@@ -407,7 +407,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
                     </div>
                   </div>
                   <div className="absolute bottom-0 left-0 w-full bg-neutral-50 p-5">
-                    <p className="flex justify-between">
+                    <div className="flex justify-between">
                       <span>
                         <span className="font-medium">Subtotal</span>
                         <span className="block text-sm text-neutral-500">
@@ -415,7 +415,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
                         </span>
                       </span>
                       <span className="text-xl font-medium">${totalPrice}</span>
-                    </p>
+                    </div>
                     <div className="mt-5 flex items-center gap-5">
                       <button
                         onClick={onClickCheckout}
