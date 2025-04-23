@@ -10,8 +10,7 @@ import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
 import FingerWidthInput from './custom';
-import { Drawer, Form, message, Modal, Spin } from 'antd';
-import Measure from './measure';
+import { Drawer, Form, message, Spin } from 'antd';
 import CartListItem from './cartItem';
 
 import { FaXmark, FaCircleCheck } from "react-icons/fa6";
@@ -34,8 +33,8 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [selfQuantity, setSelfQuantity] = useState<number>(1);
   const [selfPrice, setSelfPrice] = useState<number>(0);
   const [skuTitle, setSkuTitle] = useState<SkuItem[]>([]);
-  const [airrtiute, setAirrRoute] = useState<string>('');
-  const [airrtiuteList, setAirrRouteList] = useState<Sku[]>([]);
+  const [airrtiute, setAirrtiute] = useState<string>('');
+  const [airrtiuteList, setAirrtiuteList] = useState<Sku[]>([]);
   const [shapeOptions, setShapeOptions] = useState<any[]>([]);
   const [size, setSize] = useState<string>('M');
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L']);
@@ -234,15 +233,15 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   }
 
   const setchoicheSize = (e: SkuItem,) => {
-    setAirrRoute(e.title);
-    setAirrRouteList(e.List)
+    setAirrtiute(e.title);
+    setAirrtiuteList(e.List)
     setShowCustomInfo(false);
   }
 
   const setOpenCustom = (e: SkuItem) => {
-    setAirrRoute(e.title);
+    setAirrtiute(e.title);
     setShowCustomInfo(true);
-    setAirrRouteList(e.List)
+    setAirrtiuteList(e.List)
     setShapeOptions(e.List.map((item) => {
       return {
         label: item.title,
