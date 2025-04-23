@@ -65,16 +65,19 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
   useEffect(() => {
     if (product) {
+      if (product.Sku) {
+        setSkuTitle(product.Sku);
+      } else {
+        setSkuTitle([]);
+      }
       initData();
     }
   }, [product]);
 
   const initData = () => {
-    if (product.Sku) {
-      setSkuTitle(product.Sku);
-    } else {
-      setSkuTitle([]);
-    }
+    console.error("object", product);
+    
+
     setSelfPrice(parseFloat((product.price * (product.priceOff / 100)).toFixed(0) + '.99'))
     if (items?.length > 0) {
       const item = items.find(item => item.product_id === product.productId);
