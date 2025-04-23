@@ -97,6 +97,10 @@ const Footer = () => {
             <li>
               <a href='/document/contact' className='hover:text-primary-800 text-primary-700 text-sm'>CONTACT US</a>
             </li>
+            <li>
+            <div className="text-primary-700 font-bold">General Inquiries & Order Issues: </div>
+            <div className="text-primary-500">service@ftanails.com</div>
+            </li>
 
           </ul>
         </div>
@@ -117,8 +121,8 @@ const Footer = () => {
           </li>
         </ul>
 
-        <p className='text-primary-700 text-sm md:ml-auto'>Copyright © 2024<a href='https://ftanails.com/'
-          target='_blank' className="hover:underline mx-1">FTAnails</a>All Rights Reserved.</p>
+        <p className='text-primary-700 text-sm md:ml-auto'>Copyright © 2024-2025 <a href='https://ftanails.com/'
+          target='_blank' className="hover:underline mx-1">FTAnails.com</a>All Rights Reserved.</p>
       </div>
 
     </footer>

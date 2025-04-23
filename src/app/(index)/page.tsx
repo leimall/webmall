@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Adpage from "@/components/Layout/Adpage";
 import NewsLists from "@/components/Layout/index/lastest";
 import BestLists from "@/components/Layout/index/bast";
-import SaleLists from "@/components/Layout/index/sales";
+import UsaNoTax from "@/components/Layout/index/usaNoTax";
 import Comment from "@/components/Layout/index/comment";
 
 import Informatin from "@/template/indexInfo";
@@ -70,11 +70,10 @@ export default async function PageHome() {
     <main >
       <FirstAdPage />
       <div className="relative mx-auto max-w-c-1440 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
+        <UsaNoTax title="Sale" products={fetchedSale} />
         <NewsLists title="New Release" products={fetchedLasers} />
         <BannerInIndex />
         <BestLists title="Best Seller" products={fetchedBast} />
-        {/* <Adpage />
-        <SaleLists title="Sale" products={fetchedSale} /> */}
         <Comment title="User Feedbacks" products={fetchedSale} />
         <Informatin />
       </div>

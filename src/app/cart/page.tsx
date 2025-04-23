@@ -32,7 +32,7 @@ export default function Cart() {
           </li>
         </ul>
       </div>
-      <h1 className="text-xl md:text-3xl py-1 md:py-4 mb-2">Shopping Cart</h1>
+      <h1 className="text-xl md:text-2xl py-1 md:py-4 mb-2">Your cart</h1>
       {loading ?
         <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white sm:rounded-lg p-12 text-center text-xl">

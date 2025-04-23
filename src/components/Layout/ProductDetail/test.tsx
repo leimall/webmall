@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import parse from 'html-react-parser';
 import { Carousel, Divider, Rate, Tag } from "antd";
 import { useProductStore } from "@/stores/useProductStore";
 import type { CarouselRef } from "antd/es/carousel";
@@ -45,6 +46,20 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
     }
   }, [product])
 
+  const processNewlines = (text: string): React.ReactNode => {
+    const parts = text.split('\n');
+    return parts.map((part, index) => {
+      return (
+        <React.Fragment key={index}>
+          <div className="pb-2">
+            {part}
+          </div>
+        </React.Fragment>
+      );
+    });
+  };
+
+
   return (
     <div className="font-sans tracking-wide mx-auto ">
       <div className="grid items-start grid-cols-1 lg:grid-cols-12 gap-8">
@@ -81,9 +96,9 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           </div>
 
           <div className="w-full hidden md:block">
-            <ReviewSummary Review={product.Review} />
+            {/* <ReviewSummary Review={product.Review} /> */}
             <Divider />
-            <ReviewList productID={product.productId} />
+            {/* <ReviewList productID={product.productId} /> */}
           </div>
         </div>
 
@@ -104,17 +119,17 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
 
           <Divider />
           <div>
-            <Price product={product} />
+            {/* <Price product={product} /> */}
           </div>
           <Divider />
           <div>
-            <CartItemComponent product={product} />
+            {/* <CartItemComponent product={product} /> */}
           </div>
 
           <Divider />
           <div>
             <h3 className="text-md font-bold text-gray-800">Description</h3>
-            <p className="text-gray-700 text-sm mt-2">{product.desction}</p>
+            <div className="text-gray-700 text-sm mt-2">{processNewlines(product.desction)}</div>
           </div>
           <Divider />
           <div className="bg-gray-50 p-4 rounded-sm border border-gray-200">
@@ -136,9 +151,9 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           </div>
           <Divider />
           <div className="w-full lg:hidden">
-            <ReviewSummary Review={product.Review} />
+            {/* <ReviewSummary Review={product.Review} /> */}
             <Divider />
-            <ReviewList productID={product.productId} />
+            {/* <ReviewList productID={product.productId} /> */}
           </div>
         </div>
       </div>

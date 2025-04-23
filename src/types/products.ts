@@ -42,9 +42,7 @@ export type ProductDetail = Product & {
 	Tags: Tags[];
 	Category: Category[];
 	Detail: Detail[];
-	Sku: Sku & {
-		List: Sku[];
-	};
+	Sku: SkuItem[]
   Brand: {
     Info: BrandItem;
     Tags: tagsChild[];
@@ -86,13 +84,17 @@ export type TagItem = {
   value_cm: string;
 }
 
+export type SkuItem = Sku & {
+  List: Sku[];
+};
+
 export type Sku = {
   title: string;
-  title_en: string;
   price: number;
   priceOff: number;
   productId: string;
   stock: number;
+  id: number;
 }
 
 export type Category = {

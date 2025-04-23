@@ -331,14 +331,14 @@ const CheckoutPage = () => {
     <div>
       <div className="relative mx-auto max-w-c-1024 py-5 justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
         <LoadingPayment isLoading={payloading} />
-        <h2 className="text-2xl font-bold text-gray-800 pb-2 md:pb-8">Complete your information</h2>
+        <h2 className="text-xl font-bold text-gray-800 pb-2 md:pb-8">Express checkout</h2>
         {loading ? (
           <AddressSkeleton />
         ) : (
           <div className="flex flex-col  md:flex-row ">
             <div className="w-full md:w-7/12">
               <div className="space-y-4">
-                <h3>Set Shipping Address</h3>
+                <h3>Delivery</h3>
                 <ToggleContent title={defaultAddress} value={value}>
                   <div className='relative'>
                     <LoadingOverlay isLoading={addressloading} />
@@ -355,12 +355,12 @@ const CheckoutPage = () => {
 
                   </div>
                 </ToggleContent>
-                <h3>Set Billing Information</h3>
+                <h3>Payment</h3>
                 <ToggleContent title="Billing Information" value={true}>
                   <div className="flex flex-col">
                     {
                       isShowChecked && (
-                        <Checkbox checked={checkedValue} onChange={onChange}>Same as shipping address</Checkbox>
+                        <Checkbox checked={checkedValue} onChange={onChange}>Use shipping address as billing address</Checkbox>
                       )
                       || billingAddress &&
                       <div className="border relative rounded-md mt-2 p-4 border-bg-400">

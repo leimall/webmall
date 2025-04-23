@@ -17,9 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="relative mx-auto max-w-c-1280 mb-8 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0 min-h-screen">
-      <div className="flex justify-between flex-col md:flex-row pt-10">
-
+    <div className="relative mx-auto max-w-c-1280 mb-8 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
+      <div className="flex justify-between flex-col md:flex-row md:pt-8 pt-4">
         <div className="hidden md:block md:w-1/3 flex-shrink-0">
           <div className="bg-bg-50 border border-bg-200 rounded p-8 mx-8 space-y-6 mb-4">
             <div>
