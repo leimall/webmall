@@ -323,7 +323,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     <div>
       <Form form={form} layout="vertical">
         <div className="flex flex-wrap gap-4 my-4">
-          {skuTitle?.length > 0 && skuTitle?.map((e, index) => (
+          {product.Sku?.length > 0 && product.Sku.map((e, index) => (
             e.title === 'Custom' ? (
               <div
                 key={index}
