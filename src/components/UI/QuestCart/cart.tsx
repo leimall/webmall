@@ -33,7 +33,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [selfItem, setSelfItem] = useState<CartItem | null>(null);
   const [selfQuantity, setSelfQuantity] = useState<number>(1);
   const [selfPrice, setSelfPrice] = useState<number>(0);
-  const [skuTitle, setSkuTitle] = useState<SkuItem[]>();
+  const [skuTitle, setSkuTitle] = useState<SkuItem[]>([]);
   const [airrtiute, setAirrRoute] = useState<string>('');
   const [airrtiuteList, setAirrRouteList] = useState<Sku[]>([]);
   const [shapeOptions, setShapeOptions] = useState<any[]>([]);
