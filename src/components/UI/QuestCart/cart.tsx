@@ -2,7 +2,7 @@
 import { useCartStore } from '@/stores/useCartStore'; // 引入 Zustand store
 import { useNowBuyStore } from '@/stores/useNowBuyStore'; // 引入 Zustand store
 import { useAuthStore } from '@/stores/useUserinfoStroe';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CartItem } from '@/types/stores/cart';
 import type { ProductDetail, Sku, SkuItem } from "@/types/products";
@@ -20,7 +20,6 @@ import Link from 'next/link';
 import { useOrderStore } from '@/stores/useOrdersStore';
 import AuthModal from '@/components/Common/Auth/authmodal';
 import { useAuthCheck } from '@/hooks/useAuthentication';
-import { error } from 'console';
 
 export default function CartItemComponent({ product }: { product: ProductDetail }) {
   const router = useRouter();
@@ -28,7 +27,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [orderId, setOrderId] = useState('');
   const [form] = Form.useForm();
   const { update } = useNowBuyStore();
-  const { addItem, setQuantity, setSkuValue, items, fetchCartItems, totalPrice, clearCart } = useCartStore();
+  const { addItem, setQuantity, items, totalPrice, clearCart } = useCartStore();
   const { user } = useAuthStore();
   const [userId, setUserId] = useState('');
   const [selfItem, setSelfItem] = useState<CartItem | null>(null);
@@ -45,20 +44,25 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [open, setOpen] = useState(false);
   const [showCustomInfo, setShowCustomInfo] = useState<boolean>(false);
   const Custom = "Custom"
+
   useEffect(() => {
     if (user) {
       setUserId(user.userId);
     }
   }, [user]);
 
-  useEffect(() => {
+  const checkItems = useCallback(() => {
     if (items?.length > 0) {
       const data = items.find(item => item.product_id === product.productId);
       if (data) {
         setShow(true);
       }
     }
-  }, [items]);
+  }, [items, product.productId]);
+
+  useEffect(() => {
+    checkItems();
+  }, [checkItems]);
 
   useEffect(() => {
     if (product) {
@@ -119,7 +123,9 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         status: 1,
       });
     }
-  }; useEffect(() => {
+  };
+
+  useEffect(() => {
     if (selfItem) {
       if (items?.length > 0) {
         const result = items.find(item => item.product_id === product.productId)
@@ -128,7 +134,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
         }
       }
     }
-  }, [selfItem, selfQuantity]);
+  }, [selfItem, selfQuantity, items, product.productId, setQuantity]);
 
   const handleGetOrderId = async () => {
     try {
@@ -149,13 +155,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     if (user) {
       setUserId(user.userId);
     }
-    setTimeout(() => {
-      console.error("object", userId);
-    }, 800);
+    await new Promise(resolve => setTimeout(resolve, 800));
+    console.error("object", userId);
   };
 
   const handleAddToCart = async (): Promise<void> => {
-    getUserId()
+    await getUserId();
     form.validateFields().then(async (values) => {
       setLoading(true);
       console.log('Form values:', values);
@@ -192,7 +197,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   } = useAuthCheck(handleAddToCart, {
     onNeedLogin: () => message.info('Please log in first before adding it to the shopping cart.')
   });
-
 
   const handleDecrease = () => {
     if (selfQuantity > 1) {
@@ -312,14 +316,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     }
   }
 
-
   return (
     <div>
       <Form form={form} layout="vertical">
         <div className="flex flex-wrap gap-4 my-4">
-          {
-            skuTitle?.map((e, index) => (
-              e.title === 'Custom' &&
+          {skuTitle?.map((e, index) => (
+            e.title === 'Custom' ? (
               <div
                 key={index}
                 className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === airrtiute ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
@@ -327,7 +329,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               >
                 {e.title}
               </div>
-              ||
+            ) : (
               <div
                 key={index}
                 className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === airrtiute ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
@@ -335,23 +337,21 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               >
                 {e.title}
               </div>
-            ))
-          }
+            )
+          ))}
         </div>
         <div className="flex flex-wrap gap-4 my-2">
-          {
-            airrtiute != 'Custom' && airrtiuteList.map((e, index) => (
-              <div
-                key={index}
-                className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
-                onClick={() => setSize(e.title)}
-              >
-                {e.title}
-              </div>
-            ))}
+          {airrtiute !== 'Custom' && airrtiuteList.map((e, index) => (
+            <div
+              key={index}
+              className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+              onClick={() => setSize(e.title)}
+            >
+              {e.title}
+            </div>
+          ))}
         </div>
-        {
-          showCustomInfo &&
+        {showCustomInfo && (
           <div className="bg-gray-50 md:my-2 p-2 md:p-4 rounded-sm border border-gray-200">
             <div className='flex items-start'>
               <FaCircleCheck className="md:text-md text-2xl mr-2" />
@@ -360,13 +360,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               </span>
             </div>
           </div>
-        }
-        {
-          airrtiute === Custom &&
+        )}
+        {airrtiute === Custom && (
           <div className="bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">
             <FingerWidthInput onChangeValue={handleWidthsChange} shapeOptions={shapeOptions} initialInputValue='' initialShape='' />
           </div>
-        }
+        )}
         <div className="pt-2">
           <button
             type="button"
@@ -376,7 +375,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
           >
             Add To Cart
           </button>
-
         </div>
       </Form>
 
