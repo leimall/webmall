@@ -34,7 +34,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [selfPrice, setSelfPrice] = useState<number>(0);
   const [skuTitle, setSkuTitle] = useState<SkuItem[]>([]);
   const [airrtiute, setAirrtiute] = useState<string>('');
-  const [airrtiuteList, setAirrtiuteList] = useState<Sku[]>([]);
+  const [atlist, setAtlist] = useState<Sku[]>([]);
   const [shapeOptions, setShapeOptions] = useState<any[]>([]);
   const [size, setSize] = useState<string>('M');
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L']);
@@ -155,7 +155,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       setUserId(user.userId);
     }
     await new Promise(resolve => setTimeout(resolve, 800));
-    console.error("object", userId);
   };
 
   const handleAddToCart = async (): Promise<void> => {
@@ -234,14 +233,14 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
   const setchoicheSize = (e: SkuItem,) => {
     setAirrtiute(e.title);
-    setAirrtiuteList(e.List)
+    setAtlist(e.List)
     setShowCustomInfo(false);
   }
 
   const setOpenCustom = (e: SkuItem) => {
     setAirrtiute(e.title);
-    setShowCustomInfo(true);
-    setAirrtiuteList(e.List)
+    // setShowCustomInfo(true);
+    setAtlist(e.List)
     setShapeOptions(e.List.map((item) => {
       return {
         label: item.title,
@@ -318,7 +317,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   return (
     <div>
       <Form form={form} layout="vertical">
-        <div className="flex flex-wrap gap-4 my-4">
+        {/* <div className="flex flex-wrap gap-4 my-4">
           {skuTitle?.map((e, index) => (
             e.title === 'Custom' ? (
               <div
@@ -338,9 +337,9 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               </div>
             )
           ))}
-        </div>
+        </div> */}
         <div className="flex flex-wrap gap-4 my-2">
-          {airrtiute !== 'Custom' && airrtiuteList.map((e, index) => (
+          {airrtiute !== Custom && atlist?.map((e, index) => (
             <div
               key={index}
               className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
