@@ -72,6 +72,8 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const initData = () => {
     if (product.Sku) {
       setSkuTitle(product.Sku);
+    } else {
+      setSkuTitle([]);
     }
     setSelfPrice(parseFloat((product.price * (product.priceOff / 100)).toFixed(0) + '.99'))
     if (items?.length > 0) {
@@ -317,8 +319,8 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   return (
     <div>
       <Form form={form} layout="vertical">
-        {/* <div className="flex flex-wrap gap-4 my-4">
-          {skuTitle?.map((e, index) => (
+        <div className="flex flex-wrap gap-4 my-4">
+          {skuTitle?.length > 0 && skuTitle?.map((e, index) => (
             e.title === 'Custom' ? (
               <div
                 key={index}
@@ -337,7 +339,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               </div>
             )
           ))}
-        </div> */}
+        </div>
         <div className="flex flex-wrap gap-4 my-2">
           {airrtiute !== Custom && atlist?.map((e, index) => (
             <div
