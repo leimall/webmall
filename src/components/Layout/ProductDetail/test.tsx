@@ -123,7 +123,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           </div>
           <Divider />
           <div>
-            <CartItemComponent product={product} />
+            {/* <CartItemComponent product={product} /> */}
           </div>
 
           <Divider />
