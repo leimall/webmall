@@ -4,6 +4,8 @@ import { getProductDetail, getProductList } from "@/apis/product";
 import ProductDetailPage from "@/components/Layout/ProductDetail/test";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { FaAngleRight } from "react-icons/fa6";
+import Category from "@/components/Common/Category";
 
 // 定义默认的元数据信息，用于产品未找到的情况
 const defaultMetadata = {
@@ -97,6 +99,10 @@ export default async function Page({ params }: { params: { id: string } }) {
     return <div>Product not found</div>;
   }
 
+  const categoryItems = product.Category.map(item => ({
+    title: item.title,
+    url: `/category/${item.title.toLowerCase().replace(/\s+/g, '_')}` // 处理多个空格
+  }));
 
   // 返回客户端组件，服务器端不处理客户端逻辑
   return (
@@ -104,17 +110,25 @@ export default async function Page({ params }: { params: { id: string } }) {
       <div>
         <ul className="flex items-center font-[sans-serif] space-x-4">
           <Link href={'/'} passHref>
-            <li className="text-gray-800 text-base cursor-pointer">
+            <li className="text-gray-800 text-base cursor-pointer relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-1 lg:hover:text-primary-400 lg:after:transition-all lg:after:duration-300">
               Home
             </li>
           </Link>
           <li>
-            <svg xmlns="http://www.w3.org/2000/svg" className="fill-gray-400 w-3.5 -rotate-90" viewBox="0 0 24 24">
-              <path fillRule="evenodd"
-                d="M11.99997 18.1669a2.38 2.38 0 0 1-1.68266-.69733l-9.52-9.52a2.38 2.38 0 1 1 3.36532-3.36532l7.83734 7.83734 7.83734-7.83734a2.38 2.38 0 1 1 3.36532 3.36532l-9.52 9.52a2.38 2.38 0 0 1-1.68266.69734z"
-                clipRule="evenodd" data-original="#000000"></path>
-            </svg>
+            <FaAngleRight className="font-bold text-gray-500" />
           </li>
+          {
+            categoryItems.length>0&&
+            <Link href={categoryItems[0].url} passHref>
+            <li className="text-gray-800 text-base cursor-pointer relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-1 lg:hover:text-primary-400 lg:after:transition-all lg:after:duration-300">
+              {categoryItems[0].title}
+            </li>
+          </Link>
+          }
+          <li>
+            <FaAngleRight className="font-bold text-gray-500" />
+          </li>
+
           <li className="text-gray-500 text-base">
             {product.title}
           </li>
@@ -126,3 +140,4 @@ export default async function Page({ params }: { params: { id: string } }) {
     </div>
   );
 }
+

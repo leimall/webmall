@@ -69,6 +69,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const initData = () => {
     if (product.Sku) {
       setSkuTitle(product.Sku);
+      setAirrRoute(product.Sku[0].title);
     }
     setSelfPrice(parseFloat((product.price * (product.priceOff / 100)).toFixed(0) + '.99'))
     if (items?.length > 0) {
@@ -316,7 +317,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   return (
     <div>
       <Form form={form} layout="vertical">
-        <div className="flex flex-wrap gap-4 my-4">
+        <div className="flex flex-wrap gap-4 mt-6">
           {
             skuTitle?.map((e, index) => (
               e.title === 'Custom' &&
@@ -350,17 +351,6 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               </div>
             ))}
         </div>
-        {
-          showCustomInfo &&
-          <div className="bg-gray-50 md:my-2 p-2 md:p-4 rounded-sm border border-gray-200">
-            <div className='flex items-start'>
-              <FaCircleCheck className="md:text-md text-2xl mr-2" />
-              <span className="text-text-secondary font-bold">
-                Custom measurements give the best result for the same price.
-              </span>
-            </div>
-          </div>
-        }
         {
           airrtiute === Custom &&
           <div className="bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">

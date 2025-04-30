@@ -28,7 +28,7 @@ export default function ProductInfoPage({ product }: { product: ProductDetail })
   }, [product]);
   return (
     <div className="font-sans tracking-wide mx-auto ">
-      <div className="flex items-end mt-2">
+      <div className="flex items-end">
         <div className="text-red-500 text-3xl font-bold">${newprice}</div>
         {show &&
           <span className="line-through text-sm text-gray-400 px-1">${oldprice}</span>

@@ -14,7 +14,7 @@ export default function Title({ title }: { title: string }) {
         </Link>
       </div>
       <Link rel="stylesheet" href={`/search?tag=${title}`}>
-        <div className="inline-flex border-bg-200 font-medium text-custom-sm py-1.5 px-4 md:py-2.5 md:px-7 rounded border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:bg-primary-400">View All</div>
+        <div className="inline-flex border-bg-200 text-primary-400 font-medium text-custom-sm py-1.5 px-4 md:py-2.5 md:px-7 rounded border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:bg-primary-400">View All</div>
       </Link>
     </div>
   )

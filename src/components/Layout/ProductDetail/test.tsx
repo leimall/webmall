@@ -58,6 +58,14 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
     });
   };
 
+  const copyToClipboard = async () => {
+    try {
+        await navigator.clipboard.writeText(product.productId);
+    } catch (error) {
+        console.error('复制失败:', error);
+    }
+};
+
 
   return (
     <div className="font-sans tracking-wide mx-auto ">
@@ -110,7 +118,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
                 </h1>
               </div>
               <div className="flex text-xs text-gray-500 pt-2">
-                <div className="flex items-center gap-2 text-gray-400">SKU: {product.productId} <FaCopy className="mr-4 text-blue-500" /></div>
+                <div onClick={copyToClipboard} className="flex items-center gap-2 text-gray-400 cursor-pointer">SKU: {product.productId} <FaCopy className="mr-4 text-blue-500" /></div>
                 <CustomRate rating={rate} />
               </div>
             </div>
@@ -120,7 +128,6 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           <div>
             <Price product={product} />
           </div>
-          <Divider />
           <div>
             <CartItemComponent product={product} />
           </div>

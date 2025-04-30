@@ -8,6 +8,7 @@ import {
   Pagination,
   FloatButton,
   Drawer,
+  type PaginationProps 
 } from "antd";
 import useMenuStore from "@/stores/useMenuStore";
 import { useSearchParams } from "next/navigation";
@@ -15,7 +16,7 @@ import { getAllProductList } from "@/apis/product";
 import type { ProductSearch } from "@/types/products";
 import ProductCardOne from "@/components/Common/Products/cardtwo";
 import ProductCardSkeleton from "@/components/Common/Products/skeleton";
-import { FaListUl, FaXmark } from "react-icons/fa6";
+import { FaListUl } from "react-icons/fa6";
 const PAGE_SIZE = 12;
 const Min_Price = 0;
 const Max_price = 500
@@ -95,7 +96,6 @@ const SearchLayout = () => {
   }
 
   const initProcess = (data: ProductSearch[], query: string | null, tag: string | null) => {
-    console.error("1111", query, tag);
     let productList = data
     if (query) {
       productList = filterProductsBySearch(productList, query)
@@ -173,9 +173,7 @@ const SearchLayout = () => {
     }
   }
 
-
-
-  const onChange = (page: number) => {
+  const onChange: PaginationProps['onChange'] = (page: number) => {
     setCurrentPage(page);
     setShowProduct(getPaginatedItems(filteredProducts, page, PAGE_SIZE));
   };
@@ -363,8 +361,9 @@ const SearchLayout = () => {
             <Pagination
               current={currentPage}
               onChange={onChange}
-              pageSize={PAGE_SIZE}
               total={total}
+              pageSize={PAGE_SIZE}
+              hideOnSinglePage
             />
           </div>
         </div>

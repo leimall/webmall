@@ -25,8 +25,8 @@ export default function ProductCardOne({ product }: { product: Product }) {
   return (
     <>
       <Link href={`/product/${product.productId}`}>
-        <div className="bg-white border border-bg-200 cursor-pointer rounded hover:scale-[1.01] transition-all relative">
-          <div className="md:m-8 m-2 hover:m-4 transition-all">
+        <div className="bg-white border border-bg-200 cursor-pointer hover:border-primary-200 rounded transition-all relative">
+          <div className="md:m-8 m-2 hover:m-4 transition-all relative">
             <div className="relative h-0 pb-[100%] rounded-t overflow-hidden mx-auto">
               <Image
                 src={product.mainImg}
@@ -45,7 +45,7 @@ export default function ProductCardOne({ product }: { product: Product }) {
 
           </div>
 
-          <div className="p-1 md:p-3 bg-bg-10">
+          <div className="p-1 md:p-3 bg-bg-10 rounded-b">
             <h2 className="text-sm md:font-extrabold text-primary-800 h-6 line-clamp-1">{product.title}</h2>
             <div className="md:flex md:items-center md:justify-between text-fta-black-100">
               <Price product={product} />
