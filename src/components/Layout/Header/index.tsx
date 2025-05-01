@@ -206,7 +206,6 @@ export default function Header() {
               list.map((mainCategory, index) => (
                 index === 0 && (
                 <div key={"Drawer" + mainCategory.ID}>
-                  <h1>{"Drawer" + mainCategory.ID}</h1>
                   <div className='flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
                     <FaAngleDown className='text-primary-500 text-sm mr-2' /> {mainCategory.title_en}
                   </div>
