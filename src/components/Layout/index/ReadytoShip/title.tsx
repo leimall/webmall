@@ -9,7 +9,7 @@ export default function Title({ title }: { title: string }) {
         <TbTax className="text-xl text-primary-main" />
         Limited Time Offer</span>
       <Link rel="stylesheet" href="/readytoship">
-        <h2 className="font-semibold text-2xl xl:text-heading-5 text-dark">Ready To Ship</h2>
+        <h1 className="font-semibold text-2xl xl:text-heading-5 text-dark relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-1 lg:after:transition-all lg:after:duration-300">Ready To Ship</h1>
       </Link>
     </div>
       <Link rel="stylesheet" href="/readytoship">
