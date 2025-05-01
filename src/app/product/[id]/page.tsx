@@ -4,6 +4,7 @@ import { getProductDetail, getProductList } from "@/apis/product";
 import ProductDetailPage from "@/components/Layout/ProductDetail/test";
 import type { Metadata } from "next";
 import ProductNavigation from "./Navigation";
+import ScrollToTopOnMount from "@/components/Common/top/ScrollToTopOnMount";
 
 // 定义默认的元数据信息，用于产品未找到的情况
 const defaultMetadata = {
@@ -104,6 +105,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
   return (
     <div className="relative mx-auto max-w-c-1280 py-5 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
+      <ScrollToTopOnMount />
       <ProductNavigation product={product} />
       <div className="flex flex-col md:flex-row">
         <ProductDetailPage product={product} />
