@@ -122,7 +122,7 @@ export default function BannerInIndex() {
             <p className="p-1 font-bold">🔹 Collector’s edition</p>
             <p className="p-1 font-bold">🔹 One-of-a-kind</p>
             <div className="itemms-center justify-center flex pt-2 md:pt-10">
-              <Link rel="stylesheet" href="/category/zodiac_collections">
+              <Link rel="stylesheet" href="/category/zodiac_realm">
               <div className="inline-flex font-medium text-custom-sm py-1.5 px-4 md:py-2.5 md:px-7 rounded border-bg-700 border  bg-primary-400 text-bg-300 ease-out duration-200 hover:text-primary-400 hover:bg-bg-300">Shop Now</div>
               </Link>
             </div>
