@@ -1,10 +1,9 @@
 // pages/product/[id].tsx
 "use client";
 
-import React, { Suspense, useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Carousel, Divider } from "antd";
-import { useProductStore } from "@/stores/useProductStore";
 import type { CarouselRef } from "antd/es/carousel";
 import type { ProductDetail } from "@/types/products";
 import Price from "./price"
@@ -17,10 +16,10 @@ import ReviewList from "@/components/Common/ReviewList";
 import ReviewSummary from "@/components/Common/ReviewList/ReviewSummary";
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
-  const { selectedImageIndex, setSelectedImageIndex } = useProductStore();
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const carouselRef = useRef<CarouselRef>(null);
-  const [rate, setRate] = React.useState<number>(5.0);
-  const [images, setImages] = React.useState<any[]>([]);
+  const [rate, setRate] = useState<number>(5.0);
+  const [images, setImages] = useState<any[]>([]);
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -158,7 +157,9 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
           <div className="w-full lg:hidden">
             <ReviewSummary Review={product.Review} />
             <Divider />
+            <Suspense>
             <ReviewList productID={product.productId} />
+            </Suspense>
           </div>
         </div>
       </div>

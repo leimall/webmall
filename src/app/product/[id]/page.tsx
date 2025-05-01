@@ -5,7 +5,6 @@ import ProductDetailPage from "@/components/Layout/ProductDetail/test";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { FaAngleRight } from "react-icons/fa6";
-import Category from "@/components/Common/Category";
 
 // 定义默认的元数据信息，用于产品未找到的情况
 const defaultMetadata = {
@@ -78,16 +77,22 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 export async function generateStaticParams() {
-  let list: { id: string }[] = [];
-  const res = await getProductList();
-  const products = res.data;
+  try {
 
-  products.forEach((product: Product) => {
-    list.push({
-      id: product.productId,
+    let list: { id: string }[] = [];
+    const res = await getProductList();
+    const products = res.data;
+
+    products.forEach((product: Product) => {
+      list.push({
+        id: product.productId,
+      });
     });
-  });
-  return list
+    return list
+  } catch (err) {
+    console.error("err:", err);
+    return []
+  }
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -99,10 +104,12 @@ export default async function Page({ params }: { params: { id: string } }) {
     return <div>Product not found</div>;
   }
 
-  const categoryItems = product.Category.map(item => ({
-    title: item.title,
-    url: `/category/${item.title.toLowerCase().replace(/\s+/g, '_')}` // 处理多个空格
-  }));
+  const categoryUrl = () => {
+    return `/category/${product.Category[0].title.toLowerCase().replace(/\s+/g, '_')}`;
+  }
+  const categoryTitle = () => {
+    return product.Category[0].title;
+  }
 
   // 返回客户端组件，服务器端不处理客户端逻辑
   return (
@@ -118,12 +125,12 @@ export default async function Page({ params }: { params: { id: string } }) {
             <FaAngleRight className="font-bold text-gray-500" />
           </li>
           {
-            categoryItems.length>0&&
-            <Link href={categoryItems[0].url} passHref>
-            <li className="text-gray-800 text-base cursor-pointer relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-1 lg:hover:text-primary-400 lg:after:transition-all lg:after:duration-300">
-              {categoryItems[0].title}
-            </li>
-          </Link>
+            product.Category.length > 0 &&
+            <Link href={categoryUrl()} passHref>
+              <li className="text-gray-800 text-base cursor-pointer relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-1 lg:hover:text-primary-400 lg:after:transition-all lg:after:duration-300">
+                {categoryTitle()}
+              </li>
+            </Link>
           }
           <li>
             <FaAngleRight className="font-bold text-gray-500" />

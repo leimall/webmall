@@ -1,8 +1,7 @@
 'use client'
 import { Carousel } from 'antd';
 import Link from "next/link";
-import { useProductStore } from "@/stores/useProductStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CarouselRef } from "antd/es/carousel";
 type Banner = {
   imageUrl: string,
@@ -13,7 +12,7 @@ type Banner = {
 
 
 export default function BannerInIndex() {
-  const { adImageIndex, setAdImageIndex } = useProductStore();
+  const [adImageIndex, setAdImageIndex ] = useState<number>(0);
   const carouselRef = useRef<CarouselRef>(null);
   const banners: Banner[] = [
     {
@@ -128,8 +127,6 @@ export default function BannerInIndex() {
               </Link>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
