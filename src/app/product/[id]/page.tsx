@@ -2,9 +2,8 @@
 import type { Product, ProductDetail } from "@/types/products";
 import { getProductDetail, getProductList } from "@/apis/product";
 import ProductDetailPage from "@/components/Layout/ProductDetail/test";
-import Link from "next/link";
 import type { Metadata } from "next";
-import { FaAngleRight } from "react-icons/fa6";
+import ProductNavigation from "./Navigation";
 
 // 定义默认的元数据信息，用于产品未找到的情况
 const defaultMetadata = {
@@ -103,44 +102,9 @@ export default async function Page({ params }: { params: { id: string } }) {
   if (!product) {
     return <div>Product not found</div>;
   }
-
-  const categoryUrl = () => {
-    return `/category/${product.Category[0].title.toLowerCase().replace(/\s+/g, '_')}`;
-  }
-  const categoryTitle = () => {
-    return product.Category[0].title;
-  }
-
-  // 返回客户端组件，服务器端不处理客户端逻辑
   return (
     <div className="relative mx-auto max-w-c-1280 py-5 items-center justify-between align-items:flex-end px-4 md:px-8 2xl:px-0">
-      <div>
-        <ul className="flex items-center font-[sans-serif] space-x-4">
-          <Link href={'/'} passHref>
-            <li className="text-gray-800 text-base cursor-pointer relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-1 lg:hover:text-primary-400 lg:after:transition-all lg:after:duration-300">
-              Home
-            </li>
-          </Link>
-          <li>
-            <FaAngleRight className="font-bold text-gray-500" />
-          </li>
-          {
-            product.Category.length > 0 &&
-            <Link href={categoryUrl()} passHref>
-              <li className="text-gray-800 text-base cursor-pointer relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-1 lg:hover:text-primary-400 lg:after:transition-all lg:after:duration-300">
-                {categoryTitle()}
-              </li>
-            </Link>
-          }
-          <li>
-            <FaAngleRight className="font-bold text-gray-500" />
-          </li>
-
-          <li className="text-gray-500 text-base">
-            {product.title}
-          </li>
-        </ul>
-      </div>
+      <ProductNavigation product={product} />
       <div className="flex flex-col md:flex-row">
         <ProductDetailPage product={product} />
       </div>

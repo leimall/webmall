@@ -10,6 +10,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 import FreeShipping from "@/components/Common/free/shipping";
 import { ConfigProvider } from "antd";
 import { ecomTheme } from "@/themes";
+import ScrollToTopOnMount from "@/components/Common/top/ScrollToTopOnMount";
 
 export const metadata: Metadata = {
   title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
@@ -53,6 +54,7 @@ export default function RootLayout({
       </head>
 
       <body suppressHydrationWarning={true} className="min-h-screen flex flex-col">
+        <ScrollToTopOnMount />
         <FreeShipping />
         <Header />
         <div className="flex-grow bg-white">
