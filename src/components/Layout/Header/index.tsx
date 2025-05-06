@@ -211,7 +211,7 @@ export default function Header() {
                       {
                         index === 1 && (
                           <span className="text-xs text-rose-600 ml-2 font-bold uppercase tracking-wide animate-tax-badge">
-                          USA No Tax
+                          USA Tax Free
                         </span>
                         )
                       }
@@ -286,7 +286,7 @@ export default function Header() {
                     index === 1 && (
                       <div className="absolute top-0 right-0 -mt-4">
                         <span className="text-xs text-rose-600 uppercase tracking-wide animate-tax-badge">
-                          USA No Tax
+                          USA Tax Free
                         </span>
                       </div>
                     )

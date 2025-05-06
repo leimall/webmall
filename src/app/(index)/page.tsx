@@ -6,7 +6,7 @@ import Comment from "@/components/Layout/index/comment";
 import PublicLists from "@/components/Layout/index/publists";
 
 import Informatin from "@/template/indexInfo";
-import { getBestProductList, getSaleProductList, getLasterProductList } from "@/apis/product";
+import { getBestProductList, getReadytogoProductList, getLasterProductList } from "@/apis/product";
 import { getProductByCategory } from "@/apis/product";
 import { notFound } from 'next/navigation';
 import FirstAdPage from '@/components/Layout/index/ad/first';
@@ -53,7 +53,7 @@ export default async function PageHome() {
 
   let fetchedLasers: Product[] = [];
   let fetchedBast: Product[] = [];
-  let fetchedSale: Product[] = [];
+  let fetchReadyTogo: Product[] = [];
 
   let ZodiacList: Product[] = [];
   let CultureList: Product[] = [];
@@ -61,10 +61,10 @@ export default async function PageHome() {
   let OriginalList: Product[] = [];
   let ThreeDList: Product[] = [];
   try {
-    const [laserResponse, bestResp, saleResp, ZodiacResp, CultureResp, MastersResp, OriginalResp, ThreeDResp] = await Promise.all([
+    const [laserResponse, bestResp, readyToGoResp, ZodiacResp, CultureResp, MastersResp, OriginalResp, ThreeDResp] = await Promise.all([
       getLasterProductList(),
       getBestProductList(),
-      getSaleProductList(),
+      getReadytogoProductList(),
       getProductByCategory(ZodiacName, { offset: 1, limit: 4 }),
       getProductByCategory(CultureName, { offset: 1, limit: 8 }),
       getProductByCategory(MastersName, { offset: 1, limit: 8 }),
@@ -75,7 +75,7 @@ export default async function PageHome() {
     // Assuming each API returns an array of objects
     fetchedLasers = laserResponse.data;
     fetchedBast = bestResp.data;
-    fetchedSale = saleResp.data;
+    fetchReadyTogo = readyToGoResp.data;
     ZodiacList = ZodiacResp.data?.list || [];
     CultureList = CultureResp.data?.list || [];
     MastersList = MastersResp.data?.list || [];
@@ -95,7 +95,7 @@ export default async function PageHome() {
     <main >
       <FirstAdPage />
       <div className="relative mx-auto max-w-c-1440 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
-        <ReadyToShop title="Sale" products={fetchedSale} />
+        <ReadyToShop title="Ready To Go" products={fetchReadyTogo} />
         <NewsLists title="New Release" products={fetchedLasers} />
         <BannerInIndex />
         <PublicLists title={ZodiacName} url={returnURL(ZodiacName)} products={ZodiacList} />
@@ -104,7 +104,7 @@ export default async function PageHome() {
         <PublicLists title={OriginalName} url={returnURL(OriginalName)} products={OriginalList} />
         <PublicLists title={ThreeDName} url={returnURL(ThreeDName)} products={ThreeDList} />
         {/* <BestLists title="Best Seller" products={fetchedBast} /> */}
-        <Comment title="User Feedbacks" products={fetchedSale} />
+        <Comment title="User Feedbacks" products={fetchedLasers} />
         <Informatin />
       </div>
     </main>

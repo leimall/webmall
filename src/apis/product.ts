@@ -29,6 +29,12 @@ export const getBestProductList = () => {
   })
 }
 
+export const getReadytogoProductList = () => {
+  return request({
+    url: '/product/readytogo',
+    method: 'get'
+  })
+}
 export const getSaleProductList = () => {
   return request({
     url: '/product/sale',
