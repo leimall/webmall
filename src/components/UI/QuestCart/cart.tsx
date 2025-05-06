@@ -10,7 +10,7 @@ import { getOrderId, createOrderForDB } from '@/apis/orders';
 import type { Order } from '@/types/stores/orders';
 
 import FingerWidthInput from './custom';
-import { Drawer, Form, message, Modal, Spin } from 'antd';
+import { Drawer, Form, List, message, Modal, Spin } from 'antd';
 import Measure from './measure';
 import CartListItem from './cartItem';
 
@@ -35,8 +35,8 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
   const [selfQuantity, setSelfQuantity] = useState<number>(1);
   const [selfPrice, setSelfPrice] = useState<number>(0);
   const [skuTitle, setSkuTitle] = useState<SkuItem[]>();
-  const [airrtiute, setAirrRoute] = useState<string>('');
-  const [airrtiuteList, setAirrRouteList] = useState<Sku[]>([]);
+  const [airrRoute, setAirrRoute] = useState<string>('');
+  const [airrRouteList, setAirrRouteList] = useState<Sku[]>([]);
   const [shapeOptions, setShapeOptions] = useState<any[]>([]);
   const [size, setSize] = useState<string>('M');
   const [sizeList, setSizeList] = useState<string[]>(['XS', 'S', 'M', 'L']);
@@ -68,8 +68,10 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
 
   const initData = () => {
     if (product.Sku) {
+      const { List } = product.Sku[0]
       setSkuTitle(product.Sku);
       setAirrRoute(product.Sku[0].title);
+      setAirrRouteList(List)
     }
     setSelfPrice(parseFloat((product.price * (product.priceOff / 100)).toFixed(0) + '.99'))
     if (items?.length > 0) {
@@ -224,7 +226,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
     if (selfItem) {
       setSelfItem({
         ...selfItem,
-        size_title: airrtiute,
+        size_title: airrRoute,
         size: e,
       });
     }
@@ -323,7 +325,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               e.title === 'Custom' &&
               <div
                 key={index}
-                className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === airrtiute ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === airrRoute ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
                 onClick={() => setOpenCustom(e)}
               >
                 {e.title}
@@ -331,7 +333,7 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
               ||
               <div
                 key={index}
-                className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === airrtiute ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                className={`w-auto cursor-pointer px-2 h-10 border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === airrRoute ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
                 onClick={() => setchoicheSize(e)}
               >
                 {e.title}
@@ -339,20 +341,22 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
             ))
           }
         </div>
-        <div className="flex flex-wrap gap-4 my-2">
+        <div className="flex flex-wrap gap-4 ">
           {
-            airrtiute != 'Custom' && airrtiuteList.map((e, index) => (
-              <div
-                key={index}
-                className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
-                onClick={() => setSize(e.title)}
-              >
-                {e.title}
+            airrRoute != 'Custom' && airrRouteList.map((e, index) => (
+              <div className='my-4'>
+                <div
+                  key={index}
+                  className={`w-10 h-10 cursor-pointer border hover:border-gray-800 hover:bg-slate-100  font-semibold text-md rounded flex items-center justify-center ${e.title === size ? 'border-gray-800 bg-slate-100' : 'border-primary-50 bg-white'}`}
+                  onClick={() => setSize(e.title)}
+                >
+                  {e.title}
+                </div>
               </div>
             ))}
         </div>
         {
-          airrtiute === Custom &&
+          airrRoute === Custom &&
           <div className="bg-gray-50 my-2 md:my-4 p-2 md:p-4 rounded-sm border border-gray-200">
             <FingerWidthInput onChangeValue={handleWidthsChange} shapeOptions={shapeOptions} initialInputValue='' initialShape='' />
           </div>

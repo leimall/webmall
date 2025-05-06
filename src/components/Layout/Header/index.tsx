@@ -198,23 +198,30 @@ export default function Header() {
             <div onClick={(e) => gotoUrl(e, '/search')} className='text-primary-500 flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
               <AiFillProduct className='text-primary-500 text-md mr-2' /> All Products
             </div>
-            <div onClick={(e) => gotoUrl(e, '/readytoship')} className='text-primary-500 flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
+            {/* <div onClick={(e) => gotoUrl(e, '/readytoship')} className='text-primary-500 flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
               <TbTax className='text-primary-500 text-md mr-2' /> Ready to Ship
-            </div>
-            
+            </div> */}
+
             {list && list.length > 0 ? (
               list.map((mainCategory, index) => (
-                index === 0 && (
-                <div key={"Drawer" + mainCategory.ID}>
-                  <div className='flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
-                    <FaAngleDown className='text-primary-500 text-sm mr-2' /> {mainCategory.title_en}
-                  </div>
-                  {mainCategory.children && mainCategory.children.map((subCategory) => (
-                    <div key={"sub" + subCategory.ID} onClick={(e) => gotoUrl(e, `/category/${subCategory.url}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
-                      <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
+                index >= 0 && (
+                  <div key={"Drawer" + mainCategory.ID}>
+                    <div className='flex items-center border-b text-md border-bg-200 pb-4 mb-4'>
+                      <FaAngleDown className='text-primary-500 text-sm mr-2' /> {mainCategory.title_en}
+                      {
+                        index === 1 && (
+                          <span className="text-xs text-rose-600 ml-2 font-bold uppercase tracking-wide animate-tax-badge">
+                          USA No Tax
+                        </span>
+                        )
+                      }
                     </div>
-                  ))}
-                </div>
+                    {mainCategory.children && mainCategory.children.map((subCategory) => (
+                      <div key={"sub" + subCategory.ID} onClick={(e) => gotoUrl(e, `/category/${subCategory.url}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
+                        <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
+                      </div>
+                    ))}
+                  </div>
                 )
               ))
             ) : (
@@ -266,32 +273,41 @@ export default function Header() {
               Home
             </div>
           </Link>
-          <Link href="/readytoship">
+          {/* <Link href="/readytoship">
             <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
             Ready to Ship
             </div>
-          </Link>
+          </Link> */}
           {list && list.length > 0 ? (
             list.map((mainCategory, index) => (
-              index === 0 && (
-              <div key={mainCategory.ID} className="relative group">
-                <div className='text-primary-500 cursor-pointer'>
-                  <div className='flex items-center'>
-                    <FaAngleRight className='text-primary-500 text-xs mr-1' />{mainCategory.title_en}
+              index >= 0 && (
+                <div key={mainCategory.ID} className="relative group">
+                  {
+                    index === 1 && (
+                      <div className="absolute top-0 right-0 -mt-4">
+                        <span className="text-xs text-rose-600 uppercase tracking-wide animate-tax-badge">
+                          USA No Tax
+                        </span>
+                      </div>
+                    )
+                  }
+                  <div className='text-primary-500 cursor-pointer'>
+                    <div className='flex items-center'>
+                      {mainCategory.title_en} <FaAngleDown className='text-primary-500 text-md font-bold ml-1' />
+                    </div>
                   </div>
+                  {mainCategory.children && mainCategory.children.length > 0 && (
+                    <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10 w-52">
+                      {mainCategory.children.map((subCategory) => (
+                        <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
+                          <div className='flex items-center text-md text-primary-500 p-3 hover:bg-gray-100'>
+                            <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                {mainCategory.children && mainCategory.children.length > 0 && (
-                  <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10 w-52">
-                    {mainCategory.children.map((subCategory) => (
-                      <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
-                        <div className='flex items-center text-md text-primary-500 p-3 hover:bg-gray-100'>
-                          <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
               )
             ))
           ) : (
