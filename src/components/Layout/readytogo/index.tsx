@@ -8,15 +8,15 @@ import {
   Pagination,
   FloatButton,
   Drawer,
-  type PaginationProps 
 } from "antd";
 import useMenuStore from "@/stores/useMenuStore";
 import { useSearchParams } from "next/navigation";
-import { getAllProductList } from "@/apis/product";
-import type { ProductSearch } from "@/types/products";
+import { getAllProductList, getAllTagList } from "@/apis/product";
+import type { ProductSearch, TagItem } from "@/types/products";
 import ProductCardOne from "@/components/Common/Products/cardtwo";
 import ProductCardSkeleton from "@/components/Common/Products/skeleton";
-import { FaListUl } from "react-icons/fa6";
+import { FaListUl, FaXmark } from "react-icons/fa6";
+import { AlertTwoTone } from "@ant-design/icons";
 const PAGE_SIZE = 12;
 const Min_Price = 0;
 const Max_price = 500
@@ -47,14 +47,12 @@ const SearchLayout = () => {
   const [loading, setLoading] = useState(true);
   const [saveAlllist, setSaveAlllist] = useState<ProductSearch[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductSearch[]>([]);
+  const [allTags, setAllTags] = useState<TagItem[]>([]);
   const [products, setProducts] = useState<ProductSearch[]>([]);
   const [showProduct, setShowProduct] = useState<ProductSearch[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [total, setTotal] = useState(0);
-
-
-  const { categories } = useMenuStore();
 
   const [priceRange, setPriceRange] = useState([Min_Price, Max_price]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -67,7 +65,7 @@ const SearchLayout = () => {
     if (selectedBrands.length > 0) {
       handleCategorydChange(selectedBrands);
     } else {
-      filterProducts(filteredProducts);
+      filterProducts(saveAlllist);
     }
   }, [selectedBrands]);
 
@@ -82,6 +80,7 @@ const SearchLayout = () => {
 
   const getallproductlist = async (query: string | null, tag: string | null) => {
     try {
+      await getAllTagsLists()
       const res = await getAllProductList()
       if (res.code === 0) {
         setSaveAlllist(res?.data)
@@ -95,12 +94,24 @@ const SearchLayout = () => {
     }
   }
 
+  const getAllTagsLists = async () => {
+    try {
+      const res = await getAllTagList()
+      if (res.code === 0) {
+        setAllTags(res?.data)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const initProcess = (data: ProductSearch[], query: string | null, tag: string | null) => {
     let productList = data
     if (query) {
       productList = filterProductsBySearch(productList, query)
     }
     if (tag) {
+      setSelectedBrands([tag])
       productList = filterProductsByTagTitle(productList, tag)
     }
     if (selectedBrands.length > 0) {
@@ -137,8 +148,10 @@ const SearchLayout = () => {
 
   const filterObjectsByCategoryTitle = (values: string[], product: ProductSearch[]): ProductSearch[] => {
     return product.filter(item => {
-      const categoryTitles = item.Category.map((cat: { title: string }) => cat.title);
-      return categoryTitles.some(title => values.includes(title));
+      if (item.Tags && item.Tags.length > 0) {
+        const categoryTitles = item.Tags.map((cat: { title: string }) => cat.title);
+        return categoryTitles.some(title => values.includes(title));
+      }
     });
   }
 
@@ -173,7 +186,9 @@ const SearchLayout = () => {
     }
   }
 
-  const onChange: PaginationProps['onChange'] = (page: number) => {
+
+
+  const onChange = (page: number) => {
     setCurrentPage(page);
     setShowProduct(getPaginatedItems(filteredProducts, page, PAGE_SIZE));
   };
@@ -192,11 +207,11 @@ const SearchLayout = () => {
       if (!Array.isArray(product.Tags)) {
         return false;
       }
-      return product.Tags.some(tag => {
-        if (typeof tag.title !== 'string') {
+      return product.Tags.some(item => {
+        if (typeof item.title !== 'string') {
           return false;
         }
-        return normalizeString(tag.title).includes(normalizedSearchTerm);
+        return normalizeString(item.title).includes(normalizedSearchTerm);
       });
     });
   }
@@ -282,38 +297,30 @@ const SearchLayout = () => {
               </div>
             </div>
 
-
             <div>
-              {categories && categories.length > 0 ? (
-                categories.map((mainCategory, index) => (
-                  index === 1 && (
-                  <div key={mainCategory.ID} className="bg-bg-50 border border-bg-200 rounded p-4 mb-4">
-                    <h3 className="text-gray-700 font-medium mt-2` my-2">{mainCategory.title_en}</h3>
-                    {mainCategory.children && mainCategory.children.map((subCategory) => (
-                      <div key={subCategory.ID} className="flex items-center pt-1">
-                        <Checkbox
-                          checked={selectedBrands.includes(subCategory.title_en)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedBrands([...selectedBrands, subCategory.title_en]);
-                            } else {
-                              setSelectedBrands(
-                                selectedBrands.filter((b) => b !== subCategory.title_en),
-                              );
-                            }
-                          }}
-                        >
-                          <span className="text-gray-600">{subCategory.title_en}</span>
-                        </Checkbox>
-                      </div>
-                    ))}
-                  </div>
-                  )
+              <div className="bg-bg-50 border border-bg-200 rounded p-4 mb-4">
+                <h3 className="text-gray-700 font-medium mt-2` my-2">Tag List</h3>
+                {allTags && allTags.length > 0 && (
+                  allTags.map((tag) => (
+                    <div key={tag.id} className="flex items-center pt-1">
+                      <Checkbox
+                        checked={selectedBrands.includes(tag.title_en)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedBrands([...selectedBrands, tag.title_en]);
+                          } else {
+                            setSelectedBrands(
+                              selectedBrands.filter((b) => b !== tag.title_en),
+                            );
+                          }
+                        }}
+                      >
+                        <span className="text-gray-600">{tag.title_en}</span>
+                      </Checkbox>
+                    </div>
+                  )))}
 
-                ))
-              ) : (
-                <div>No categories available</div>
-              )}
+              </div>
 
             </div>
           </div>
@@ -359,11 +366,11 @@ const SearchLayout = () => {
           </div>
           <div className='flex justify-center mt-8'>
             <Pagination
+              hideOnSinglePage={true}
               current={currentPage}
               onChange={onChange}
-              total={total}
               pageSize={PAGE_SIZE}
-              hideOnSinglePage
+              total={total}
             />
           </div>
         </div>
@@ -376,7 +383,7 @@ const SearchLayout = () => {
       }
 
 
-      <Drawer title="Filters"  placement={"right"} onClose={onClose} open={open}>
+      <Drawer title="Filters" placement={"right"} onClose={onClose} open={open}>
         <div className="w-full p-2">
           <div className="">
             <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
@@ -408,42 +415,34 @@ const SearchLayout = () => {
               </div>
             </div>
             <div>
-              {categories && categories.length > 0 ? (
-                categories.map((mainCategory, index) => (
-                  index === 1 && (
-                  <div key={mainCategory.ID} className="bg-background-back1 border border-bg-200 rounded p-4 mb-4">
-                    <h3 className="text-gray-700 font-medium mt-2` my-2">{mainCategory.title_en}</h3>
-                    {mainCategory.children && mainCategory.children.map((subCategory) => (
-                      <div key={subCategory.ID} className="flex items-center pt-1">
-                        <Checkbox
-                          checked={selectedBrands.includes(subCategory.title_en)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedBrands([...selectedBrands, subCategory.title_en]);
-                            } else {
-                              setSelectedBrands(
-                                selectedBrands.filter((b) => b !== subCategory.title_en),
-                              );
-                            }
-                          }}
-                        >
-                          <span className="text-gray-600">{subCategory.title_en}</span>
-                        </Checkbox>
-                      </div>
-                    ))}
-                  </div>
-                  )
-                ))
-              ) : (
-                <div>No categories available</div>
-              )}
-
+              <div className="bg-background-back1 border border-bg-200 rounded p-4 mb-4">
+                <h3 className="text-gray-700 font-medium mt-2` my-2">Tag List</h3>
+                {allTags && allTags.length > 0 && (
+                  allTags.map((item) => (
+                    <div key={item.id} className="flex items-center pt-1">
+                      <Checkbox
+                        checked={selectedBrands.includes(item.title_en)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedBrands([...selectedBrands, item.title_en]);
+                          } else {
+                            setSelectedBrands(
+                              selectedBrands.filter((b) => b !== item.title_en),
+                            );
+                          }
+                        }}
+                      >
+                        <span className="text-gray-600">{item.title_en}</span>
+                      </Checkbox>
+                    </div>
+                  )))}
+              </div>
             </div>
           </div>
         </div>
       </Drawer>
 
 
-    </div>
+    </div >
   );
 }; export default SearchLayout;

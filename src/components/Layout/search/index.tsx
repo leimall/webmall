@@ -66,7 +66,7 @@ const SearchLayout = () => {
     if (selectedBrands.length > 0) {
       handleCategorydChange(selectedBrands);
     } else {
-      filterProducts(filteredProducts);
+      filterProducts(saveAlllist);
     }
   }, [selectedBrands]);
 
@@ -100,6 +100,7 @@ const SearchLayout = () => {
       productList = filterProductsBySearch(productList, query)
     }
     if (tag) {
+      setSelectedBrands([tag])
       productList = filterProductsByTagTitle(productList, tag)
     }
     if (selectedBrands.length > 0) {
@@ -190,14 +191,14 @@ const SearchLayout = () => {
     }
     const normalizedSearchTerm = normalizeString(searchTerm);
     return products.filter(product => {
-      if (!Array.isArray(product.Tags)) {
+      if (!Array.isArray(product.Category)) {
         return false;
       }
-      return product.Tags.some(tag => {
-        if (typeof tag.title !== 'string') {
+      return product.Category.some(item => {
+        if (typeof item.title !== 'string') {
           return false;
         }
-        return normalizeString(tag.title).includes(normalizedSearchTerm);
+        return normalizeString(item.title).includes(normalizedSearchTerm);
       });
     });
   }
@@ -283,37 +284,8 @@ const SearchLayout = () => {
               </div>
             </div>
 
-            <div className="bg-bg-50 border border-bg-200 rounded p-4 space-y-6 mb-4">
-              <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
-              <Slider
-                range
-                min={Min_Price}
-                max={Max_price}
-                value={priceRange}
-                onChange={setPriceRange}
-                className="mb-4"
-              />
-              <div className="flex items-center space-x-2">
-                <Input
-                  value={priceRange[0]}
-                  onChange={(e) =>
-                    setPriceRange([Number(e.target.value), priceRange[1]])
-                  }
-                  className="w-20"
-                />
-                <span>-</span>
-                <Input
-                  value={priceRange[1]}
-                  onChange={(e) =>
-                    setPriceRange([priceRange[0], Number(e.target.value)])
-                  }
-                  className="w-20"
-                />
-              </div>
-            </div>
-
             <div>
-              {categories && categories.length > 0 ? (
+              {categories && categories.length > 0 && (
                 categories.map((mainCategory) => (
                   <div key={mainCategory.ID} className="bg-bg-50 border border-bg-200 rounded p-4 mb-4">
                     <h3 className="text-gray-700 font-medium mt-2` my-2">{mainCategory.title_en}</h3>
@@ -337,8 +309,6 @@ const SearchLayout = () => {
                     ))}
                   </div>
                 ))
-              ) : (
-                <div>No categories available</div>
               )}
 
             </div>

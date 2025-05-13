@@ -1,6 +1,6 @@
 import type { CategoryProduct } from '@/types/category';
 import type { ProductComment } from '@/types/product_comment';
-import type { Product, ProductDetail, ProductSearch } from '@/types/products';
+import type { Product, ProductDetail, ProductSearch, TagItem } from '@/types/products';
 import type { ResponseData, ResponsePageList  } from '@/types/respones'
 import request from '@/utils/request'
 import { comment } from 'postcss';
@@ -8,6 +8,7 @@ type ProductDetailResponse = ResponseData<ProductDetail>;
 type productResponse = ResponsePageList<Product[]>;
 type ProductCommentListResponse = ResponsePageList<ProductComment[]>;
 type ResponseLists = ResponseData<ProductSearch[]>;
+type TagRespone = ResponseData<TagItem[]>;
 
 export const getProductList = () => {
   return request({
@@ -22,23 +23,11 @@ export const getLasterProductList = () => {
   })
 }
 
-export const getBestProductList = () => {
+export const getBestProductList = (data: any) => {
   return request({
-    url: '/product/bastseller',
-    method: 'get'
-  })
-}
-
-export const getReadytogoProductList = () => {
-  return request({
-    url: '/product/readytogo',
-    method: 'get'
-  })
-}
-export const getSaleProductList = () => {
-  return request({
-    url: '/product/sale',
-    method: 'get'
+    url: '/product/best',
+    method: 'get',
+    params: data
   })
 }
 
@@ -82,6 +71,13 @@ export const getAllProductList = (): Promise<ResponseLists>  => {
 export const getProductSku = (id: string) => {
   return request({
     url: `/product/sku/${id}`,
+    method: 'get'
+  })
+}
+
+export const getAllTagList = (): Promise<TagRespone> => {
+  return request({
+    url: `/product/tags`,
     method: 'get'
   })
 }

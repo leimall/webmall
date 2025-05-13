@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 import NewsLists from "@/components/Layout/index/lastest";
 import BestLists from "@/components/Layout/index/bast";
-import ReadyToShop from "@/components/Layout/index/ReadytoShip";
+import ReadyToShop from "@/components/Layout/index/ReadytoGo";
 import Comment from "@/components/Layout/index/comment";
 import PublicLists from "@/components/Layout/index/publists";
 
 import Informatin from "@/template/indexInfo";
-import { getBestProductList, getReadytogoProductList, getLasterProductList } from "@/apis/product";
+import { getBestProductList } from "@/apis/product";
 import { getProductByCategory } from "@/apis/product";
 import { notFound } from 'next/navigation';
 import FirstAdPage from '@/components/Layout/index/ad/first';
@@ -62,9 +62,9 @@ export default async function PageHome() {
   let ThreeDList: Product[] = [];
   try {
     const [laserResponse, bestResp, readyToGoResp, ZodiacResp, CultureResp, MastersResp, OriginalResp, ThreeDResp] = await Promise.all([
-      getLasterProductList(),
-      getBestProductList(),
-      getReadytogoProductList(),
+      getBestProductList({keyword:"New Desgin", page:1, size: 4}),
+      getBestProductList({keyword:"Best Seller", page:1, size: 4}),
+      getBestProductList({keyword:"Ready To Go", page:1, size: 8}),
       getProductByCategory(ZodiacName, { offset: 1, limit: 4 }),
       getProductByCategory(CultureName, { offset: 1, limit: 8 }),
       getProductByCategory(MastersName, { offset: 1, limit: 8 }),
@@ -96,7 +96,8 @@ export default async function PageHome() {
       <FirstAdPage />
       <div className="relative mx-auto max-w-c-1440 items-center justify-between align-items:flex-end px-2 md:px-8 2xl:px-0">
         <ReadyToShop title="Ready To Go" products={fetchReadyTogo} />
-        <NewsLists title="New Release" products={fetchedLasers} />
+        <NewsLists title="New Desgin" products={fetchedLasers} />
+        <BestLists title="Best Seller" products={fetchedBast} />
         <BannerInIndex />
         <PublicLists title={ZodiacName} url={returnURL(ZodiacName)} products={ZodiacList} />
         <PublicLists title={CultureName} url={returnURL(CultureName)} products={CultureList} />

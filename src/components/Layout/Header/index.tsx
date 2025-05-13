@@ -273,11 +273,6 @@ export default function Header() {
               Home
             </div>
           </Link>
-          {/* <Link href="/readytoship">
-            <div className='text-primary-500 max-lg:border-b max-lg:py-3 relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-2 lg:after:transition-all lg:after:duration-300'>
-            Ready to Ship
-            </div>
-          </Link> */}
           {list && list.length > 0 ? (
             list.map((mainCategory, index) => (
               index >= 0 && (

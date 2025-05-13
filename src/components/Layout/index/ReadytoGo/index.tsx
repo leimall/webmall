@@ -1,10 +1,8 @@
 'use client'
-
 import ProductCardOne from '@/components/Common/Products/cardtwo'
 import { Product } from '@/types/products'
 import Title from './title'
 import React from 'react'
-import Link from 'next/link'
 
 
 export default function NewsLists({ products, title }: { products: Product[], title: string }) {
