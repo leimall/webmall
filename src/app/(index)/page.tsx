@@ -13,6 +13,7 @@ import FirstAdPage from '@/components/Layout/index/ad/first';
 
 import BannerInIndex from '@/components/Common/Banner';
 import type { Product } from "@/types/products";
+import Payment from '@/components/Layout/index/payment';
 
 
 export const metadata: Metadata = {
@@ -107,6 +108,7 @@ export default async function PageHome() {
         {/* <BestLists title="Best Seller" products={fetchedBast} /> */}
         <Comment title="User Feedbacks" products={fetchedLasers} />
         <Informatin />
+        <Payment />
       </div>
     </main>
   );
