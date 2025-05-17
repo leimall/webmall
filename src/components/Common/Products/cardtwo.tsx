@@ -3,6 +3,7 @@ import type { Product } from "@/types/products";
 import Link from "next/link";
 import Price from "./price"
 import React from "react";
+import CustomRate from "../Rate/home";
 
 
 export default function ProductCardOne({ product }: { product: Product }) {
@@ -26,7 +27,7 @@ export default function ProductCardOne({ product }: { product: Product }) {
     <>
       <Link href={`/product/${product.productId}`}>
         <div className="bg-white border border-bg-200 cursor-pointer hover:border-2 hover:border-primary-200 rounded transition-all relative">
-          <div className="md:m-8 m-2 hover:m-4 transition-all relative">
+          <div className="md:m-4 m-0 hover:m-0 transition-all relative">
             <div className="relative h-0 pb-[100%] rounded-t overflow-hidden mx-auto">
               <Image
                 src={product.mainImg}
@@ -46,7 +47,10 @@ export default function ProductCardOne({ product }: { product: Product }) {
           </div>
 
           <div className="p-1 md:p-3 bg-bg-10 rounded-b">
-            <h2 className="text-sm md:font-extrabold text-primary-800 h-6 line-clamp-1">{product.title}</h2>
+            <h1 className="text-sm md:font-extrabold text-primary-800 h-6 line-clamp-1">{product.title}</h1>
+            <h2>
+              <CustomRate review={product.Review} />
+            </h2>
             <div className="md:flex md:items-center md:justify-between text-fta-black-100">
               <Price product={product} />
             </div>

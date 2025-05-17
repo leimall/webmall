@@ -4,8 +4,8 @@ import React from 'react'
 
 export default function PaymentPage() {
   return (
-    <section className="m-4">
-      <div className='flex items-center justify-center gap-4'>
+    <section className="md:m-4 m-2">
+      <div className='flex items-center justify-center md:gap-4 gap-1'>
         <div className='w-20'>
           <img src="/images/payment/visa.png" alt="visa icon" />
         </div>

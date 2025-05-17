@@ -80,16 +80,29 @@ const config: Config = {
       },
 
       zIndex: {
-        99999: "99999",
-        999: "999",
-        1: "1",
+        "99999": "99999",
+        "999": "999",
+        "1": "1",
       },
       opacity: {
-        65: ".65",
+        "65": ".65",
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeOut: {
+          '0%': { opacity: '1' },
+          '100%': { opacity: '0' },
+        }
+      },
+      animation: {
+        fadeIn: 'fadeIn 1.5s ease-in',
+        fadeOut: 'fadeOut 1.5s ease-out',
       },
     },
   },
   plugins: [],
 };
-
 export default config;

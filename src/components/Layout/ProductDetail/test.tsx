@@ -118,7 +118,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
               </div>
               <div className="flex text-xs text-gray-500 pt-2">
                 <div onClick={copyToClipboard} className="flex items-center gap-2 text-gray-400 cursor-pointer">SKU: {product.productId} <FaCopy className="mr-4 text-blue-500" /></div>
-                <CustomRate rating={rate} />
+                <CustomRate review={product.Review} />
               </div>
             </div>
           </div>

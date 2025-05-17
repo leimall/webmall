@@ -70,7 +70,7 @@ const Footer = () => {
         <div className="md:pl-20">
           <h4 className="text-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">FTAnails SUPORT
           </h4>
-          <ul className="space-y-5 mt-6 max-sm:hidden">
+          <ul className="md:space-y-5 md:mt-6 mt-2">
             <li>
               <a href='/document/faq' className='hover:text-primary-800 text-primary-700 text-sm'>FAQ</a>
             </li>
@@ -90,7 +90,7 @@ const Footer = () => {
           <h4 className="text-primary-800 font-semibold text-lg relative max-sm:cursor-pointer">FTANAILS SERVICE
           </h4>
 
-          <ul className="space-y-5 mt-6 max-sm:hidden">
+          <ul className="md:space-y-5 md:mt-6 mt-2">
             <li>
               <a href='/document/about' className='hover:text-primary-800 text-primary-700 text-sm'>ABOUT US</a>
             </li>
@@ -108,8 +108,8 @@ const Footer = () => {
       </div>
       <hr className="my-10 border-bg-300" />
 
-      <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c-1440 flex items-center justify-between flex-wrap max-md:flex-col gap-4">
-        <ul className="md:flex md:space-x-6 max-md:space-y-2">
+      <div className="px-4 md:px-8 2xl:px-0 relative mx-auto max-w-c-1440 flex md:items-center justify-between flex-wrap max-md:flex-col gap-4">
+        <ul className="md:flex md:space-x-6 max-md:space-y-2 md:font-normal font-bold">
           <li>
             <a href='/document/terms' className='hover:text-primary-800 text-primary-700 text-sm'>Terms of Service</a>
           </li>
@@ -121,8 +121,6 @@ const Footer = () => {
           </li>
         </ul>
 
-        <p className='text-primary-700 text-sm'>Copyright © 2024-2025 <a href='https://ftanails.com/'
-          target='_blank' className="hover:underline mx-1">FTAnails.com</a>All Rights Reserved.</p>
         <div className="flex flex-wrap gap-2 items-center">
           <div className="w-24">
             <img src="/images/safe/sp.png" alt="" />
@@ -130,16 +128,22 @@ const Footer = () => {
           <div className="w-24">
             <img src="/images/safe/mas.png" alt="" />
           </div>
-          <div className="w-24">
+          <div className="md:w-24 w-28">
             <img src="/images/safe/ns.png" alt="" />
           </div>
-          <div className="w-20">
+          <div className="md:w-20 w-24">
             <img src="/images/safe/vs.png" alt="" />
           </div>
           <div className="w-24">
             <img src="/images/safe/sl.png" alt="" />
           </div>
+          <div className="w-28">
+            <img src="/images/safe/bbb.png" alt="" />
+          </div>
         </div>
+
+        <p className='text-primary-700 text-sm'>Copyright © 2024-2025 <a href='https://ftanails.com/'
+          target='_blank' className="hover:underline mx-1">FTAnails.com</a>All Rights Reserved.</p>
       </div>
 
     </footer>

@@ -3,7 +3,7 @@ import { SafetyOutlined, ShoppingCartOutlined, DollarOutlined, CustomerServiceOu
 
 export default function IndexInfor() {
   return (
-    <section className="flex flex-col md:flex-row justify-between py-16">
+    <section className="flex flex-col md:flex-row justify-between md:py-8 py-2">
       <div className="text-center md:w-1/4 p-2 xl:p-4">
         <SafetyOutlined style={{ fontSize: '4rem', color: '#603813' }} />
         <div className="text-lg font-bold pt-2">

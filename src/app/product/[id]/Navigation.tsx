@@ -9,8 +9,8 @@ export default function ProductNavigation({ product }: { product: ProductDetail 
   };
 
   return (
-    <div className="mb-8">
-      <ul className="flex items-center font-[sans-serif] space-x-4">
+    <div className="md:mb-4 mb-2">
+      <ul className="flex items-center font-[sans-serif] md:space-x-4 space-x-0">
         <Link href="/" passHref>
           <li className="text-gray-800 text-base cursor-pointer relative lg:hover:after:absolute lg:after:bg-primary-200 lg:after:w-0 lg:hover:after:w-full lg:hover:after:h-[3px] lg:after:block lg:after:-bottom-1 lg:hover:text-primary-400 lg:after:transition-all lg:after:duration-300">
             Home

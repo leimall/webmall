@@ -27,7 +27,7 @@ export default function ProductInfoPage({ product }: { product: ProductDetail })
     }
   }, [product]);
   return (
-    <div className="font-sans tracking-wide mx-auto ">
+    <div className="font-sans tracking-wide mx-auto flex items-center justify-between">
       <div className="flex items-end">
         <div className="text-red-500 text-3xl font-bold">${newprice}</div>
         {show &&
@@ -39,6 +39,7 @@ export default function ProductInfoPage({ product }: { product: ProductDetail })
           </div>
         }
       </div>
+      <div className="text-green-700 font-bold">In Stock</div>
     </div>
   );
 }

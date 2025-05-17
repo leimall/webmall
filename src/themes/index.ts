@@ -53,6 +53,9 @@ export const ecomTheme: ThemeConfig = {
     },
     FloatButton: {
       colorBgContainer: '#603813',
+    },
+    Rate: {
+      marginXS: 2,
     }
   }
 

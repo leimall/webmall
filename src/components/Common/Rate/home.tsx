@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { Rate } from 'antd';
 import type { ReviewItem } from '@/types/products';
+import { formatNumberWithUnit } from '@/utils/tools';
 
 
 export default function CustomRate({review}: {review:ReviewItem}) {
@@ -11,9 +12,10 @@ export default function CustomRate({review}: {review:ReviewItem}) {
   }, [review.average]);
   return (
     <div>
-      <span className='mr-2'>{value}</span>
+      <span className='text-sm mr-1'>{value}</span>
       <Rate disabled allowHalf defaultValue={review.average} style={{ fontSize: 14, color: '#FF9100FF' }} />
-      <span className='ml-2'>({review.reviews})</span>
+      <span className='text-sm ml-1'>({formatNumberWithUnit(review.reviews, 2)})</span>
+      
     </div>
   );
 }
