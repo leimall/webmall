@@ -44,6 +44,15 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
     }
   }, [product])
 
+  const handleThumbnailClick = (index: number) => {
+        // 显式设置轮播图索引并更新外部状态
+        setSelectedImageIndex(index);
+        if (carouselRef.current) {
+            // 调用轮播组件的跳转方法（具体方法名根据轮播库文档调整）
+            carouselRef.current.goTo(index);
+        }
+    };
+
   const processNewlines = (text: string): React.ReactNode => {
     const parts = text.split('\n');
     return parts.map((part, index) => {
@@ -96,7 +105,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
                 src={image.img_url}
                 alt={product.title}
                 className={`w-16 h-16 border-2 rounded cursor-pointer ${selectedImageIndex === index ? 'border-gray-800 bg-slate-100' : 'border-primary-50'} `}
-                onClick={() => setSelectedImageIndex(index)}
+                onClick={() => handleThumbnailClick(index)}
               />
             ))}
           </div>

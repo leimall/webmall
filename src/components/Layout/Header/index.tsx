@@ -18,9 +18,11 @@ import { FaXmark, FaAngleDown, FaGenderless, FaAngleRight } from "react-icons/fa
 import { FaHome } from "react-icons/fa";
 import { AiFillProduct, AiOutlineMenuUnfold } from "react-icons/ai";
 import { TbTax } from 'react-icons/tb';
+import { getMenuList } from '@/apis/category';
 
 export default function Header() {
   const [list, setList] = useState<Category[]>([]);
+  const [menu, setMenu] = useState<Category[]>([]);
   const { fetchCategories, categories } = useMenuStore();
 
 
@@ -32,6 +34,17 @@ export default function Header() {
       fetchCategories();
     }
   }, [categories]);
+
+  useEffect(() => {
+    fetchMenu();
+  }, []);
+
+  const fetchMenu = async () => {
+    const menuList = await getMenuList();
+    if (menuList.code === 0 && menuList.data && menuList.data.length > 0) {
+      setMenu(menuList.data);
+    }
+  }
 
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -211,16 +224,23 @@ export default function Header() {
                       {
                         index === 1 && (
                           <span className="text-xs text-rose-600 ml-2 font-bold uppercase tracking-wide animate-tax-badge">
-                          USA Tax Free
-                        </span>
+                            USA Tax Free
+                          </span>
                         )
                       }
                     </div>
-                    {mainCategory.children && mainCategory.children.map((subCategory) => (
-                      <div key={"sub" + subCategory.ID} onClick={(e) => gotoUrl(e, `/category/${subCategory.url}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
-                        <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
-                      </div>
-                    ))}
+                    {index === 0 ? (
+                      mainCategory.children && mainCategory.children.map((subCategory) => (
+                        <div key={"sub" + subCategory.ID} onClick={(e) => gotoUrl(e, `/category/${subCategory.url}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
+                          <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
+                        </div>
+                      ))) : (
+                      menu.length > 0 && menu.map((subCategory) => (
+                        <div key={"sub" + subCategory.ID} onClick={(e) => gotoUrl(e, `/readytogo?tag=${subCategory.title_en}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
+                          <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
+                        </div>
+                      )))
+                    }
                   </div>
                 )
               ))
@@ -291,7 +311,7 @@ export default function Header() {
                       {mainCategory.title_en} <FaAngleDown className='text-primary-500 text-md font-bold ml-1' />
                     </div>
                   </div>
-                  {mainCategory.children && mainCategory.children.length > 0 && (
+                  {index === 0 ? (mainCategory.children && mainCategory.children.length > 0 && (
                     <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10 w-52">
                       {mainCategory.children.map((subCategory) => (
                         <Link key={subCategory.ID} href={`/category/${subCategory.url}`}>
@@ -301,7 +321,18 @@ export default function Header() {
                         </Link>
                       ))}
                     </div>
-                  )}
+                  )) : (
+                    <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10 w-52">
+                      {menu.length > 0 && menu.map((subCategory) => (
+                        <Link key={subCategory.ID} href={`/readytogo?tag=${subCategory.title_en}`}>
+                          <div className='flex items-center text-md text-primary-500 p-3 hover:bg-gray-100'>
+                            <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )
+                }
                 </div>
               )
             ))

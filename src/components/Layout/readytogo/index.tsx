@@ -9,21 +9,21 @@ import {
   FloatButton,
   Drawer,
 } from "antd";
-import useMenuStore from "@/stores/useMenuStore";
 import { useSearchParams } from "next/navigation";
 import { getAllProductList, getAllTagList } from "@/apis/product";
 import type { ProductSearch, TagItem } from "@/types/products";
 import ProductCardOne from "@/components/Common/Products/cardtwo";
 import ProductCardSkeleton from "@/components/Common/Products/skeleton";
 import { FaListUl, FaXmark } from "react-icons/fa6";
-import { AlertTwoTone } from "@ant-design/icons";
+import { getMenuList } from "@/apis/category";
+import type { CategoryItem } from "@/types/category";
+import MenuSkeleton from "./menuSkeleton";
 const PAGE_SIZE = 12;
 const Min_Price = 0;
 const Max_price = 500
 
 function useDebounceEffect(callback: () => void, delay: number, dependencies: any[]) {
   const savedCallback = useRef<() => void>();
-
 
   // 保存最新的回调函数
   useEffect(() => {
@@ -43,23 +43,23 @@ function useDebounceEffect(callback: () => void, delay: number, dependencies: an
 }
 
 const SearchLayout = () => {
+  const title = "Ready To Go"
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [saveAlllist, setSaveAlllist] = useState<ProductSearch[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductSearch[]>([]);
-  const [allTags, setAllTags] = useState<TagItem[]>([]);
   const [products, setProducts] = useState<ProductSearch[]>([]);
   const [showProduct, setShowProduct] = useState<ProductSearch[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(12);
 
   const [priceRange, setPriceRange] = useState([Min_Price, Max_price]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("default");
   const [showBackTop, setShowBackTop] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const [menuList, setMenuList] = useState<CategoryItem[]>([]);
 
   useEffect(() => {
     if (selectedBrands.length > 0) {
@@ -74,13 +74,13 @@ const SearchLayout = () => {
   }, 300, [priceRange]);
 
   useEffect(() => {
-    setLoading(true)
     getallproductlist(searchParams.get("query"), searchParams.get("tag"));
   }, [searchParams.toString()])
 
   const getallproductlist = async (query: string | null, tag: string | null) => {
     try {
-      await getAllTagsLists()
+      setLoading(true)
+      await fetchMenu()
       const res = await getAllProductList()
       if (res.code === 0) {
         setSaveAlllist(res?.data)
@@ -94,14 +94,10 @@ const SearchLayout = () => {
     }
   }
 
-  const getAllTagsLists = async () => {
-    try {
-      const res = await getAllTagList()
-      if (res.code === 0) {
-        setAllTags(res?.data)
-      }
-    } catch (error) {
-      console.error(error);
+  const fetchMenu = async () => {
+    const menuList = await getMenuList();
+    if (menuList.code === 0 && menuList.data && menuList.data.length > 0) {
+      setMenuList(menuList.data);
     }
   }
 
@@ -147,10 +143,13 @@ const SearchLayout = () => {
   };
 
   const filterObjectsByCategoryTitle = (values: string[], product: ProductSearch[]): ProductSearch[] => {
+    const modifiedArray = values.map((item) => {
+      return item === "Shop All Nails" ? "Ready To Go" : item;
+    });
     return product.filter(item => {
       if (item.Tags && item.Tags.length > 0) {
         const categoryTitles = item.Tags.map((cat: { title: string }) => cat.title);
-        return categoryTitles.some(title => values.includes(title));
+        return categoryTitles.some(title => modifiedArray.includes(title));
       }
     });
   }
@@ -201,6 +200,9 @@ const SearchLayout = () => {
   const filterProductsByTagTitle = (products: ProductSearch[], searchTerm: string): ProductSearch[] => {
     if (typeof searchTerm !== 'string' || searchTerm === '') {
       return products;
+    }
+    if (searchTerm === "Shop All Nails") {
+      searchTerm = "Ready To Go"
     }
     const normalizedSearchTerm = normalizeString(searchTerm);
     return products.filter(product => {
@@ -299,10 +301,12 @@ const SearchLayout = () => {
 
             <div>
               <div className="bg-bg-50 border border-bg-200 rounded p-4 mb-4">
-                <h3 className="text-gray-700 font-medium mt-2` my-2">Tag List</h3>
-                {allTags && allTags.length > 0 && (
-                  allTags.map((tag) => (
-                    <div key={tag.id} className="flex items-center pt-1">
+                <h3 className="text-gray-700 font-medium mt-2` my-2">{title}</h3>
+                {loading ? (
+                  <MenuSkeleton />
+                ) : (menuList && menuList.length > 0 && (
+                  menuList.map((tag) => (
+                    <div key={tag.ID} className="flex items-center pt-1">
                       <Checkbox
                         checked={selectedBrands.includes(tag.title_en)}
                         onChange={(e) => {
@@ -318,8 +322,7 @@ const SearchLayout = () => {
                         <span className="text-gray-600">{tag.title_en}</span>
                       </Checkbox>
                     </div>
-                  )))}
-
+                  ))))}
               </div>
 
             </div>
@@ -352,7 +355,7 @@ const SearchLayout = () => {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-3 md:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-2 md:gap-4">
             {loading ? (
               // 显示 8 个骨架屏
               Array.from({ length: 12 }).map((_, index) => (
@@ -416,10 +419,10 @@ const SearchLayout = () => {
             </div>
             <div>
               <div className="bg-background-back1 border border-bg-200 rounded p-4 mb-4">
-                <h3 className="text-gray-700 font-medium mt-2` my-2">Tag List</h3>
-                {allTags && allTags.length > 0 && (
-                  allTags.map((item) => (
-                    <div key={item.id} className="flex items-center pt-1">
+                <h3 className="text-gray-700 font-medium mt-2` my-2">{title}</h3>
+                {menuList && menuList.length > 0 && (
+                  menuList.map((item) => (
+                    <div key={item.ID} className="flex items-center pt-1">
                       <Checkbox
                         checked={selectedBrands.includes(item.title_en)}
                         onChange={(e) => {

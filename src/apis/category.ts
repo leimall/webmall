@@ -24,3 +24,9 @@ export const getShapeLists = (): Promise<CategoryResponse> => {
     method: 'get',
   })
 }
+export const getMenuList = (): Promise<CategoryResponse> => {
+  return request({
+    url: '/category/menu',
+    method: 'get',
+  })
+}
