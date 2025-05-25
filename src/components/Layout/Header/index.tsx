@@ -236,7 +236,7 @@ export default function Header() {
                         </div>
                       ))) : (
                       menu.length > 0 && menu.map((subCategory) => (
-                        <div key={"sub" + subCategory.ID} onClick={(e) => gotoUrl(e, `/readytogo?tag=${subCategory.title_en}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
+                        <div key={"sub" + subCategory.ID} onClick={(e) => gotoUrl(e, `/readytogo?query=${subCategory.title_en}`)} className='text-primary-500 flex items-center text-sm pb-2 mb-2 pl-4'>
                           <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
                         </div>
                       )))
@@ -324,7 +324,7 @@ export default function Header() {
                   )) : (
                     <div className="absolute hidden group-hover:block bg-white border border-gray-200 rounded shadow-lg z-10 w-52">
                       {menu.length > 0 && menu.map((subCategory) => (
-                        <Link key={subCategory.ID} href={`/readytogo?tag=${subCategory.title_en}`}>
+                        <Link key={subCategory.ID} href={`/readytogo?query=${subCategory.title_en}`}>
                           <div className='flex items-center text-md text-primary-500 p-3 hover:bg-gray-100'>
                             <FaGenderless className='text-primary-500 text-xs mr-2' /> {subCategory.title_en}
                           </div>

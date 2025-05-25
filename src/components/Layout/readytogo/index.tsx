@@ -20,7 +20,9 @@ import type { CategoryItem } from "@/types/category";
 import MenuSkeleton from "./menuSkeleton";
 const PAGE_SIZE = 12;
 const Min_Price = 0;
-const Max_price = 500
+const Max_price = 2000
+const shopAllNails = "Shop All Nails"
+const readyToGo = "Ready To Go"
 
 function useDebounceEffect(callback: () => void, delay: number, dependencies: any[]) {
   const savedCallback = useRef<() => void>();
@@ -97,18 +99,21 @@ const SearchLayout = () => {
   const fetchMenu = async () => {
     const menuList = await getMenuList();
     if (menuList.code === 0 && menuList.data && menuList.data.length > 0) {
-      setMenuList(menuList.data);
+      const filteredArray = menuList.data.filter((item) => item.title_en !== shopAllNails);
+      setMenuList(filteredArray);
     }
   }
 
   const initProcess = (data: ProductSearch[], query: string | null, tag: string | null) => {
     let productList = data
+    productList = filterProductsBySearch(productList, readyToGo)
+    setSaveAlllist(productList)
     if (query) {
-      productList = filterProductsBySearch(productList, query)
-    }
-    if (tag) {
-      setSelectedBrands([tag])
-      productList = filterProductsByTagTitle(productList, tag)
+      if (query !== shopAllNails && query !== readyToGo) {
+        setSelectedBrands([query])
+      } else {
+        setSelectedBrands([])
+      }
     }
     if (selectedBrands.length > 0) {
       productList = filterObjectsByCategoryTitle(selectedBrands, productList)
@@ -118,7 +123,6 @@ const SearchLayout = () => {
     }
     filterProducts(productList)
   }
-
   const showproduct = (data: ProductSearch[]) => {
     setProducts(data);
     setTotal(data.length);
@@ -143,13 +147,10 @@ const SearchLayout = () => {
   };
 
   const filterObjectsByCategoryTitle = (values: string[], product: ProductSearch[]): ProductSearch[] => {
-    const modifiedArray = values.map((item) => {
-      return item === "Shop All Nails" ? "Ready To Go" : item;
-    });
     return product.filter(item => {
-      if (item.Tags && item.Tags.length > 0) {
-        const categoryTitles = item.Tags.map((cat: { title: string }) => cat.title);
-        return categoryTitles.some(title => modifiedArray.includes(title));
+      if (item.Category && item.Category.length > 0) {
+        const categoryTitles = item.Category.map((cat: { title: string }) => cat.title);
+        return categoryTitles.some(title => values.includes(title));
       }
     });
   }
@@ -197,7 +198,8 @@ const SearchLayout = () => {
   }
 
   // 筛选函数
-  const filterProductsByTagTitle = (products: ProductSearch[], searchTerm: string): ProductSearch[] => {
+  const filterProductsBySearch = (products: ProductSearch[], searchTerm: string): ProductSearch[] => {
+
     if (typeof searchTerm !== 'string' || searchTerm === '') {
       return products;
     }
@@ -206,38 +208,11 @@ const SearchLayout = () => {
     }
     const normalizedSearchTerm = normalizeString(searchTerm);
     return products.filter(product => {
-      if (!Array.isArray(product.Tags)) {
-        return false;
-      }
-      return product.Tags.some(item => {
-        if (typeof item.title !== 'string') {
-          return false;
-        }
-        return normalizeString(item.title).includes(normalizedSearchTerm);
-      });
-    });
-  }
-  const filterProductsBySearch = (products: ProductSearch[], searchTerm: string): ProductSearch[] => {
-
-    if (typeof searchTerm !== 'string' || searchTerm === '') {
-      return products;
-    }
-    const normalizedSearchTerm = normalizeString(searchTerm);
-    return products.filter(product => {
       try {
-        // 检查 product.title 是否为字符串
-        const titleMatch = typeof product.title === 'string' && normalizeString(product.title).includes(normalizedSearchTerm);
-        // 检查 product.desction 是否为字符串
-        const descriptionMatch = typeof product.desction === 'string' && normalizeString(product.desction).includes(normalizedSearchTerm);
-        // 检查 product.Category 是否为数组
-        const categoryMatch = Array.isArray(product.Category) &&
-          product.Category.every(cat => typeof cat.title === 'string') &&
-          normalizeString(product.Category.map(cat => cat.title).join(' ')).includes(normalizedSearchTerm);
-        // 检查 product.Tags 是否为数组
         const tagsMatch = Array.isArray(product.Tags) &&
           product.Tags.every(tag => typeof tag.title === 'string') &&
           normalizeString(product.Tags.map(tag => tag.title).join(' ')).includes(normalizedSearchTerm);
-        return titleMatch || descriptionMatch || categoryMatch || tagsMatch;
+        return tagsMatch;
       } catch (error) {
         console.error('Error:', error);
         return false;
@@ -265,8 +240,8 @@ const SearchLayout = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
-    <div className="min-h-screen pt-8 bg-white">
-      <div className="max-w-7xl mx-auto px-4 mb-12 flex gap-6">
+    <div className="min-h-screen pt-2 md:pt-8 bg-white">
+      <div className="max-w-7xl mx-auto px-2 md:px-4 mb-12 flex gap-6">
         {/* 左侧筛选区域 */}
         <div className="hidden md:block md:w-64 flex-shrink-0">
           <div className="">
@@ -331,7 +306,7 @@ const SearchLayout = () => {
         {/* 右侧商品区域 */}
         <div className="flex-1">
           {/* 排序工具栏 */}
-          <div className="border border-bg-200 bg-bg-50 rounded p-4 mb-6">
+          <div className="border border-bg-200 bg-bg-50 rounded p-4 mb-2 md:mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="w-40 min-w-40">
@@ -349,13 +324,13 @@ const SearchLayout = () => {
                   />
                 </div>
               </div>
-              <div className="text-gray-500 hidden md:block">Total of <span className="font-bold text-primary-600">{total}</span> items</div>
+              <div className="text-gray-500 hidden md:block">Total of <span className="font-bold text-primary-600"> {loading ? (12) : (total)}</span> items</div>
               <div className="lg:hidden" onClick={onOpen}>
                 <FaListUl className="text-3xl cursor-pointer text-primary-400" />
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-2 md:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-2 md:gap-4">
             {loading ? (
               // 显示 8 个骨架屏
               Array.from({ length: 12 }).map((_, index) => (
@@ -387,7 +362,7 @@ const SearchLayout = () => {
 
 
       <Drawer title="Filters" placement={"right"} onClose={onClose} open={open}>
-        <div className="w-full p-2">
+        <div className="w-full">
           <div className="">
             <div className="bg-background-back1 border border-bg-200 rounded p-4 space-y-6 mb-4">
               <h3 className="text-gray-700 font-medium mb-4">Price Range</h3>
