@@ -1,7 +1,11 @@
-# Block all crawlers for /accounts
 User-agent: *
-Disallow: /document
-
-# Allow all crawlers
-User-agent: *
+Disallow: 
+Disallow: /checkout
+Disallow: /auth
+Disallow: /cart
+Disallow: /payment
+Disallow: /profile
+Sitemap: http://www.ftanails.com/sitemap.xml
+# Allow search engines
+User-agent: Googlebot
 Allow: /
