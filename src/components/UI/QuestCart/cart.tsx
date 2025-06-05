@@ -72,6 +72,12 @@ export default function CartItemComponent({ product }: { product: ProductDetail 
       setSkuTitle(product.Sku);
       setAirrRoute(product.Sku[0].title);
       setAirrRouteList(List)
+      setShapeOptions(List.map((item) => {
+        return {
+          label: item.title,
+          value: item.title,
+        }
+      }));
     }
     setSelfPrice(parseFloat((product.price * (product.priceOff / 100)).toFixed(0) + '.99'))
     if (items?.length > 0) {

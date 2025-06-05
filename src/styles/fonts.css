@@ -1,6 +1,7 @@
 /* Preload critical fonts */
 <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/notosans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Americana.ttf" as="font" type="font/truetype" crossorigin>
 
 @font-face {
   font-family: 'Inter';
@@ -33,6 +34,14 @@
   font-family: 'NotoSans Itali';
   src: url('/fonts/notosans-italic.woff2') format('woff2'),
        url('/fonts/notosans-italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: 'Americana';
+  src: url('/fonts/Americana.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: optional;

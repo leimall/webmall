@@ -14,14 +14,18 @@ import FirstAdPage from '@/components/Layout/index/ad/first';
 import BannerInIndex from '@/components/Common/Banner';
 import type { Product } from "@/types/products";
 import Payment from '@/components/Layout/index/payment';
+import { SEO_KEYWORDS, SEO_index_title, SEO_index_description } from '@/utils/seo_keywords';
 
 
 export const metadata: Metadata = {
-  title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
-  description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+  keywords: SEO_KEYWORDS.join(", "),
+  title: SEO_index_title,
+  description: SEO_index_description,
+
+
   openGraph: {
-    title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
-    description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+    title: SEO_index_title,
+    description: SEO_index_description,
     type: 'website',
     url: 'https://ftanails.com',
     images: [
@@ -35,8 +39,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
-    description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+    title: SEO_index_title,
+    description: SEO_index_description,
+
     images: ['https://ftanails.com/images/logo/logo.png']
   }
 };
@@ -63,9 +68,9 @@ export default async function PageHome() {
   let ThreeDList: Product[] = [];
   try {
     const [laserResponse, bestResp, readyToGoResp, ZodiacResp, CultureResp, MastersResp, OriginalResp, ThreeDResp] = await Promise.all([
-      getBestProductList({keyword:"New Desgin", page:1, size: 4}),
-      getBestProductList({keyword:"Best Seller", page:1, size: 4}),
-      getBestProductList({keyword:"Ready To Go", page:1, size: 8}),
+      getBestProductList({ keyword: "New Desgin", page: 1, size: 4 }),
+      getBestProductList({ keyword: "Best Seller", page: 1, size: 4 }),
+      getBestProductList({ keyword: "Ready To Go", page: 1, size: 8 }),
       getProductByCategory(ZodiacName, { offset: 1, limit: 4 }),
       getProductByCategory(CultureName, { offset: 1, limit: 8 }),
       getProductByCategory(MastersName, { offset: 1, limit: 8 }),

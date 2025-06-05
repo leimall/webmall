@@ -1,12 +1,18 @@
 // app/product/[id]/Navigation.tsx（服务器组件）
+'use client';
 import type { ProductDetail } from "@/types/products";
 import Link from "next/link";
+import { useEffect } from "react";
 import { FaAngleRight } from "react-icons/fa6";
 
 export default function ProductNavigation({ product }: { product: ProductDetail }) {
   const categoryUrl = () => {
     return `/category/${product.Category[0].title.toLowerCase().replace(/\s+/g, '_')}`;
   };
+
+  useEffect(() => {
+    console.error("product.Category", product);
+  }, [product]);
 
   return (
     <div className="md:mb-4 mb-2">

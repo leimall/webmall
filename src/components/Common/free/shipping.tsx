@@ -2,13 +2,14 @@
 import { FaTruck } from "react-icons/fa6";
 import { AnimatePresence, motion } from "motion/react"
 import React, { useState } from "react";
+import { SHIPPING_INFO } from "@/utils/seo_keywords";
 const FreeShipping = () => {
     const [index, setIndex] = useState(0)
      const words = [
-      ' Free shipping on orders over $69.',
-      'Free shipping on orders over $69.',
-      ' Free shipping on orders over $69.',
-      'Free shipping on orders over $69.',
+      `${SHIPPING_INFO}`,
+      ` ${SHIPPING_INFO}`,
+      `${SHIPPING_INFO}`,
+      ` ${SHIPPING_INFO}`,
     ]
 
     React.useEffect(() => {

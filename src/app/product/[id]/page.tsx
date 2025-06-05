@@ -5,14 +5,16 @@ import ProductDetailPage from "@/components/Layout/ProductDetail/test";
 import type { Metadata } from "next";
 import ProductNavigation from "./Navigation";
 import ScrollToTopOnMount from "@/components/Common/top/ScrollToTopOnMount";
+import { SEO_index_title, SEO_KEYWORDS, SEO_index_description, SEO_ProductDetail_title, SEO_ProductDetail_description } from "@/utils/seo_keywords";
 
 // 定义默认的元数据信息，用于产品未找到的情况
 const defaultMetadata = {
-  title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
-  description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+  keywords: SEO_KEYWORDS.join(", "),
+  title: SEO_index_title,
+  description: SEO_index_description,
   openGraph: {
-    title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
-    description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+    title: SEO_index_title,
+    description: SEO_index_description,
     type: 'website',
     url: 'https://ftanails.com',
     images: [
@@ -26,8 +28,8 @@ const defaultMetadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
-    description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+    title: SEO_index_title,
+    description: SEO_index_description,
     images: ['https://ftanails.com/images/logo/logo.png']
   }
 };
@@ -35,11 +37,11 @@ const defaultMetadata = {
 // 生成产品元数据的辅助函数
 const generateProductMetadata = (product: ProductDetail, id: string): Metadata => {
   return {
-    title: product.title,
-    description: product.desction,
+    title: SEO_ProductDetail_title(product.title),
+    description: SEO_ProductDetail_description(product.desction),
     openGraph: {
-      title: product.title,
-      description: product.desction,
+      title: SEO_ProductDetail_title(product.title),
+      description: SEO_ProductDetail_description(product.desction),
       type: 'website',
       url: `https://ftanails.com/product/${id}`,
       images: [
@@ -53,8 +55,8 @@ const generateProductMetadata = (product: ProductDetail, id: string): Metadata =
     },
     twitter: {
       card: 'summary_large_image',
-      title: product.title,
-      description: product.desction,
+      title: SEO_ProductDetail_title(product.title),
+      description: SEO_ProductDetail_description(product.desction),
       images: [product.mainImg]
     }
   };

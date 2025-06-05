@@ -10,6 +10,7 @@ const config: Config = {
       inter: ["Inter", ...defaultTheme.fontFamily.sans],
       notasans: ["NotoSans", ...defaultTheme.fontFamily.sans],
       sans: [...defaultTheme.fontFamily.sans, "Roboto", "Arial"],
+      amer: ["Americana", "sans-serif"],
     },
     extend: {
       colors: {

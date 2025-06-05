@@ -11,10 +11,12 @@ import FreeShipping from "@/components/Common/free/shipping";
 import { ConfigProvider } from "antd";
 import { ecomTheme } from "@/themes";
 import ScrollToTopOnMount from "@/components/Common/top/ScrollToTopOnMount";
+import { SEO_index_description, SEO_KEYWORDS, SEO_index_title } from "@/utils/seo_keywords";
 
 export const metadata: Metadata = {
-  title: 'FTAnails press-on-nails | Paint Your Life, Design Your World',
-  description: "Indulge in the charm of our hand - crafted nail art sets at FTAnails. Each set is painstakingly created by skilled artisans using top - notch materials. The outcome? Stunning, durable nail designs that maintain their allure through daily life. Perfect for any occasion, they add a dash of sophistication. Now, enjoy a 25% discount in our Celebrate Day Sale. Upgrade your nail style—shop now!",
+  keywords: SEO_KEYWORDS.join(", "),
+  title: SEO_index_title,
+  description: SEO_index_description
 };
 const HotjarScript = () => {
   return (
