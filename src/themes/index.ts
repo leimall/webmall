@@ -56,6 +56,11 @@ export const ecomTheme: ThemeConfig = {
     },
     Rate: {
       marginXS: 2,
+    },
+    Carousel: {
+      arrowSize: 48,
+      colorBgContainer: '#603813',
+      colorText: '#603813',
     }
   }
 

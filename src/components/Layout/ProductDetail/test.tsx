@@ -14,6 +14,7 @@ import CustomRate from "@/components/Common/Rate";
 import { FaTruck, FaShieldHalved, FaCheck, FaCopy } from "react-icons/fa6";
 import ReviewList from "@/components/Common/ReviewList";
 import ReviewSummary from "@/components/Common/ReviewList/ReviewSummary";
+import "./detail.css"
 
 export default function ProductDetailPage({ product }: { product: ProductDetail }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
@@ -81,7 +82,7 @@ export default function ProductDetailPage({ product }: { product: ProductDetail 
 
         <div className="lg:col-span-7 text-center">
           <div className="md:p-4 relative before:absolute before:inset-0 befo before:rounded">
-            <Carousel ref={carouselRef} afterChange={setSelectedImageIndex}>
+            <Carousel arrows infinite={false} ref={carouselRef} afterChange={setSelectedImageIndex}>
               {images && images.map((image, index) => (
                 <div key={index} className="relative w-full h-0 pb-[100%] overflow-hidden rounded-t mx-auto">
                   <Image
